@@ -9,14 +9,19 @@ import com.kk.gourmetapp.R
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
-    fun RecommendFragment() {
-        // do nothing.
-    }
+    var mRecommendPresenter: RecommendPresenter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
+        // Volleyによる通信処理開始（Fragment→Presenter）
+        mRecommendPresenter?.createGurunaviInfo()
+
         return inflater.inflate(R.layout.fragment_recommend, container, false)
+    }
+
+    override fun setUserActionListener(recommendPresenter: RecommendPresenter) {
+        mRecommendPresenter = recommendPresenter
     }
 
     companion object {
