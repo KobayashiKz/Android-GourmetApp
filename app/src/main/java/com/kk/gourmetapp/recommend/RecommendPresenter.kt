@@ -1,6 +1,6 @@
-package com.kk.todomvvmapp.gurumeapp.recommend
+package com.kk.gourmetapp.recommend
 
-import com.kk.todomvvmapp.gurumeapp.data.source.ShopRepository
+import com.kk.gourmetapp.data.source.ShopRepository
 
 class RecommendPresenter(mRecomendView: RecommendContract.View, repository: ShopRepository)
     : RecommendContract.UserActionListener {

@@ -1,4 +1,4 @@
-package com.kk.todomvvmapp.gurumeapp.util
+package com.kk.gourmetapp.util
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

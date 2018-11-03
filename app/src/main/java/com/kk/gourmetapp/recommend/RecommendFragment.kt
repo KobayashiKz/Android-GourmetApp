@@ -1,11 +1,11 @@
-package com.kk.todomvvmapp.gurumeapp.recommend
+package com.kk.gourmetapp.recommend
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kk.todomvvmapp.gurumeapp.R
+import com.kk.gourmetapp.R
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 

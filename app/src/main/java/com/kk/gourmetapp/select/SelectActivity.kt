@@ -1,8 +1,8 @@
-package com.kk.todomvvmapp.gurumeapp.select
+package com.kk.gourmetapp.select
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.kk.todomvvmapp.gurumeapp.R
+import com.kk.gourmetapp.R
 
 class SelectActivity : AppCompatActivity() {
 
