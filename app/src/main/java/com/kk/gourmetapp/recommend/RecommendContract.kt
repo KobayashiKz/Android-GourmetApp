@@ -7,6 +7,11 @@ interface RecommendContract {
      */
     interface View {
 
+        /**
+         * Presenterの登録
+         * @param recommendPresenter 登録するPresenter
+         */
+        fun setUserActionListener(recommendPresenter: RecommendPresenter)
     }
 
     /**
@@ -14,5 +19,9 @@ interface RecommendContract {
      */
     interface UserActionListener {
 
+        /**
+         * ぐるなびのお店情報生成
+         */
+        fun createGurunaviInfo()
     }
 }

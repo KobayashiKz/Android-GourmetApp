@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.kk.gourmetapp.R
-import com.kk.gourmetapp.data.source.ShopRepository
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.util.ActivityUtil
 
@@ -43,7 +42,7 @@ class RecommendActivity : AppCompatActivity() {
             R.id.content_frame)
 
         // Presenterの生成
-        mRecommendPresenter = RecommendPresenter(recommendFragment, ShopRepository())
+        mRecommendPresenter = RecommendPresenter(recommendFragment)
     }
 
     /**

@@ -9,14 +9,22 @@ import com.kk.gourmetapp.R
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
-    fun RecommendFragment() {
-        // do nothing.
-    }
+    var mRecommendPresenter: RecommendPresenter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
+        // ぐるなびのお店情報を取得開始
+        mRecommendPresenter?.createGurunaviInfo()
+
         return inflater.inflate(R.layout.fragment_recommend, container, false)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun setUserActionListener(recommendPresenter: RecommendPresenter) {
+        mRecommendPresenter = recommendPresenter
     }
 
     companion object {
