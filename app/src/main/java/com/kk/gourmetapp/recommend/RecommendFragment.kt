@@ -14,12 +14,15 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
-        // Volleyによる通信処理開始（Fragment→Presenter）
+        // ぐるなびのお店情報を取得開始
         mRecommendPresenter?.createGurunaviInfo()
 
         return inflater.inflate(R.layout.fragment_recommend, container, false)
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun setUserActionListener(recommendPresenter: RecommendPresenter) {
         mRecommendPresenter = recommendPresenter
     }

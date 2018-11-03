@@ -6,18 +6,22 @@ interface RecommendContract {
      * Fragment側へ呼び出すUI関連の処理
      */
     interface View {
-        // Presenterの登録処理
+
+        /**
+         * Presenterの登録
+         * @param recommendPresenter 登録するPresenter
+         */
         fun setUserActionListener(recommendPresenter: RecommendPresenter)
-
-
-
     }
 
     /**
      * Repository側へ呼び出すデータ関連の処理
      */
     interface UserActionListener {
-        // 通信してデータを取得する
+
+        /**
+         * ぐるなびのお店情報生成
+         */
         fun createGurunaviInfo()
     }
 }

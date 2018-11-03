@@ -14,7 +14,7 @@ class RecommendPresenter(mRecomendView: RecommendContract.View)
     }
 
     /**
-     * ぐるなびのお店情報を生成する処理
+     * {@inheritDoc}
      */
     override fun createGurunaviInfo() {
         // Repository側でモデルクラス作成する
