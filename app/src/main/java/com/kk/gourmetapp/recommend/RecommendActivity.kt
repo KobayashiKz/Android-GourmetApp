@@ -1,4 +1,4 @@
-package com.kk.todomvvmapp.gurumeapp.recommend
+package com.kk.gourmetapp.recommend
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +9,10 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.kk.todomvvmapp.gurumeapp.R
-import com.kk.todomvvmapp.gurumeapp.data.source.ShopRepository
-import com.kk.todomvvmapp.gurumeapp.setting.SettingActivity
-import com.kk.todomvvmapp.gurumeapp.util.ActivityUtil
+import com.kk.gourmetapp.R
+import com.kk.gourmetapp.data.source.ShopRepository
+import com.kk.gourmetapp.setting.SettingActivity
+import com.kk.gourmetapp.util.ActivityUtil
 
 class RecommendActivity : AppCompatActivity() {
 

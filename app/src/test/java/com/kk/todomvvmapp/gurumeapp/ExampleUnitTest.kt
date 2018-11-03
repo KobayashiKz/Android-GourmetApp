@@ -1,4 +1,4 @@
-package com.kk.todomvvmapp.gurumeapp
+package com.kk.gourmetapp
 
 import org.junit.Test
 

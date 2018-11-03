@@ -1,4 +1,4 @@
-package com.kk.todomvvmapp.gurumeapp.recommend
+package com.kk.gourmetapp.recommend
 
 interface RecommendContract {
 

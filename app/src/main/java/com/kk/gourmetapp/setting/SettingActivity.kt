@@ -1,8 +1,8 @@
-package com.kk.todomvvmapp.gurumeapp.setting
+package com.kk.gourmetapp.setting
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.kk.todomvvmapp.gurumeapp.R
+import com.kk.gourmetapp.R
 
 class SettingActivity : AppCompatActivity() {
 
