@@ -10,11 +10,15 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.kk.todomvvmapp.gurumeapp.R
+import com.kk.todomvvmapp.gurumeapp.data.source.ShopRepository
 import com.kk.todomvvmapp.gurumeapp.setting.SettingActivity
+import com.kk.todomvvmapp.gurumeapp.util.ActivityUtil
 
 class RecommendActivity : AppCompatActivity() {
 
     private var mDrawerLayout: DrawerLayout? = null
+
+    private var mRecommendPresenter: RecommendPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,14 @@ class RecommendActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout)
         val navigationView: NavigationView = findViewById(R.id.navigation_view)
         setupDrawerContent(navigationView)
+
+        // Fragmentの生成
+        val recommendFragment: RecommendFragment = RecommendFragment.newInstance()
+        ActivityUtil.addFragmentToActivity(supportFragmentManager, recommendFragment,
+            R.id.content_frame)
+
+        // Presenterの生成
+        mRecommendPresenter = RecommendPresenter(recommendFragment, ShopRepository())
     }
 
     /**
