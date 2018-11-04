@@ -42,7 +42,7 @@ class RecommendActivity : AppCompatActivity() {
             R.id.content_frame)
 
         // Presenterの生成
-        mRecommendPresenter = RecommendPresenter(recommendFragment)
+        mRecommendPresenter = RecommendPresenter(recommendFragment, applicationContext)
     }
 
     /**
