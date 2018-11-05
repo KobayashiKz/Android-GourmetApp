@@ -7,6 +7,12 @@ interface ShopDataSource {
 
     // ぐるなびAPIからデータ取得完了コールバック
     interface CreateGurunaviShopCallback {
+
+        /**
+         * ぐるなびAPIからEntity作成完了時に呼ばれるコールバック
+         * @param shops お店情報リスト
+         * @param imageLoader お店の画像用イメージローダー
+         */
         fun createdShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     }
 
