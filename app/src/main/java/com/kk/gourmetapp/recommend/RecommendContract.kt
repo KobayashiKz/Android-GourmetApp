@@ -1,5 +1,8 @@
 package com.kk.gourmetapp.recommend
 
+import com.android.volley.toolbox.ImageLoader
+import com.kk.gourmetapp.data.GurunaviShop
+
 interface RecommendContract {
 
     /**
@@ -12,6 +15,12 @@ interface RecommendContract {
          * @param recommendPresenter 登録するPresenter
          */
         fun setUserActionListener(recommendPresenter: RecommendPresenter)
+
+        /**
+         * ぐるなびのレストラン情報を表示
+         * @param shops レストランリスト
+         */
+        fun showGurunaviShops(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     }
 
     /**

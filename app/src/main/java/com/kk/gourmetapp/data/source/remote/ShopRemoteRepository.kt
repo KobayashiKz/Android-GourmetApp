@@ -65,7 +65,7 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
                 }
 
                 // 取得完了コールバックを返す
-                callback.createdShop(mGurunaviShopList)
+                callback.createdShop(mGurunaviShopList, mImageLoader)
             },
             Response.ErrorListener { error ->
                 // TODO: エラー時の処理
