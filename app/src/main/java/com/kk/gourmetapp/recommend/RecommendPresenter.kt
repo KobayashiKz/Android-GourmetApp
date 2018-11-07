@@ -1,19 +1,24 @@
 package com.kk.gourmetapp.recommend
 
 import android.content.Context
+import com.android.volley.toolbox.ImageLoader
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.source.ShopDataSource
 import com.kk.gourmetapp.data.source.ShopRepository
 
-class RecommendPresenter(mRecomendView: RecommendContract.View, mContext: Context)
+class RecommendPresenter(recommendView: RecommendContract.View, context: Context)
     : RecommendContract.UserActionListener {
 
-    private var mShopRepository: ShopRepository? = null
+    // フラグメントはコンストラクタで受け取る
+    private var mRecommendView: RecommendContract.View = recommendView
+    // レポジトリはコンストラクタで受け取る
+    private var mShopRepository: ShopRepository? = ShopRepository(context)
+
+    private var mContext: Context = context
 
     init {
         // FragmentにPresenterの登録要求
-        mRecomendView.setUserActionListener(this)
-        mShopRepository = ShopRepository(mContext)
+        mRecommendView.setUserActionListener(this)
     }
 
     /**
@@ -22,8 +27,9 @@ class RecommendPresenter(mRecomendView: RecommendContract.View, mContext: Contex
     override fun createGurunaviInfo() {
         // Repository側でモデルクラス作成する
         mShopRepository?.createGurunaviInfo(object :ShopDataSource.CreateGurunaviShopCallback {
-            override fun createdShop(shops: List<GurunaviShop>) {
-                // TODO: ぐるなびのレストラン情報が取得できた場合にはFragmentにUI更新依頼をかける
+            override fun createdShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
+                // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
+                mRecommendView.showGurunaviShops(shops, imageLoader)
             }
         })
     }
