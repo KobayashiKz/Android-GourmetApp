@@ -61,7 +61,7 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
                 // 取得完了コールバックを返す
                 callback.createdShop(mGurunaviShopList, RequestSingleQueue.getImageLoader())
             },
-            Response.ErrorListener { error ->
+            Response.ErrorListener { _ ->
                 // TODO: エラー時の処理
             })
         // リクエストキューを追加

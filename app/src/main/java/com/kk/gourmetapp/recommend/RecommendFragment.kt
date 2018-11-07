@@ -1,5 +1,8 @@
 package com.kk.gourmetapp.recommend
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -16,11 +19,11 @@ import com.kk.gourmetapp.data.GurunaviShop
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
-    var mRecommendPresenter: RecommendPresenter? = null
+    private var mRecommendPresenter: RecommendPresenter? = null
 
-    var mShopAdapter: ShopAdapter? = null
+    private var mShopAdapter: ShopAdapter? = null
 
-    var mRecyclerView: RecyclerView? = null
+    private var mRecyclerView: RecyclerView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -34,6 +37,7 @@ class RecommendFragment : Fragment(), RecommendContract.View {
                 // TODO fabアイコンタップ時の処理
             })
         }
+
         // お店情報を表示するRecyclerViewの設定
         mRecyclerView = root?.findViewById(R.id.shop_recycler_view)
         mRecyclerView?.setHasFixedSize(true)
@@ -80,6 +84,8 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         // 画像のイメージローダー
         private var mImageLoader: ImageLoader? = imageLoader
 
+        private var mContext: Context? = null
+
         override fun getItemCount(): Int {
             return mShopList.size
         }
@@ -93,10 +99,19 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             } else {
                 holder.image.setDefaultImageResId(R.drawable.default_image)
             }
+
+            // 画像タップ時にはブラウザでWebページを開く
+            holder.image.setOnClickListener {
+                // 遷移処理はFragmentにかいたほうがよさそう
+                val uri: Uri = Uri.parse(mShopList[position].mPageUrl)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                mContext?.startActivity(intent)
+            }
             holder.category.text = mShopList[position].mCategory
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
+            mContext = parent.context
             val item: View = LayoutInflater.from(parent.context).inflate(R.layout.shop_item, parent, false)
             return ShopViewHolder(item)
         }
