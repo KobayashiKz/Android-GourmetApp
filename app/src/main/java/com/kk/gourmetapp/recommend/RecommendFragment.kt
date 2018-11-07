@@ -77,8 +77,12 @@ class RecommendFragment : Fragment(), RecommendContract.View {
 
         override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
             holder.name.text = mShopList[position].mName
+
+            // 画像URLが存在する場合は取得し存在しない場合はデフォルド画像を表示する
             if (!mShopList[position].mImageUrl.isEmpty()) {
                 holder.image.setImageUrl(mShopList[position].mImageUrl, mImageLoader)
+            } else {
+                holder.image.setDefaultImageResId(R.drawable.default_image)
             }
             holder.category.text = mShopList[position].mCategory
         }

@@ -2,7 +2,6 @@ package com.kk.gourmetapp.data.source.remote
 
 import android.content.Context
 import com.android.volley.Response
-import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.JsonObjectRequest
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.source.ShopDataSource
@@ -13,7 +12,6 @@ import java.io.Reader
 
 class ShopRemoteRepository(context: Context): ShopDataSource {
 
-    private var mImageLoader: ImageLoader? = null
     private var mContext: Context? = context
 
     private var mGurunaviShopList: MutableList<GurunaviShop> = ArrayList()
@@ -34,10 +32,6 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
         const val KEY_REST_URL_MOBILE: String = "url_mobile"
         const val KEY_REST_URL_MOBILE_SHOP: String = "shop_image1"
         const val KEY_REST_IMAGE_URL: String = "image_url"
-    }
-
-    init {
-        mImageLoader = RequestSingleQueue.getImageLoader()
     }
 
     /**
@@ -65,7 +59,7 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
                 }
 
                 // 取得完了コールバックを返す
-                callback.createdShop(mGurunaviShopList, mImageLoader)
+                callback.createdShop(mGurunaviShopList, RequestSingleQueue.getImageLoader())
             },
             Response.ErrorListener { error ->
                 // TODO: エラー時の処理
