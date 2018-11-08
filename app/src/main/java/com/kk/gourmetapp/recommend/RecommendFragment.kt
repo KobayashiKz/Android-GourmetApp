@@ -16,6 +16,7 @@ import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
+import com.kk.gourmetapp.select.SelectActivity
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
@@ -32,10 +33,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
 
         // fabアイコンの設定
         val fab: FloatingActionButton? = root?.findViewById(R.id.fab_add_image)
-        if (fab != null) {
-            fab.setOnClickListener(View.OnClickListener {
-                // TODO fabアイコンタップ時の処理
-            })
+        fab?.setOnClickListener {
+            // タップされたら画像選択画面を起動する
+            val intent: Intent = Intent(context, SelectActivity::class.java)
+            startActivity(intent)
         }
 
         // お店情報を表示するRecyclerViewの設定
