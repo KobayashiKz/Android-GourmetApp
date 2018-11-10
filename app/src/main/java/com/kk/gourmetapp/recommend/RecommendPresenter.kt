@@ -3,8 +3,8 @@ package com.kk.gourmetapp.recommend
 import android.content.Context
 import com.android.volley.toolbox.ImageLoader
 import com.kk.gourmetapp.data.GurunaviShop
-import com.kk.gourmetapp.data.source.ShopDataSource
-import com.kk.gourmetapp.data.source.ShopRepository
+import com.kk.gourmetapp.data.source.DataRepository
+import com.kk.gourmetapp.data.source.DataSource
 
 class RecommendPresenter(recommendView: RecommendContract.View, context: Context)
     : RecommendContract.UserActionListener {
@@ -12,7 +12,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     // フラグメントはコンストラクタで受け取る
     private var mRecommendView: RecommendContract.View = recommendView
     // レポジトリはコンストラクタで受け取る
-    private var mShopRepository: ShopRepository? = ShopRepository(context)
+    private var mDataRepository: DataRepository? = DataRepository(context)
 
     private var mContext: Context = context
 
@@ -26,7 +26,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
      */
     override fun createGurunaviInfo() {
         // Repository側でモデルクラス作成する
-        mShopRepository?.createGurunaviInfo(object :ShopDataSource.CreateGurunaviShopCallback {
+        mDataRepository?.createGurunaviInfo(object :DataSource.CreateGurunaviShopCallback {
             override fun createdShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
                 // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
                 mRecommendView.showGurunaviShops(shops, imageLoader)

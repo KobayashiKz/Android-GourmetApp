@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import com.kk.gourmetapp.R
 import java.io.InputStream
@@ -19,9 +20,27 @@ class SelectFragment : Fragment(), SelectContract.View {
 
     private var mSelectImageView: ImageView? = null
 
+    private var mRecognizeInputStream: InputStream? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root: View? = inflater.inflate(R.layout.fragment_select, container, false)
         mSelectImageView = root?.findViewById(R.id.select_image_view)
+
+        // 画像認証ボタンタップされたら画像解析を開始する
+        val recognizeButton: Button? = root?.findViewById(R.id.recognize_button)
+        recognizeButton?.setOnClickListener {
+            if (mRecognizeInputStream != null) {
+                mSelectPresenter?.startRecognizerImage(mRecognizeInputStream)
+            }
+        }
+
+        // キャンセルボタンタップ時にはInputStreamをcloseする
+        val cancelButton: Button? = root?.findViewById(R.id.recognize_cancel_button)
+        cancelButton?.setOnClickListener {
+            if (mRecognizeInputStream != null) {
+                mRecognizeInputStream?.close()
+            }
+        }
 
         // ギャラリー呼び出し処理
         showGallery()
@@ -36,18 +55,6 @@ class SelectFragment : Fragment(), SelectContract.View {
         mSelectPresenter = selectPresenter
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK) {
-            // 選択された画像が取得できたらUI更新する
-            val inputStream: InputStream = context?.contentResolver!!.openInputStream(data?.data)
-            val image: Bitmap = BitmapFactory.decodeStream(inputStream)
-            inputStream.close()
-            mSelectImageView?.setImageBitmap(image)
-        } else {
-            // do nothing.
-        }
-    }
-
     /**
      * ギャラリー表示
      */
@@ -55,6 +62,17 @@ class SelectFragment : Fragment(), SelectContract.View {
         val intentGallery = Intent(Intent.ACTION_GET_CONTENT)
         intentGallery.type = GALLERY_MIME_TYPE
         startActivityForResult(intentGallery, REQUEST_GALLERY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK) {
+            // 選択された画像が取得できたらUI更新する
+            mRecognizeInputStream = context?.contentResolver!!.openInputStream(data?.data)
+            val image: Bitmap = BitmapFactory.decodeStream(mRecognizeInputStream)
+            mSelectImageView?.setImageBitmap(image)
+        } else {
+            // do nothing.
+        }
     }
 
     companion object {

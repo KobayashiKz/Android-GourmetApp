@@ -1,5 +1,7 @@
 package com.kk.gourmetapp.select
 
+import java.io.InputStream
+
 interface SelectContract {
 
     interface View {
@@ -11,5 +13,11 @@ interface SelectContract {
     }
 
     interface UserActionListener {
+
+        /**
+         * 画像認証処理
+         * @param inputStream 画像認証する対象の画像InputStream
+         */
+        fun startRecognizerImage(inputStream: InputStream?)
     }
 }
