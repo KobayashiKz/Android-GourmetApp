@@ -4,13 +4,13 @@ import android.content.Context
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.kk.gourmetapp.data.GurunaviShop
-import com.kk.gourmetapp.data.source.ShopDataSource
+import com.kk.gourmetapp.data.source.DataSource
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Reader
 
-class ShopRemoteRepository(context: Context): ShopDataSource {
+class ShopRemoteRepository(context: Context): DataSource {
 
     private var mContext: Context? = context
 
@@ -37,7 +37,7 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
     /**
      * {@inheritDoc}
      */
-    override fun createGurunaviInfo(callback: ShopDataSource.CreateGurunaviShopCallback) {
+    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback) {
         val apikey: String = getGurunaviApiKey()
 
         val request: JsonObjectRequest = JsonObjectRequest(createURL(apikey), null,
@@ -90,5 +90,19 @@ class ShopRemoteRepository(context: Context): ShopDataSource {
         val longitude: String = "139.767052"
         return URL_GURUNAVI_API + "?keyid=" + key + URL_GURUNAVI_SEPARATOR + "latitude=" + latitude +
                 URL_GURUNAVI_SEPARATOR + "longitude=" + longitude
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveRecognizeData() {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun startRecognizeImage(inputStream: InputStream?) {
+        // do nothing.
     }
 }

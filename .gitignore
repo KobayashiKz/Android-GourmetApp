@@ -10,4 +10,5 @@
 /captures
 .externalNativeBuild
 /app/src/main/assets/authinfo.txt
+/app/src/main/assets/watson-recognize-info.txt
 .idea/vcs.xml

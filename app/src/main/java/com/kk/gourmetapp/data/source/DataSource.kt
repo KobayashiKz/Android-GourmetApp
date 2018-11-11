@@ -2,8 +2,9 @@ package com.kk.gourmetapp.data.source
 
 import com.android.volley.toolbox.ImageLoader
 import com.kk.gourmetapp.data.GurunaviShop
+import java.io.InputStream
 
-interface ShopDataSource {
+interface DataSource {
 
     // ぐるなびAPIからデータ取得完了コールバック
     interface CreateGurunaviShopCallback {
@@ -21,4 +22,19 @@ interface ShopDataSource {
      * @param callback 情報取得後のコールバック
      */
     fun createGurunaviInfo(callback: CreateGurunaviShopCallback)
+
+    interface RecognizeCallback {
+        fun onFinish()
+    }
+
+    /**
+     * 画像認証処理
+     * @param inputStream 画像認証する対象の画像InputStream
+     */
+    fun startRecognizeImage(inputStream: InputStream?)
+
+    /**
+     * 画像認証データをDBに保存する
+     */
+    fun saveRecognizeData()
 }
