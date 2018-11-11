@@ -63,8 +63,8 @@ class SelectFragment : Fragment(), SelectContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK) {
-            mRecognizeImageUri = data?.data
             // 選択された画像が取得できたらUI更新する
+            mRecognizeImageUri = data?.data
             val inputStream: InputStream = context?.contentResolver!!.openInputStream(data?.data)
             val image: Bitmap = BitmapFactory.decodeStream(inputStream)
             mSelectImageView?.setImageBitmap(image)

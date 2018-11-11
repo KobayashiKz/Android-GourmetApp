@@ -29,7 +29,7 @@ interface DataSource {
 
     /**
      * 画像認証処理
-     * @param inputStream 画像認証する対象の画像InputStream
+     * @param uri 画像認証する対象の画像Uri
      */
     fun startRecognizeImage(uri: Uri?)
 

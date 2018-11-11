@@ -24,8 +24,8 @@ class ImageRecognizer(context: Context) {
 
     /**
      * Watson Visual Recognizerによる画像認証処理
-     * @param inputStream 画像解析対象のinputStream
-     * @param callback    画像解析後に発火するコールバック
+     * @param uri      画像解析対象のUri
+     * @param callback 画像解析後に発火するコールバック
      */
     fun recognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
         thread {
@@ -41,10 +41,10 @@ class ImageRecognizer(context: Context) {
 
     /**
      * 画像解析
-     * @param apiKey      WatsonAPIキー
-     * @param version     Watsonバージョン
-     * @param inputStream 画像解析対象のinputStream
-     * @param callback    画像解析後に発火するコールバック
+     * @param apiKey   WatsonAPIキー
+     * @param version  Watsonバージョン
+     * @param uri      画像解析対象のUri
+     * @param callback 画像解析後に発火するコールバック
      * @return 画像解析結果
      */
     private fun analize(apiKey: String, version: String,uri: Uri?,
