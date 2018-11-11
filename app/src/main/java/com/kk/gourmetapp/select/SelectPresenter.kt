@@ -1,6 +1,7 @@
 package com.kk.gourmetapp.select
 
 import android.content.Context
+import android.net.Uri
 import com.kk.gourmetapp.data.source.DataRepository
 import java.io.InputStream
 
@@ -20,7 +21,7 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
     /**
      * {@inheritDoc}
      */
-    override fun startRecognizerImage(inputStream: InputStream?) {
-        mDataRepository?.startRecognizeImage(inputStream)
+    override fun startRecognizerImage(uri: Uri?) {
+        mDataRepository?.startRecognizeImage(uri)
     }
 }

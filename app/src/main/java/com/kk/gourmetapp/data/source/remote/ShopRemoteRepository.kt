@@ -1,6 +1,7 @@
 package com.kk.gourmetapp.data.source.remote
 
 import android.content.Context
+import android.net.Uri
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.kk.gourmetapp.data.GurunaviShop
@@ -102,7 +103,7 @@ class ShopRemoteRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun startRecognizeImage(inputStream: InputStream?) {
+    override fun startRecognizeImage(uri: Uri?) {
         // do nothing.
     }
 }

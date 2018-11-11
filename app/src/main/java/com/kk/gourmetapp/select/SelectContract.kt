@@ -1,6 +1,6 @@
 package com.kk.gourmetapp.select
 
-import java.io.InputStream
+import android.net.Uri
 
 interface SelectContract {
 
@@ -16,8 +16,8 @@ interface SelectContract {
 
         /**
          * 画像認証処理
-         * @param inputStream 画像認証する対象の画像InputStream
+         * @param uri 画像認証する対象の画像Uri
          */
-        fun startRecognizerImage(inputStream: InputStream?)
+        fun startRecognizerImage(uri: Uri?)
     }
 }

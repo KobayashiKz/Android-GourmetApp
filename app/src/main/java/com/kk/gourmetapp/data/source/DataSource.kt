@@ -1,8 +1,8 @@
 package com.kk.gourmetapp.data.source
 
+import android.net.Uri
 import com.android.volley.toolbox.ImageLoader
 import com.kk.gourmetapp.data.GurunaviShop
-import java.io.InputStream
 
 interface DataSource {
 
@@ -29,9 +29,9 @@ interface DataSource {
 
     /**
      * 画像認証処理
-     * @param inputStream 画像認証する対象の画像InputStream
+     * @param uri 画像認証する対象の画像Uri
      */
-    fun startRecognizeImage(inputStream: InputStream?)
+    fun startRecognizeImage(uri: Uri?)
 
     /**
      * 画像認証データをDBに保存する

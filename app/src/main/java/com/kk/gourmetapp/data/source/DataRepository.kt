@@ -1,9 +1,9 @@
 package com.kk.gourmetapp.data.source
 
 import android.content.Context
+import android.net.Uri
 import com.kk.gourmetapp.data.ImageRecognizer
 import com.kk.gourmetapp.data.source.remote.ShopRemoteRepository
-import java.io.InputStream
 
 class DataRepository(context: Context): DataSource {
 
@@ -26,9 +26,9 @@ class DataRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun startRecognizeImage(inputStream: InputStream?) {
+    override fun startRecognizeImage(uri: Uri?) {
         val imageRecognizer: ImageRecognizer = ImageRecognizer.newInstance(mContext)
-        imageRecognizer.recognizeImage(inputStream, object : DataSource.RecognizeCallback {
+        imageRecognizer.recognizeImage(uri, object : DataSource.RecognizeCallback {
             override fun onFinish() {
                 // TODO: 受け取ったデータをパースする
             }
