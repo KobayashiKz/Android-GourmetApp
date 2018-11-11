@@ -1,6 +1,7 @@
 package com.kk.gourmetapp.data
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.ibm.watson.developer_cloud.service.exception.NotFoundException
 import com.ibm.watson.developer_cloud.service.exception.RequestTooLargeException
@@ -14,6 +15,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Reader
+import java.util.*
 import kotlin.concurrent.thread
 
 class ImageRecognizer(context: Context) {
@@ -25,13 +27,13 @@ class ImageRecognizer(context: Context) {
      * @param inputStream 画像解析対象のinputStream
      * @param callback    画像解析後に発火するコールバック
      */
-    fun recognizeImage(inputStream: InputStream?, callback: DataSource.RecognizeCallback) {
+    fun recognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
         thread {
             val apiInfoList: MutableList<String> = getRecoginzeApiKey()
             analize(
                 apiInfoList[APIINFO.API_KEY.getIndex()],
                 apiInfoList[APIINFO.VERSION.getIndex()],
-                inputStream,
+                uri,
                 callback
             )
         }
@@ -39,17 +41,19 @@ class ImageRecognizer(context: Context) {
 
     /**
      * 画像解析
-     * @param apikey      WatsonAPIキー
+     * @param apiKey      WatsonAPIキー
      * @param version     Watsonバージョン
      * @param inputStream 画像解析対象のinputStream
      * @param callback    画像解析後に発火するコールバック
      * @return 画像解析結果
      */
-    private fun analize(apikey: String, version: String,inputStream: InputStream?,
+    private fun analize(apiKey: String, version: String,uri: Uri?,
                         callback: DataSource.RecognizeCallback): Boolean {
         var result: Boolean
         try {
-            val options: IamOptions = IamOptions.Builder().apiKey(apikey).build()
+            val inputStream: InputStream = mContext.contentResolver.openInputStream(uri)
+
+            val options: IamOptions = IamOptions.Builder().apiKey(apiKey).build()
             val visualRecognition: VisualRecognition = VisualRecognition(version, options)
 
             // 分類器の設定.日本語/food分類器を使用
@@ -63,6 +67,8 @@ class ImageRecognizer(context: Context) {
 
             // 画像認証をおこなう
             val responce: ClassifiedImages = visualRecognition.classify(classifyOptions).execute()
+
+            Log.d(TAG, "Recognition result: $responce")
 
             callback.onFinish()
 
@@ -128,9 +134,9 @@ class ImageRecognizer(context: Context) {
         // 画像認証のファイル名
         const val RECOGNIZE_FILE_NAME: String = "recognizeImage"
         // 画像認証の精度
-        const val RECOGNIZE_THRESHOLD: Float = 0.6f
+        const val RECOGNIZE_THRESHOLD: Float = 0.9f
         // 分類器
-        val RECOGNIZE_TYPE:List<String> = listOf("food")
+        val RECOGNIZE_TYPE:List<String> = listOf("default")
 
         fun newInstance(context: Context): ImageRecognizer {
             return ImageRecognizer(context)

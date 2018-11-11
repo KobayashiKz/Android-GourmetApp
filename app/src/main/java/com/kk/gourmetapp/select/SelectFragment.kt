@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +21,7 @@ class SelectFragment : Fragment(), SelectContract.View {
 
     private var mSelectImageView: ImageView? = null
 
-    private var mRecognizeInputStream: InputStream? = null
+    private var mRecognizeImageUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root: View? = inflater.inflate(R.layout.fragment_select, container, false)
@@ -29,17 +30,13 @@ class SelectFragment : Fragment(), SelectContract.View {
         // 画像認証ボタンタップされたら画像解析を開始する
         val recognizeButton: Button? = root?.findViewById(R.id.recognize_button)
         recognizeButton?.setOnClickListener {
-            if (mRecognizeInputStream != null) {
-                mSelectPresenter?.startRecognizerImage(mRecognizeInputStream)
-            }
+            mSelectPresenter?.startRecognizerImage(mRecognizeImageUri)
         }
 
         // キャンセルボタンタップ時にはInputStreamをcloseする
         val cancelButton: Button? = root?.findViewById(R.id.recognize_cancel_button)
         cancelButton?.setOnClickListener {
-            if (mRecognizeInputStream != null) {
-                mRecognizeInputStream?.close()
-            }
+            // TODO: キャンセルボタンの処理
         }
 
         // ギャラリー呼び出し処理
@@ -66,9 +63,10 @@ class SelectFragment : Fragment(), SelectContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_GALLERY && resultCode == RESULT_OK) {
+            mRecognizeImageUri = data?.data
             // 選択された画像が取得できたらUI更新する
-            mRecognizeInputStream = context?.contentResolver!!.openInputStream(data?.data)
-            val image: Bitmap = BitmapFactory.decodeStream(mRecognizeInputStream)
+            val inputStream: InputStream = context?.contentResolver!!.openInputStream(data?.data)
+            val image: Bitmap = BitmapFactory.decodeStream(inputStream)
             mSelectImageView?.setImageBitmap(image)
         } else {
             // do nothing.
