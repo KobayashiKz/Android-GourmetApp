@@ -70,7 +70,7 @@ class ImageRecognizer(context: Context) {
 
             Log.d(TAG, "Recognition result: $responce")
 
-            callback.onFinish()
+            callback.onFinish(responce)
 
             result = true
         } catch (e: NotFoundException) {
@@ -81,10 +81,8 @@ class ImageRecognizer(context: Context) {
             Log.w(TAG, "Failed authentication of Watson Visual Recognizer because 413 error. " + e.message)
             result = false
         } catch (e: ServiceResponseException) {
-            Log.w(
-                TAG, "Failed authentication of Watson Visual Recognizer. Status: "
-                        + e.statusCode + ": " + e.message
-            )
+            Log.w(TAG, "Failed authentication of Watson Visual Recognizer. Status: "
+                        + e.statusCode + ": " + e.message)
             result = false
         }
         return result
@@ -134,9 +132,9 @@ class ImageRecognizer(context: Context) {
         // 画像認証のファイル名
         const val RECOGNIZE_FILE_NAME: String = "recognizeImage"
         // 画像認証の精度
-        const val RECOGNIZE_THRESHOLD: Float = 0.9f
+        const val RECOGNIZE_THRESHOLD: Float = 0.5f
         // 分類器
-        val RECOGNIZE_TYPE:List<String> = listOf("default")
+        val RECOGNIZE_TYPE:List<String> = listOf("food")
 
         fun newInstance(context: Context): ImageRecognizer {
             return ImageRecognizer(context)
