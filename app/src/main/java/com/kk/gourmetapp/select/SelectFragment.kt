@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import com.kk.gourmetapp.R
 import java.io.InputStream
 
@@ -33,10 +34,10 @@ class SelectFragment : Fragment(), SelectContract.View {
             mSelectPresenter?.startRecognizerImage(mRecognizeImageUri)
         }
 
-        // キャンセルボタンタップ時にはInputStreamをcloseする
+        // キャンセルボタンタップ時には画面を戻す
         val cancelButton: Button? = root?.findViewById(R.id.recognize_cancel_button)
         cancelButton?.setOnClickListener {
-            // TODO: キャンセルボタンの処理
+            activity?.onBackPressed()
         }
 
         // ギャラリー呼び出し処理
@@ -71,6 +72,13 @@ class SelectFragment : Fragment(), SelectContract.View {
         } else {
             // do nothing.
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun showRecognizeToast(keyword: String?) {
+        Toast.makeText(context, keyword, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

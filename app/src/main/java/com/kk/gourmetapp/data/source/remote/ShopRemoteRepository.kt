@@ -103,7 +103,7 @@ class ShopRemoteRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun startRecognizeImage(uri: Uri?) {
+    override fun startRecognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
         // do nothing.
     }
 }
