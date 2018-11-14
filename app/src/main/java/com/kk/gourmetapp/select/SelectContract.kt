@@ -20,7 +20,7 @@ interface SelectContract {
         /**
          * 読み込み中アニメーションの停止
          */
-        fun stopLoadingAnimation()
+        fun dismissProgressDialog()
     }
 
     interface UserActionListener {

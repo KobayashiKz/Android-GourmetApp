@@ -51,8 +51,6 @@ class SelectFragment : Fragment(), SelectContract.View {
             activity?.onBackPressed()
         }
 
-//        mAnimationView = root?.findViewById(R.id.loading_animation_view)
-
         // ギャラリー呼び出し処理
         showGallery()
 
@@ -97,7 +95,7 @@ class SelectFragment : Fragment(), SelectContract.View {
     /**
      * {@inheritDoc}
      */
-    override fun stopLoadingAnimation() {
+    override fun dismissProgressDialog() {
         mLoadingDialog?.dismiss()
     }
 
