@@ -51,7 +51,11 @@ class DataRepository(context: Context): DataSource {
             }
 
             override fun onParsed(keyword: String?) {
+                // キーワードをDBに保存
+                mShopRemoteRepository?.saveRecognizeData(keyword)
+
                 callback.onParsed(keyword)
+
             }
         })
     }
@@ -80,7 +84,7 @@ class DataRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun saveRecognizeData() {
+    override fun saveRecognizeData(keyword: String?) {
         // TODO: DBにキーワードを保存する
     }
 }
