@@ -19,7 +19,6 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
     // レポジトリはコンストラクタで受け取る
     private var mDataRepository: DataRepository? = DataRepository(context)
 
-
     init {
         mSelectView.setUserActionListener(this)
     }
@@ -34,6 +33,7 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
             }
             override fun onParsed(keyword: String?) {
                 mHandler.post {
+                    mSelectView.stopLoadingAnimation()
                     mSelectView.showRecognizeToast(keyword)
                 }
             }
