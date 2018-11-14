@@ -16,6 +16,11 @@ interface SelectContract {
          * @param keyword 画像認証で抽出したキーワード
          */
         fun showRecognizeToast(keyword: String?)
+
+        /**
+         * 読み込み中アニメーションの停止
+         */
+        fun dismissProgressDialog()
     }
 
     interface UserActionListener {
