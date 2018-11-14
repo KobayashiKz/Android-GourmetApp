@@ -33,7 +33,7 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
             }
             override fun onParsed(keyword: String?) {
                 mHandler.post {
-                    mSelectView.stopLoadingAnimation()
+                    mSelectView.dismissProgressDialog()
                     mSelectView.showRecognizeToast(keyword)
                 }
             }

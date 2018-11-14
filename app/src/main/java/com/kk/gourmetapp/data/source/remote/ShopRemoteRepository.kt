@@ -96,8 +96,13 @@ class ShopRemoteRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun saveRecognizeData() {
-        // do nothing.
+    override fun saveRecognizeData(keyword: String?) {
+        // DB保存
+//        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("keywords")
+//        val key: String? = reference.push().key
+//        val map: HashMap<String?, Any?> = HashMap()
+//        map.put(key, keyword)
+//        reference.updateChildren(map, null)
     }
 
     /**

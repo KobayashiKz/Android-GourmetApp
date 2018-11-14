@@ -47,6 +47,7 @@ interface DataSource {
 
     /**
      * 画像認証データをDBに保存する
+     * @param keyword 画像認証から抽出したキーワード
      */
-    fun saveRecognizeData()
+    fun saveRecognizeData(keyword: String?)
 }
