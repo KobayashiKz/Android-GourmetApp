@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.source.DataSource
 import java.io.BufferedReader
@@ -97,12 +99,9 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun saveRecognizeData(keyword: String?) {
-        // DB保存
-//        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("keywords")
-//        val key: String? = reference.push().key
-//        val map: HashMap<String?, Any?> = HashMap()
-//        map.put(key, keyword)
-//        reference.updateChildren(map, null)
+        // DBにキーワードを保存
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("keywords")
+        reference.setValue(keyword)
     }
 
     /**

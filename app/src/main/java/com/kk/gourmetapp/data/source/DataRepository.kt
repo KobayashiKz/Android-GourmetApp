@@ -46,16 +46,14 @@ class DataRepository(context: Context): DataSource {
 
                 // キーワードが抽出できた場合だけコールバックを返す
                 if (keyword != null) {
+                    mShopRemoteRepository?.saveRecognizeData(keyword)
                     callback.onParsed(keyword)
                 }
             }
 
             override fun onParsed(keyword: String?) {
                 // キーワードをDBに保存
-                mShopRemoteRepository?.saveRecognizeData(keyword)
-
                 callback.onParsed(keyword)
-
             }
         })
     }
