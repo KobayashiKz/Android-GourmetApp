@@ -46,10 +46,13 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         mRecyclerView?.layoutManager = linearLayoutManager
 
+        return root
+    }
+
+    override fun onResume() {
+        super.onResume()
         // ぐるなびのお店情報を取得開始
         mRecommendPresenter?.createGurunaviInfo()
-
-        return root
     }
 
     /**

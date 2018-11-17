@@ -1,17 +1,26 @@
 package com.kk.gourmetapp.data.source
 
+import android.content.ContentValues
 import android.content.Context
+import android.content.SharedPreferences
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
+import android.text.TextUtils
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
 import com.kk.gourmetapp.data.ImageRecognizer
 import com.kk.gourmetapp.data.source.remote.ShopRemoteRepository
+import com.kk.gourmetapp.util.DatabaseHelper
+import java.util.*
 
 class DataRepository(context: Context): DataSource {
 
     private val mContext: Context = context
 
     private var mShopRemoteRepository: ShopRemoteRepository? = null
+
+    private var mDbHelper: DatabaseHelper? = DatabaseHelper(mContext)
 
     init {
         mShopRemoteRepository = ShopRemoteRepository(mContext)
@@ -21,8 +30,17 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback) {
+        val keyword: String? = pickKeyword()
         //リモート側でAPIをたたいて情報生成する
-        mShopRemoteRepository?.createGurunaviInfo(callback)
+        mShopRemoteRepository?.createGurunaviInfo(keyword, callback)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun createGurunaviInfo(keyword: String?,
+                                    callback: DataSource.CreateGurunaviShopCallback) {
+        // do nothing.
     }
 
     /**
@@ -46,14 +64,13 @@ class DataRepository(context: Context): DataSource {
 
                 // キーワードが抽出できた場合だけコールバックを返す
                 if (keyword != null) {
-                    mShopRemoteRepository?.saveRecognizeData(keyword)
                     callback.onParsed(keyword)
                 }
             }
 
             override fun onParsed(keyword: String?) {
                 // キーワードをDBに保存
-                callback.onParsed(keyword)
+                saveRecognizeData(keyword)
             }
         })
     }
@@ -83,6 +100,65 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun saveRecognizeData(keyword: String?) {
-        // TODO: DBにキーワードを保存する
+        // SQLiteにキーワードを登録する. TODO: Priority計算処理
+        val writer: SQLiteDatabase? = mDbHelper?.writableDatabase
+
+        val values = ContentValues()
+        values.put(DatabaseHelper.KeywordTable.COLUMN_NAME_KEYWORD.value, keyword)
+        values.put(DatabaseHelper.KeywordTable.COLUMN_NAME_PRIORITY.value, 1)
+        writer?.insert(DatabaseHelper.KeywordTable.TABLE_NAME.value, null, values)
+
+        // Preferenceにも保存しておく
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(DatabaseHelper.KEY_KEYWORD, keyword).apply()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun pickKeyword(): String? {
+
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
+
+        var keyword: String? = preference.getString(DatabaseHelper.KEY_KEYWORD, "")
+
+        if (!TextUtils.isEmpty(keyword)) {
+            // Preferenceに保存されている場合には、キーワードを抜き出して空文字をセットしておく
+            preference.edit().putString(DatabaseHelper.KEY_KEYWORD, "").apply()
+        } else {
+            // Preferenceにキーワードが保存されていない場合にはDBからランダム番目のキーワードを取得する
+            val reader: SQLiteDatabase? = mDbHelper?.readableDatabase
+
+            // キーワード保存件数の取得
+            val recordCount: Long? = mDbHelper?.getRecordCount(reader, DatabaseHelper.KeywordTable.TABLE_NAME.value)
+            if (recordCount != 0L) {
+                // ランダム値を生成
+                val randomInt: Int = Random().nextInt(recordCount!!.toInt())
+
+                val projection: Array<String> = arrayOf(DatabaseHelper.KeywordTable.COLUMN_NAME_KEYWORD.value)
+                // ランダム番目のキーワードを取得する
+                val cursor: Cursor? = reader?.query(
+                    DatabaseHelper.KeywordTable.TABLE_NAME.value,
+                    projection,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "$randomInt,1")
+
+                while (cursor!!.moveToNext()) {
+                    keyword = cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseHelper.KeywordTable.COLUMN_NAME_KEYWORD.value))
+                }
+                cursor.close()
+            } else {
+                // キーワードが保存されていない場合にはnullを返す
+                keyword = null
+            }
+        }
+        return keyword
     }
 }
