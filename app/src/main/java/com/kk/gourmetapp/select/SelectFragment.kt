@@ -48,7 +48,7 @@ class SelectFragment : Fragment(), SelectContract.View {
         // キャンセルボタンタップ時には画面を戻す
         val cancelButton: Button? = root?.findViewById(R.id.recognize_cancel_button)
         cancelButton?.setOnClickListener {
-            activity?.onBackPressed()
+            close()
         }
 
         // ギャラリー呼び出し処理
@@ -97,6 +97,13 @@ class SelectFragment : Fragment(), SelectContract.View {
      */
     override fun dismissProgressDialog() {
         mLoadingDialog?.dismiss()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun close() {
+        activity?.onBackPressed()
     }
 
     companion object {
