@@ -12,8 +12,8 @@ class GoogleSignInUtil(context: Context) {
     var mContext: Context = context
 
     /**
-     * ログインチェック
-     * @return true: ログイン済み, false: 未ログイン
+     * サインインに使用するClientの生成処理
+     * @return サインインClient
      */
     fun createGoogleSignInClient(): GoogleSignInClient {
         // GoogleAPIにログインしているかチェックする
@@ -34,6 +34,9 @@ class GoogleSignInUtil(context: Context) {
         return account != null
     }
 
+    /**
+     * Googleサインインする際のリクエストコード. StartActivityForResultのRequestコード
+     */
     enum class GoogleSignInRequest{
         REQUEST_SIGN_IN;
 
