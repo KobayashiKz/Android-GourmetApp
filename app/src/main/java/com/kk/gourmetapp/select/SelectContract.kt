@@ -21,6 +21,11 @@ interface SelectContract {
          * 読み込み中アニメーションの停止
          */
         fun dismissProgressDialog()
+
+        /**
+         * Fragmentを閉じる
+         */
+        fun close()
     }
 
     interface UserActionListener {

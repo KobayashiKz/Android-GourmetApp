@@ -35,6 +35,7 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
                 mHandler.post {
                     mSelectView.dismissProgressDialog()
                     mSelectView.showRecognizeToast(keyword)
+                    mSelectView.close()
                 }
             }
         })
