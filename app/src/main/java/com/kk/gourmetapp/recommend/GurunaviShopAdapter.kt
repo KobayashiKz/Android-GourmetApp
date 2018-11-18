@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
@@ -28,6 +29,8 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
     }
 
     override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
+        holder.scrollView.isVerticalScrollBarEnabled = false
+
         holder.name.text = mShopList[position].mName
 
         // 画像URLが存在する場合は取得し存在しない場合はデフォルド画像を表示する
@@ -45,12 +48,15 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             mContext?.startActivity(intent)
         }
         holder.category.text = mShopList[position].mCategory
+        holder.tel.text = mShopList[position].mTelNumber
+        holder.openTime.text = mShopList[position].mOpenTime
+        holder.budget.text = mShopList[position].mBudget
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
         mContext = parent.context
         val item: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.shop_item, parent, false)
+            R.layout.gurunavi_shop_item, parent, false)
         return ShopViewHolder(item)
     }
 
@@ -58,8 +64,13 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
      * ViewHolderクラス
      */
     class ShopViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.findViewById(R.id.shop_name)
-        val image: NetworkImageView = itemView.findViewById(R.id.shop_image)
-        val category: TextView = itemView.findViewById(R.id.shop_category)
+        val name: TextView = itemView.findViewById(R.id.gurunavi_shop_name)
+        val image: NetworkImageView = itemView.findViewById(R.id.gurunavi_shop_image)
+        val category: TextView = itemView.findViewById(R.id.gurunavi_shop_category)
+        val tel: TextView = itemView.findViewById(R.id.gurunavi_shop_tel)
+        val openTime: TextView = itemView.findViewById(R.id.gurunavi_shop_open_time)
+        val budget: TextView = itemView.findViewById(R.id.gurunavi_shop_budget)
+
+        val scrollView: ScrollView = itemView.findViewById(R.id.gurunavi_shop_text_scroll_view)
     }
 }

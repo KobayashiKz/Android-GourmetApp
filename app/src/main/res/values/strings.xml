@@ -6,6 +6,7 @@
     <!-- おすすめ画面 -->
     <string name="text_gurunavi">ぐるなび</string>
     <string name="text_hotpepper">ホットペッパー</string>
+    <string name="text_budget_unit">円</string>
 
     <!-- 画像選択画面 -->
     <string name="button_start_recognize">Recognize</string>

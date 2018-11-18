@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- おすすめ画面 -->
+    <dimen name="icon_margin_height">18dp</dimen>
+    <dimen name="icon_margin_width">18dp</dimen>
+    <dimen name="icon_margin_start">30dp</dimen>
+    <dimen name="text_margin_start">5dp</dimen>
+    <dimen name="text_margin_top">4dp</dimen>
+
     <!-- 画像選択画面 -->
     <dimen name="button_recognize_margin">10dp</dimen>
     <dimen name="button_recognize_width">150dp</dimen>
