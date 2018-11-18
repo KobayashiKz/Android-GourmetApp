@@ -140,20 +140,19 @@ class DataRepository(context: Context): DataSource {
 
         var keyword: String? = preference.getString(DatabaseHelper.KEY_KEYWORD, "")
 
-        if (!TextUtils.isEmpty(keyword)) {
-            // Preferenceに保存されている場合には、キーワードを抜き出して空文字をセットしておく
-            preference.edit().putString(DatabaseHelper.KEY_KEYWORD, "").apply()
-        } else {
+        if (TextUtils.isEmpty(keyword)) {
             // Preferenceにキーワードが保存されていない場合にはDBからランダム番目のキーワードを取得する
             val reader: SQLiteDatabase? = mDbHelper?.readableDatabase
 
             // キーワード保存件数の取得
-            val recordCount: Long? = mDbHelper?.getRecordCount(reader, DatabaseHelper.KeywordTable.TABLE_NAME.value)
+            val recordCount: Long? = mDbHelper?.getRecordCount(reader,
+                DatabaseHelper.KeywordTable.TABLE_NAME.value)
             if (recordCount != 0L) {
                 // ランダム値を生成
                 val randomInt: Int = Random().nextInt(recordCount!!.toInt())
 
-                val projection: Array<String> = arrayOf(DatabaseHelper.KeywordTable.COLUMN_NAME_KEYWORD.value)
+                val projection: Array<String> = arrayOf(
+                    DatabaseHelper.KeywordTable.COLUMN_NAME_KEYWORD.value)
                 // ランダム番目のキーワードを取得する
                 val cursor: Cursor? = reader?.query(
                     DatabaseHelper.KeywordTable.TABLE_NAME.value,
@@ -176,5 +175,15 @@ class DataRepository(context: Context): DataSource {
             }
         }
         return keyword
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun removeRecognizeKeyword() {
+        // Preferenceに保存されている場合には、キーワードを抜き出して空文字をセットしておく
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(DatabaseHelper.KEY_KEYWORD, "").apply()
     }
 }

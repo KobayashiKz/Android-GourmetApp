@@ -87,4 +87,9 @@ interface DataSource {
      * @return 嗜好キーワード. nullは嗜好キーワードなし
      */
     fun pickKeyword(): String?
+
+    /**
+     * 画像解析直後に使用する検索キーワードの削除
+     */
+    fun removeRecognizeKeyword()
 }

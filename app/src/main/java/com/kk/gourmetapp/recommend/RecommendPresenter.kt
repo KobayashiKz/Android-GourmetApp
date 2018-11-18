@@ -45,6 +45,8 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                 shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?) {
                 // ホットペッパーのレストラン情報が取得できた場合にはUI更新をかける
                 mRecommendView.showHotpepperShops(shops, imageLoader)
+                // 画像解析で取得保存しておいたキーワードを空文字にしておく
+                mDataRepository?.removeRecognizeKeyword()
             }
         })
     }

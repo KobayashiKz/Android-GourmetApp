@@ -122,7 +122,8 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val category: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_GENRE)
                         .getString(KEY_HOTPEPPER_SHOP_GENRE_NAME)
                     val imageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO)
-                        .getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE).getString(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE)
+                        .getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE)
+                        .getString(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE)
                     val pageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_URL)
                         .getString(KEY_HOTPEPPER_SHOP_URL_PC)
                     val shop = HotpepperShop(name, category, imageUrl, pageUrl)
@@ -211,5 +212,12 @@ class ShopRemoteRepository(context: Context): DataSource {
     override fun pickKeyword(): String? {
         // do nothing.
         return null
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun removeRecognizeKeyword() {
+        // do nothing.
     }
 }
