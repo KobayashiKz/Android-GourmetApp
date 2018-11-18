@@ -3,6 +3,9 @@
 
     <string name="drawer_setting">Settings</string>
 
+    <!-- おすすめ画面 -->
+    <string name="text_gurunavi">ぐるなび</string>
+
     <!-- 画像選択画面 -->
     <string name="button_start_recognize">Recognize</string>
     <string name="button_cancel_recognize">Cancel</string>

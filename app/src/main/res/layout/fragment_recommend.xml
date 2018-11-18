@@ -16,12 +16,20 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/shop_recycler_view"
+            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
-            </android.support.v7.widget.RecyclerView>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/text_gurunavi"/>
+
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/shop_recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layerType="hardware"
+                        android:layout_margin="10dp">
+                </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -35,5 +43,4 @@
                 app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>
-
 </FrameLayout>
