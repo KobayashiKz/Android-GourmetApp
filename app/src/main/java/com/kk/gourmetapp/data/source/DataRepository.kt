@@ -46,6 +46,22 @@ class DataRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
+    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback) {
+        val keyword: String? = pickKeyword()
+        mShopRemoteRepository?.createHotpepperInfo(keyword, callback)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun createHotpepperInfo(keyword: String?,
+                                     callback: DataSource.CreateHotpepperShopCallback) {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     override fun startRecognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
         val imageRecognizer: ImageRecognizer = ImageRecognizer.newInstance(mContext)
         imageRecognizer.recognizeImage(uri, object : DataSource.RecognizeCallback {

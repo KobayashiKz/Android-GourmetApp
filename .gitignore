@@ -9,7 +9,8 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/assets/authinfo.txt
+/app/src/main/assets/gurunavi-auth-info.txt
+/app/src/main/assets/hotpepper-auth-info.txt
 /app/src/main/assets/watson-recognize-info.txt
 .idea/vcs.xml
 /app/google-services.json
