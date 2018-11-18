@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.data.source.DataSource
@@ -32,6 +33,9 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_REST_URL_MOBILE: String = "url_mobile"
         const val KEY_REST_URL_MOBILE_SHOP: String = "shop_image1"
         const val KEY_REST_IMAGE_URL: String = "image_url"
+        const val KEY_REST_TEL: String = "tel"
+        const val KEY_REST_OPEN_TIME: String = "opentime"
+        const val KEY_REST_BUDGET: String = "budget"
 
         // ホットペッパーAPI URL
         const val NAME_HOTPEPPER_AUTH_INFO_FILE: String = "hotpepper-auth-info.txt"
@@ -48,6 +52,9 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE: String = "l"
         const val KEY_HOTPEPPER_SHOP_URL: String = "urls"
         const val KEY_HOTPEPPER_SHOP_URL_PC: String = "pc"
+        const val KEY_HOTPEPPER_SHOP_OPEN: String = "open"
+        const val KEY_HOTPEPPER_SHOP_BUDGET: String = "budget"
+        const val KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE: String = "average"
     }
 
     /**
@@ -78,7 +85,12 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val imageUrl: String = restJsonObject.getJSONObject(KEY_REST_IMAGE_URL)
                         .getString(KEY_REST_URL_MOBILE_SHOP)
                     val pageUrl: String = restJsonObject.getString(KEY_REST_URL_MOBILE)
-                    val shop = GurunaviShop(name, category, imageUrl, pageUrl)
+                    val tel: String = restJsonObject.getString(KEY_REST_TEL)
+                    val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
+                    val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
+                            mContext?.getString(R.string.text_budget_unit)
+                    val shop = GurunaviShop(
+                        name, category, imageUrl, pageUrl, tel, openTime, budget)
 
                     // ぐるなびのショップリストに追加
                     shopList.add(shop)
@@ -115,7 +127,8 @@ class ShopRemoteRepository(context: Context): DataSource {
                 val resultJsonObject = response.getJSONObject(KEY_HOTPEPPER_RESULTS)
 
                 for (i in 0..(REST_GET_COUNT - 1)) {
-                    val restJsonObject = resultJsonObject.getJSONArray(KEY_HOTPEPPER_SHOP).getJSONObject(i)
+                    val restJsonObject =
+                        resultJsonObject.getJSONArray(KEY_HOTPEPPER_SHOP).getJSONObject(i)
 
                     // 各レストラン情報をパースする
                     val name: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_NAME)
@@ -126,7 +139,11 @@ class ShopRemoteRepository(context: Context): DataSource {
                         .getString(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE)
                     val pageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_URL)
                         .getString(KEY_HOTPEPPER_SHOP_URL_PC)
-                    val shop = HotpepperShop(name, category, imageUrl, pageUrl)
+                    val openTime: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_OPEN)
+                    val budget: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_BUDGET)
+                        .getString(KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE)
+
+                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget)
 
                     shopList.add(shop)
                 }
