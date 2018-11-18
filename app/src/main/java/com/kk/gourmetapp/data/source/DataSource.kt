@@ -11,7 +11,7 @@ interface DataSource {
     interface CreateGurunaviShopCallback {
         /**
          * ぐるなびAPIからEntity作成完了時に呼ばれるコールバック
-         * @param shops お店情報リスト
+         * @param shops       お店情報リスト
          * @param imageLoader お店の画像用イメージローダー
          */
         fun createdShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
@@ -22,6 +22,13 @@ interface DataSource {
      * @param callback 情報取得後のコールバック
      */
     fun createGurunaviInfo(callback: CreateGurunaviShopCallback)
+
+    /**
+     * ぐるなびからお店情報を生成する処理
+     * @param keyword  検索キーワード
+     * @param callback 情報取得後のコールバック
+     */
+    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback)
 
     // 画像認証後のコールバック
     interface RecognizeCallback {
@@ -50,4 +57,10 @@ interface DataSource {
      * @param keyword 画像認証から抽出したキーワード
      */
     fun saveRecognizeData(keyword: String?)
+
+    /**
+     * 嗜好キーワードを抜き出す
+     * @return 嗜好キーワード. nullは嗜好キーワードなし
+     */
+    fun pickKeyword(): String?
 }

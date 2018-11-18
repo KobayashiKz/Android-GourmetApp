@@ -37,6 +37,7 @@ class SelectPresenter(fragment: SelectFragment, context: Context): SelectContrac
                     mSelectView.showRecognizeToast(keyword)
                     mSelectView.close()
                 }
+                mDataRepository?.saveRecognizeData(keyword)
             }
         })
     }

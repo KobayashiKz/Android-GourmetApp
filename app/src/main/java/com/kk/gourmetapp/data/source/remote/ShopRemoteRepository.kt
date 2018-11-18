@@ -19,7 +19,7 @@ class ShopRemoteRepository(context: Context): DataSource {
 
     companion object {
         // レストランの取得数
-        const val REST_GET_COUNT: Int = 5
+        const val REST_GET_COUNT: Int = 10
 
         // ぐるなびAPI URL
         const val NAME_AUTH_INFO_FILE: String = "authinfo.txt"
@@ -39,10 +39,20 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback) {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun createGurunaviInfo(keyword: String?, callback: DataSource.CreateGurunaviShopCallback) {
         val apikey: String = getGurunaviApiKey()
 
-        val request: JsonObjectRequest = JsonObjectRequest(createURL(apikey), null,
+        val request: JsonObjectRequest = JsonObjectRequest(createURL(apikey, keyword), null,
             Response.Listener { response ->
+
+                // データをリセットして前回までの表示内容を削除する
+                mGurunaviShopList = mutableListOf()
 
                 for (i in 0..(REST_GET_COUNT - 1)) {
                     val restJsonObject = response.getJSONArray(KEY_REST).getJSONObject(i)
@@ -83,21 +93,28 @@ class ShopRemoteRepository(context: Context): DataSource {
 
     /**
      * ぐるなびURLの生成処理
-     * @param key ぐるなびAPIのAPIキー
+     * @param key     ぐるなびAPIのAPIキー
+     * @param keyword 検索キーワード
+     * @return ぐるなび検索URL
      */
-    private fun createURL(key: String): String {
+    private fun createURL(key: String, keyword: String?): String {
         // TODO: 現在地取得処理.ひとまず東京駅の座標で固定検索かける
         val latitude: String = "35.681167"
         val longitude: String = "139.767052"
-        return URL_GURUNAVI_API + "?keyid=" + key + URL_GURUNAVI_SEPARATOR + "latitude=" + latitude +
-                URL_GURUNAVI_SEPARATOR + "longitude=" + longitude
+        val url: String = URL_GURUNAVI_API + "?keyid=" + key + URL_GURUNAVI_SEPARATOR + "latitude=" + latitude +
+                URL_GURUNAVI_SEPARATOR + "longitude=" + longitude + URL_GURUNAVI_SEPARATOR
+        return if (keyword != null) {
+            url + "freeword=" + keyword
+        } else {
+            url
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     override fun saveRecognizeData(keyword: String?) {
-        // DBにキーワードを保存
+        // do nothing.
     }
 
     /**
@@ -105,5 +122,10 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     override fun startRecognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
         // do nothing.
+    }
+
+    override fun pickKeyword(): String? {
+        // do nothing.
+        return null
     }
 }
