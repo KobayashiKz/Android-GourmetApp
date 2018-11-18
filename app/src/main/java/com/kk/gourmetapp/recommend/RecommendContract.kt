@@ -2,6 +2,7 @@ package com.kk.gourmetapp.recommend
 
 import com.android.volley.toolbox.ImageLoader
 import com.kk.gourmetapp.data.GurunaviShop
+import com.kk.gourmetapp.data.HotpepperShop
 
 interface RecommendContract {
 
@@ -18,9 +19,17 @@ interface RecommendContract {
 
         /**
          * ぐるなびのレストラン情報を表示
-         * @param shops レストランリスト
+         * @param shops       レストランリスト
+         * @param imageLoader レストラン画像
          */
         fun showGurunaviShops(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
+
+        /**
+         * ホットペッパーのレストラン情報を表示
+         * @param shops       レストランリスト
+         * @param imageLoader レストラン画像
+         */
+        fun showHotpepperShops(shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
     }
 
     /**
@@ -32,5 +41,11 @@ interface RecommendContract {
          * ぐるなびのお店情報生成
          */
         fun createGurunaviInfo()
+
+        /**
+         * ホットペッパーのお店情報生成
+         */
+        fun createHotpepperInfo()
+
     }
 }

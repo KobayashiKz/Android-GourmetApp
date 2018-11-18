@@ -4,6 +4,7 @@ import android.net.Uri
 import com.android.volley.toolbox.ImageLoader
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
 import com.kk.gourmetapp.data.GurunaviShop
+import com.kk.gourmetapp.data.HotpepperShop
 
 interface DataSource {
 
@@ -14,7 +15,17 @@ interface DataSource {
          * @param shops       お店情報リスト
          * @param imageLoader お店の画像用イメージローダー
          */
-        fun createdShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
+        fun createGurunaviShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
+    }
+
+    // ホットペッパーAPIからデータ取得完了コールバック
+    interface CreateHotpepperShopCallback {
+        /**
+         * ホットペッパーAPIからEntity作成完了時に呼ばれるコールバック
+         * @param shops       お店情報リスト
+         * @param imageLoader お店の画像用イメージローダー
+         */
+        fun createHotpepperShop(shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
     }
 
     /**
@@ -29,6 +40,19 @@ interface DataSource {
      * @param callback 情報取得後のコールバック
      */
     fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback)
+
+    /**
+     * ホットペッパーからお店情報を生成する処理
+     * @param callback 情報取得後のコールバック
+     */
+    fun createHotpepperInfo(callback: CreateHotpepperShopCallback)
+
+    /**
+     * ホットペッパーからお店情報を生成する処理
+     * @param keyword  検索キーワード
+     * @param callback 情報取得後のコールバック
+     */
+    fun createHotpepperInfo(keyword: String?, callback: CreateHotpepperShopCallback)
 
     // 画像認証後のコールバック
     interface RecognizeCallback {
