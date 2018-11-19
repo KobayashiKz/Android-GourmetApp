@@ -1,9 +1,12 @@
 package com.kk.gourmetapp.data.source.remote
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
@@ -26,6 +29,12 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val URL_GURUNAVI_API: String = "https://api.gnavi.co.jp/RestSearchAPI/v3/"
         const val URL_SEPARATOR: String = "&"
 
+        // ぐるなびクレジット画像URL
+        const val URL_GURUNAVI_CREDIT: String
+                = "https://api.gnavi.co.jp/api/img/credit/api_90_35.gif"
+        const val URL_GURUNAVI_CREDIT_TRANSITION: String
+                = "https://api.gnavi.co.jp/api/scope/"
+
         // ぐるなびJsonパース用キー
         const val KEY_REST: String = "rest"
         const val KEY_REST_NAME: String = "name"
@@ -39,7 +48,14 @@ class ShopRemoteRepository(context: Context): DataSource {
 
         // ホットペッパーAPI URL
         const val NAME_HOTPEPPER_AUTH_INFO_FILE: String = "hotpepper-auth-info.txt"
-        const val URL_HOTPEPPER_API: String = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/"
+        const val URL_HOTPEPPER_API: String
+                = "http://webservice.recruit.co.jp/hotpepper/gourmet/v1/"
+
+        // ホットペッパークレジット画像URL
+        const val URL_HOTPEPPER_CREDIT: String
+                = "http://webservice.recruit.co.jp/banner/hotpepper-m.gif"
+        const val URL_HOTPEPPER_CREDIT_TRANSITION: String
+                = "http://webservice.recruit.co.jp/"
 
         // ホットペッパーJsonパース用キー
         const val KEY_HOTPEPPER_RESULTS: String = "results"
@@ -236,5 +252,33 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     override fun removeRecognizeKeyword() {
         // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCredit(): RequestBuilder<Drawable>? {
+        return Glide.with(mContext).load(URL_GURUNAVI_CREDIT)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCredit(): RequestBuilder<Drawable>? {
+        return Glide.with(mContext).load(URL_HOTPEPPER_CREDIT)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCreditUri(): Uri? {
+        return Uri.parse(URL_GURUNAVI_CREDIT_TRANSITION)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCreditUri(): Uri? {
+        return Uri.parse(URL_HOTPEPPER_CREDIT_TRANSITION)
     }
 }

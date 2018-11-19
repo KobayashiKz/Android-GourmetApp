@@ -1,7 +1,9 @@
 package com.kk.gourmetapp.data.source
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import com.android.volley.toolbox.ImageLoader
+import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
@@ -92,4 +94,28 @@ interface DataSource {
      * 画像解析直後に使用する検索キーワードの削除
      */
     fun removeRecognizeKeyword()
+
+    /**
+     * ぐるなびのクレジット画像の読み込み
+     * @return Web画像のRequest
+     */
+    fun loadGurunaviCredit(): RequestBuilder<Drawable>?
+
+    /**
+     * ホットペッパーのクレジット画像の読み込み
+     * @return Web画像のRequest
+     */
+    fun loadHotpepperCredit(): RequestBuilder<Drawable>?
+
+    /**
+     * ぐるなびのクレジット画像の遷移先読み込み
+     * @return 遷移先Uri
+     */
+    fun loadGurunaviCreditUri(): Uri?
+
+    /**
+     * ホットペッパーのクレジット画像の遷移先読み込み
+     * @return 遷移先Uri
+     */
+    fun loadHotpepperCreditUri(): Uri?
 }
