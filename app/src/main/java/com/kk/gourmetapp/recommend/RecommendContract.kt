@@ -1,6 +1,9 @@
 package com.kk.gourmetapp.recommend
 
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import com.android.volley.toolbox.ImageLoader
+import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 
@@ -47,5 +50,28 @@ interface RecommendContract {
          */
         fun createHotpepperInfo()
 
+        /**
+         * ぐるなびのクレジット画像の読み込み
+         * @return Web画像のRequest
+         */
+        fun loadGurunaviCredit(): RequestBuilder<Drawable>?
+
+        /**
+         * ホットペッパーのクレジット画像の読み込み
+         * @return Web画像のRequest
+         */
+        fun loadHotpepperCredit(): RequestBuilder<Drawable>?
+
+        /**
+         * ぐるなびのクレジット画像の遷移先読み込み
+         * @return 遷移先Uri
+         */
+        fun loadGurunaviCreditUri(): Uri?
+
+        /**
+         * ホットペッパーのクレジット画像の遷移先読み込み
+         * @return 遷移先Uri
+         */
+        fun loadHotpepperCreditUri(): Uri?
     }
 }

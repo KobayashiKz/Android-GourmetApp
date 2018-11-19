@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
+import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
 import com.kk.gourmetapp.data.ImageRecognizer
@@ -185,5 +187,34 @@ class DataRepository(context: Context): DataSource {
         val preference: SharedPreferences = mContext.getSharedPreferences(
             DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
         preference.edit().putString(DatabaseHelper.KEY_KEYWORD, "").apply()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCredit(): RequestBuilder<Drawable>? {
+        return mShopRemoteRepository?.loadGurunaviCredit()
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCredit(): RequestBuilder<Drawable>? {
+        return mShopRemoteRepository?.loadHotpepperCredit()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCreditUri(): Uri? {
+        return mShopRemoteRepository?.loadGurunaviCreditUri()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCreditUri(): Uri? {
+        return mShopRemoteRepository?.loadHotpepperCreditUri()
     }
 }

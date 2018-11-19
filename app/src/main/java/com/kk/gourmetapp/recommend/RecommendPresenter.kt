@@ -1,7 +1,10 @@
 package com.kk.gourmetapp.recommend
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import com.android.volley.toolbox.ImageLoader
+import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.data.source.DataRepository
@@ -49,5 +52,33 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                 mDataRepository?.removeRecognizeKeyword()
             }
         })
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCredit(): RequestBuilder<Drawable>? {
+        return mDataRepository?.loadGurunaviCredit()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCredit(): RequestBuilder<Drawable>? {
+        return mDataRepository?.loadHotpepperCredit()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadGurunaviCreditUri(): Uri? {
+        return mDataRepository?.loadGurunaviCreditUri()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun loadHotpepperCreditUri(): Uri? {
+        return mDataRepository?.loadHotpepperCreditUri()
     }
 }

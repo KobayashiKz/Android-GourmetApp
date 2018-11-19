@@ -1,6 +1,8 @@
 package com.kk.gourmetapp.recommend
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -9,7 +11,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.android.volley.toolbox.ImageLoader
+import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
@@ -20,8 +24,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     private var mRecommendPresenter: RecommendPresenter? = null
 
     private var mGurunaviRecyclerView: RecyclerView? = null
-
     private var mHotpepperRecyclerView: RecyclerView? = null
+
+    private var mGurunaviCredit: ImageView? = null
+    private var mHotpepperCredit: ImageView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -49,6 +55,21 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         val hotpepperLinearLayoutManager = LinearLayoutManager(context)
         hotpepperLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         mHotpepperRecyclerView?.layoutManager = hotpepperLinearLayoutManager
+
+        // クレジット画像
+        mGurunaviCredit = root?.findViewById(R.id.gurunavi_credit)
+        mGurunaviCredit?.setOnClickListener {
+            showGurunaviCreditInfo()
+        }
+        mHotpepperCredit = root?.findViewById(R.id.hotpepper_credit)
+        mHotpepperCredit?.setOnClickListener {
+            showHotpepperCreditInfo()
+        }
+
+        val gurunaviCreditBuilder: RequestBuilder<Drawable>? = mRecommendPresenter?.loadGurunaviCredit()
+        gurunaviCreditBuilder?.into(mGurunaviCredit)
+        val hotpepperCreditBuilder: RequestBuilder<Drawable>? = mRecommendPresenter?.loadHotpepperCredit()
+        hotpepperCreditBuilder?.into(mHotpepperCredit)
 
         return root
     }
@@ -83,6 +104,24 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         // 表示するお店情報をもとにアダプターを生成してRecyclerViewにセット
         val hotpepperShopAdapter: HotpepperShopAdapter? = HotpepperShopAdapter(shops, imageLoader)
         mHotpepperRecyclerView?.adapter = hotpepperShopAdapter
+    }
+
+    /**
+     * ぐるなびのクレジット画像遷移先の表示
+     */
+    private fun showGurunaviCreditInfo() {
+        val uri: Uri? = mRecommendPresenter?.loadGurunaviCreditUri()
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
+    }
+
+    /**
+     * ホットペッパーのクレジット画像遷移先の表示
+     */
+    private fun showHotpepperCreditInfo() {
+        val uri: Uri? = mRecommendPresenter?.loadHotpepperCreditUri()
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
     }
 
     companion object {
