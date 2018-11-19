@@ -26,9 +26,6 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     private var mGurunaviRecyclerView: RecyclerView? = null
     private var mHotpepperRecyclerView: RecyclerView? = null
 
-    private var mGurunaviCredit: ImageView? = null
-    private var mHotpepperCredit: ImageView? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
@@ -56,20 +53,22 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         hotpepperLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         mHotpepperRecyclerView?.layoutManager = hotpepperLinearLayoutManager
 
-        // クレジット画像
-        mGurunaviCredit = root?.findViewById(R.id.gurunavi_credit)
-        mGurunaviCredit?.setOnClickListener {
+        // ぐるなびクレジット画像
+        val gurunaviCredit: ImageView? = root?.findViewById(R.id.gurunavi_credit)
+        val gurunaviCreditBuilder: RequestBuilder<Drawable>?
+                = mRecommendPresenter?.loadGurunaviCredit()
+        gurunaviCreditBuilder?.into(gurunaviCredit)
+        gurunaviCredit?.setOnClickListener {
             showGurunaviCreditInfo()
         }
-        mHotpepperCredit = root?.findViewById(R.id.hotpepper_credit)
-        mHotpepperCredit?.setOnClickListener {
+        // ホットペッパークレジット画像
+        val hotpepperCredit: ImageView? = root?.findViewById(R.id.hotpepper_credit)
+        val hotpepperCreditBuilder: RequestBuilder<Drawable>?
+                = mRecommendPresenter?.loadHotpepperCredit()
+        hotpepperCreditBuilder?.into(hotpepperCredit)
+        hotpepperCredit?.setOnClickListener {
             showHotpepperCreditInfo()
         }
-
-        val gurunaviCreditBuilder: RequestBuilder<Drawable>? = mRecommendPresenter?.loadGurunaviCredit()
-        gurunaviCreditBuilder?.into(mGurunaviCredit)
-        val hotpepperCreditBuilder: RequestBuilder<Drawable>? = mRecommendPresenter?.loadHotpepperCredit()
-        hotpepperCreditBuilder?.into(mHotpepperCredit)
 
         return root
     }

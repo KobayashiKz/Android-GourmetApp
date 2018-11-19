@@ -194,7 +194,6 @@ class DataRepository(context: Context): DataSource {
      */
     override fun loadGurunaviCredit(): RequestBuilder<Drawable>? {
         return mShopRemoteRepository?.loadGurunaviCredit()
-
     }
 
     /**
