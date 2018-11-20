@@ -71,12 +71,16 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_HOTPEPPER_SHOP_OPEN: String = "open"
         const val KEY_HOTPEPPER_SHOP_BUDGET: String = "budget"
         const val KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE: String = "average"
+
+        // セレブモード検索ワード
+        const val TEXT_CELEB_SEATCH_WORD: String = "フレンチ"
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback) {
+    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback,
+                                    isCeleb: Boolean) {
         // do nothing.
     }
 
@@ -84,10 +88,11 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(keyword: String?,
-                                    callback: DataSource.CreateGurunaviShopCallback) {
+                                    callback: DataSource.CreateGurunaviShopCallback,
+                                    isCeleb: Boolean) {
         val apikey: String = getApiKey(NAME_GURUNAVI_AUTH_INFO_FILE)
 
-        val request = JsonObjectRequest(createGurunaviURL(apikey, keyword), null,
+        val request = JsonObjectRequest(createGurunaviURL(apikey, keyword, isCeleb), null,
             Response.Listener { response ->
 
                 val shopList: MutableList<GurunaviShop> = ArrayList()
@@ -125,7 +130,8 @@ class ShopRemoteRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback) {
+    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback
+                                     ,isCeleb: Boolean) {
         // do nothing.
     }
 
@@ -133,10 +139,11 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createHotpepperInfo(keyword: String?,
-                                     callback: DataSource.CreateHotpepperShopCallback) {
+                                     callback: DataSource.CreateHotpepperShopCallback,
+                                     isCeleb: Boolean) {
         val apikey: String = getApiKey(NAME_HOTPEPPER_AUTH_INFO_FILE)
 
-        val request = JsonObjectRequest(createHotpepperURL(apikey, keyword), null,
+        val request = JsonObjectRequest(createHotpepperURL(apikey, keyword, isCeleb), null,
             Response.Listener { response ->
                 val shopList: MutableList<HotpepperShop> = ArrayList()
 
@@ -193,16 +200,16 @@ class ShopRemoteRepository(context: Context): DataSource {
      * @param keyword 検索キーワード
      * @return 検索URL
      */
-    private fun createGurunaviURL(key: String, keyword: String?): String {
+    private fun createGurunaviURL(key: String, keyword: String?, isCeleb: Boolean): String {
         // TODO: 現在地取得処理.ひとまず東京駅の座標で固定検索かける
         val latitude: String = "35.681167"
         val longitude: String = "139.767052"
         val url: String = URL_GURUNAVI_API + "?keyid=" + key + URL_SEPARATOR + "latitude=" + latitude +
                 URL_SEPARATOR + "longitude=" + longitude
-        return if (keyword != null) {
-            url + URL_SEPARATOR + "freeword=" + keyword
-        } else {
-            url
+        return when {
+            isCeleb -> url + URL_SEPARATOR + "freeword=" + TEXT_CELEB_SEATCH_WORD
+            keyword != null -> url + URL_SEPARATOR + "freeword=" + keyword
+            else -> url
         }
     }
 
@@ -212,16 +219,16 @@ class ShopRemoteRepository(context: Context): DataSource {
      * @param keyword 検索キーワード
      * @return 検索URL
      */
-    private fun createHotpepperURL(key: String, keyword: String?): String {
+    private fun createHotpepperURL(key: String, keyword: String?, isCeleb: Boolean): String {
         // TODO: 現在地取得処理.ひとまず東京駅の座標で固定検索かける
         val latitude: String = "35.681167"
         val longitude: String = "139.767052"
         val url: String = URL_HOTPEPPER_API + "?key=" + key + URL_SEPARATOR + "lat=" + latitude +
                 URL_SEPARATOR + "lng=" + longitude + URL_SEPARATOR + "format=json"
-        return if (keyword != null) {
-            url + URL_SEPARATOR + "keyword=" + keyword
-        } else {
-            url
+        return when {
+            isCeleb -> url + URL_SEPARATOR + "keyword=" + TEXT_CELEB_SEATCH_WORD
+            keyword != null -> url + URL_SEPARATOR + "keyword=" + keyword
+            else -> url
         }
     }
 
@@ -280,5 +287,10 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     override fun loadHotpepperCreditUri(): Uri? {
         return Uri.parse(URL_HOTPEPPER_CREDIT_TRANSITION)
+    }
+
+    override fun isCelebMode(): Boolean {
+        // do nothing.
+        return false
     }
 }
