@@ -14,6 +14,7 @@ import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImag
 import com.kk.gourmetapp.data.ImageRecognizer
 import com.kk.gourmetapp.data.source.remote.ShopRemoteRepository
 import com.kk.gourmetapp.util.DatabaseHelper
+import com.kk.gourmetapp.util.PreferenceUtil
 import java.util.*
 
 class DataRepository(context: Context): DataSource {
@@ -31,33 +32,37 @@ class DataRepository(context: Context): DataSource {
     /**
      * {@inheritDoc}
      */
-    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback) {
+    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback,
+                                    isCeleb: Boolean) {
         val keyword: String? = pickKeyword()
         //リモート側でAPIをたたいて情報生成する
-        mShopRemoteRepository?.createGurunaviInfo(keyword, callback)
+        mShopRemoteRepository?.createGurunaviInfo(keyword, callback, isCeleb)
     }
 
     /**
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(keyword: String?,
-                                    callback: DataSource.CreateGurunaviShopCallback) {
+                                    callback: DataSource.CreateGurunaviShopCallback,
+                                    isCeleb: Boolean) {
         // do nothing.
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback) {
+    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback,
+                                     isCeleb: Boolean) {
         val keyword: String? = pickKeyword()
-        mShopRemoteRepository?.createHotpepperInfo(keyword, callback)
+        mShopRemoteRepository?.createHotpepperInfo(keyword, callback, isCeleb)
     }
 
     /**
      * {@inheritDoc}
      */
     override fun createHotpepperInfo(keyword: String?,
-                                     callback: DataSource.CreateHotpepperShopCallback) {
+                                     callback: DataSource.CreateHotpepperShopCallback,
+                                     isCeleb: Boolean) {
         // do nothing.
     }
 
@@ -128,8 +133,8 @@ class DataRepository(context: Context): DataSource {
 
         // Preferenceにも保存しておく
         val preference: SharedPreferences = mContext.getSharedPreferences(
-            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
-        preference.edit().putString(DatabaseHelper.KEY_KEYWORD, keyword).apply()
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(PreferenceUtil.KEY_KEYWORD, keyword).apply()
     }
 
     /**
@@ -138,9 +143,9 @@ class DataRepository(context: Context): DataSource {
     override fun pickKeyword(): String? {
 
         val preference: SharedPreferences = mContext.getSharedPreferences(
-            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
 
-        var keyword: String? = preference.getString(DatabaseHelper.KEY_KEYWORD, "")
+        var keyword: String? = preference.getString(PreferenceUtil.KEY_KEYWORD, "")
 
         if (TextUtils.isEmpty(keyword)) {
             // Preferenceにキーワードが保存されていない場合にはDBからランダム番目のキーワードを取得する
@@ -185,8 +190,8 @@ class DataRepository(context: Context): DataSource {
     override fun removeRecognizeKeyword() {
         // Preferenceに保存されている場合には、キーワードを抜き出して空文字をセットしておく
         val preference: SharedPreferences = mContext.getSharedPreferences(
-            DatabaseHelper.KEY_PREERENCE_KEYWORD, Context.MODE_PRIVATE)
-        preference.edit().putString(DatabaseHelper.KEY_KEYWORD, "").apply()
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(PreferenceUtil.KEY_KEYWORD, "").apply()
     }
 
     /**
@@ -215,5 +220,14 @@ class DataRepository(context: Context): DataSource {
      */
     override fun loadHotpepperCreditUri(): Uri? {
         return mShopRemoteRepository?.loadHotpepperCreditUri()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun isCelebMode(): Boolean {
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_SETTING, Context.MODE_PRIVATE)
+        return preference.getBoolean(PreferenceUtil.KEY_PREFERENCE_CELEB_MODE, false)
     }
 }

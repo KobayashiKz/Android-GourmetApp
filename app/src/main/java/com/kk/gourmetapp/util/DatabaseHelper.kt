@@ -65,9 +65,5 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(
         private val SQL_DROP_TABLE: String = "DROP TABLE IF EXISTS " + KeywordTable.TABLE_NAME.value
         // DBのバージョン
         private const val DATABASE_VERSION: Int = 1
-
-        // Preferenceキー
-        const val KEY_PREERENCE_KEYWORD: String = "key_preerence_keyword"
-        const val KEY_KEYWORD: String = "key_keyword"
     }
 }

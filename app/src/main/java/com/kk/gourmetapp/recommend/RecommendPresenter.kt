@@ -29,20 +29,27 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
      * {@inheritDoc}
      */
     override fun createGurunaviInfo() {
-        // Repository側でモデルクラス作成する
-        mDataRepository?.createGurunaviInfo(object :DataSource.CreateGurunaviShopCallback {
-            override fun createGurunaviShop(
-                shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
-                // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
-                mRecommendView.showGurunaviShops(shops, imageLoader)
-            }
-        })
+
+        val isCelebMode: Boolean? = mDataRepository?.isCelebMode()
+
+            // Repository側でモデルクラス作成する
+            mDataRepository?.createGurunaviInfo(object : DataSource.CreateGurunaviShopCallback {
+                override fun createGurunaviShop(
+                    shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?
+                ) {
+                    // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
+                    mRecommendView.showGurunaviShops(shops, imageLoader)
+                }
+            }, isCelebMode as Boolean)
     }
 
     /**
      * {@inheritDoc}
      */
     override fun createHotpepperInfo() {
+
+        val isCelebMode: Boolean? = mDataRepository?.isCelebMode()
+
         mDataRepository?.createHotpepperInfo(object :DataSource.CreateHotpepperShopCallback {
             override fun createHotpepperShop(
                 shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?) {
@@ -51,7 +58,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                 // 画像解析で取得保存しておいたキーワードを空文字にしておく
                 mDataRepository?.removeRecognizeKeyword()
             }
-        })
+        }, isCelebMode as Boolean)
     }
 
     /**

@@ -11,4 +11,7 @@
     <!-- 画像選択画面 -->
     <string name="button_start_recognize">Recognize</string>
     <string name="button_cancel_recognize">Cancel</string>
+
+    <!-- 設定画面 -->
+    <string name="mode_celeb_text">セレブモード</string>
 </resources>

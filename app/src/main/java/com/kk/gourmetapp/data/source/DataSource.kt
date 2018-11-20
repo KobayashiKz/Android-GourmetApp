@@ -33,28 +33,34 @@ interface DataSource {
     /**
      * ぐるなびからお店情報を生成する処理
      * @param callback 情報取得後のコールバック
+     * @param isCeleb  セレブモード状態
      */
-    fun createGurunaviInfo(callback: CreateGurunaviShopCallback)
+    fun createGurunaviInfo(callback: CreateGurunaviShopCallback, isCeleb: Boolean)
 
     /**
      * ぐるなびからお店情報を生成する処理
      * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
+     * @param isCeleb  セレブモード状態
+     *
      */
-    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback)
+    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback, isCeleb: Boolean)
 
     /**
      * ホットペッパーからお店情報を生成する処理
      * @param callback 情報取得後のコールバック
+     * @param isCeleb  セレブモード状態
      */
-    fun createHotpepperInfo(callback: CreateHotpepperShopCallback)
+    fun createHotpepperInfo(callback: CreateHotpepperShopCallback, isCeleb: Boolean)
 
     /**
      * ホットペッパーからお店情報を生成する処理
      * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
+     * @param isCeleb  セレブモード状態
      */
-    fun createHotpepperInfo(keyword: String?, callback: CreateHotpepperShopCallback)
+    fun createHotpepperInfo(keyword: String?, callback: CreateHotpepperShopCallback
+                            , isCeleb: Boolean)
 
     // 画像認証後のコールバック
     interface RecognizeCallback {
@@ -118,4 +124,11 @@ interface DataSource {
      * @return 遷移先Uri
      */
     fun loadHotpepperCreditUri(): Uri?
+
+    /**
+     * セレブモード状態の取得
+     * @return true  : ON
+     *         false : OFF
+     */
+    fun isCelebMode(): Boolean
 }
