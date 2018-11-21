@@ -1,5 +1,6 @@
 package com.kk.gourmetapp.recommend
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
+import com.kk.gourmetapp.splash.SplashActivity
 import com.kk.gourmetapp.util.ActivityUtil
 
 
@@ -23,6 +25,11 @@ class RecommendActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // スプラッシュ画面の起動
+        val splashIntent = Intent(this, SplashActivity::class.java)
+        startActivityForResult(splashIntent, REQUEST_CODE_SPLASH)
+
         setContentView(R.layout.activity_recommend)
 
         // Toolbarの設定
@@ -45,6 +52,15 @@ class RecommendActivity : AppCompatActivity() {
 
         // Presenterの生成
         mRecommendPresenter = RecommendPresenter(recommendFragment, applicationContext)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_SPLASH) {
+            if (resultCode != Activity.RESULT_OK) {
+                // SplashでAnimation完了しなかったら閉じる
+                finish()
+            }
+        }
     }
 
     /**
@@ -85,6 +101,8 @@ class RecommendActivity : AppCompatActivity() {
     }
 
     companion object {
-        val TAG: String = "RecommendActivity"
+        const val TAG: String = "RecommendActivity"
+
+        const val REQUEST_CODE_SPLASH: Int = 0
     }
 }
