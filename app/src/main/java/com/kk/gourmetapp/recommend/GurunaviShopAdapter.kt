@@ -2,8 +2,10 @@ package com.kk.gourmetapp.recommend
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,7 +50,18 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             mContext?.startActivity(intent)
         }
         holder.category.text = mShopList[position].mCategory
+
+        holder.tel.paintFlags = holder.tel.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         holder.tel.text = mShopList[position].mTelNumber
+        if (!TextUtils.isEmpty(mShopList[position].mTelNumber)) {
+            // 電話番号をタップしたらダイアル画面へ遷移させる
+            holder.tel.setOnClickListener {
+                val uri: Uri = Uri.parse("tel:" + mShopList[position].mTelNumber)
+                val intent = Intent(Intent.ACTION_DIAL, uri)
+                mContext?.startActivity(intent)
+            }
+        }
+
         holder.openTime.text = mShopList[position].mOpenTime
         holder.budget.text = mShopList[position].mBudget
     }
