@@ -131,4 +131,11 @@ interface DataSource {
      *         false : OFF
      */
     fun isCelebMode(): Boolean
+
+    /**
+     * おすすめショップの更新可否
+     * @return true  : 更新必要
+     *         false : 更新不必要
+     */
+    fun shouldUpdate(): Boolean
 }

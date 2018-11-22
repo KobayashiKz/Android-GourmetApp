@@ -73,5 +73,12 @@ interface RecommendContract {
          * @return 遷移先Uri
          */
         fun loadHotpepperCreditUri(): Uri?
+
+        /**
+         * おすすめショップの更新可否
+         * @return true  : 更新必要
+         *         false : 更新不必要
+         */
+        fun shouldUpdate(): Boolean
     }
 }

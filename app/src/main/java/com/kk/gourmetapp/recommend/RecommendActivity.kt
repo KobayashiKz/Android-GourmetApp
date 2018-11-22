@@ -28,7 +28,7 @@ class RecommendActivity : AppCompatActivity() {
 
         // スプラッシュ画面の起動
         val splashIntent = Intent(this, SplashActivity::class.java)
-        startActivityForResult(splashIntent, REQUEST_CODE_SPLASH)
+        startActivityForResult(splashIntent, ActivityUtil.REQUEST_CODE_SPLASH)
 
         setContentView(R.layout.activity_recommend)
 
@@ -55,13 +55,25 @@ class RecommendActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_SPLASH) {
-            if (resultCode != Activity.RESULT_OK) {
-                // SplashでAnimation完了しなかったら閉じる
-                finish()
+        if (requestCode == ActivityUtil.REQUEST_CODE_SPLASH && resultCode != Activity.RESULT_OK) {
+            // SplashでAnimation完了しなかったら閉じる
+            finish()
+        } else if (requestCode == ActivityUtil.REQUEST_CODE_RECOGNIZE &&
+            resultCode == Activity.RESULT_OK) {
+
+            // 画像解析が完了している場合には再検索をかける
+            if (mRecommendPresenter?.shouldUpdate()!!) {
+                mRecommendPresenter?.createGurunaviInfo()
+                mRecommendPresenter?.createHotpepperInfo()
             }
+        } else if (requestCode == ActivityUtil.REQUEST_CODE_SETTING &&
+            resultCode == Activity.RESULT_OK) {
+            // セレブモード変更した際には再検索をかける
+            mRecommendPresenter?.createGurunaviInfo()
+            mRecommendPresenter?.createHotpepperInfo()
         }
     }
+
 
     /**
      * ドロワーナビゲーションのアイテムがタップされたときの処理
@@ -73,7 +85,7 @@ class RecommendActivity : AppCompatActivity() {
                 R.id.navigation_setting -> {
                     // 設定画面を起動する
                     val intent = Intent(applicationContext, SettingActivity::class.java)
-                    startActivity(intent)
+                    startActivityForResult(intent, ActivityUtil.REQUEST_CODE_SETTING)
                 }
                 else -> {
                     // do nothing.
@@ -102,7 +114,5 @@ class RecommendActivity : AppCompatActivity() {
 
     companion object {
         const val TAG: String = "RecommendActivity"
-
-        const val REQUEST_CODE_SPLASH: Int = 0
     }
 }

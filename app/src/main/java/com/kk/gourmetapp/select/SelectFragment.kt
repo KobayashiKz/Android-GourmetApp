@@ -1,5 +1,6 @@
 package com.kk.gourmetapp.select
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
@@ -31,7 +32,8 @@ class SelectFragment : Fragment(), SelectContract.View {
 
     private var mLoadingDialog: RecognizingDialog? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root: View? = inflater.inflate(R.layout.fragment_select, container, false)
         mSelectImageView = root?.findViewById(R.id.select_image_view)
 
@@ -48,7 +50,8 @@ class SelectFragment : Fragment(), SelectContract.View {
         // キャンセルボタンタップ時には画面を戻す
         val cancelButton: Button? = root?.findViewById(R.id.recognize_cancel_button)
         cancelButton?.setOnClickListener {
-            close()
+            activity?.setResult(Activity.RESULT_CANCELED)
+            activity?.finish()
         }
 
         // ギャラリー呼び出し処理
@@ -103,7 +106,8 @@ class SelectFragment : Fragment(), SelectContract.View {
      * {@inheritDoc}
      */
     override fun close() {
-        activity?.onBackPressed()
+        activity?.setResult(Activity.RESULT_OK)
+        activity?.finish()
     }
 
     companion object {

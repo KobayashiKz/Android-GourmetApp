@@ -78,7 +78,7 @@ class DataRepository(context: Context): DataSource {
                 val resultList: MutableList<ClassResult> = response.images[0].classifiers[0].classes
                 val imageInfoList: MutableList<ImageInfo>? = ArrayList()
                 for (result: ClassResult in resultList) {
-                    val imageInfo: ImageInfo = ImageInfo(result.className, result.score, result.typeHierarchy)
+                    val imageInfo = ImageInfo(result.className, result.score, result.typeHierarchy)
                     imageInfoList?.add(imageInfo)
                 }
 
@@ -229,5 +229,18 @@ class DataRepository(context: Context): DataSource {
         val preference: SharedPreferences = mContext.getSharedPreferences(
             PreferenceUtil.KEY_PREFERENCE_SETTING, Context.MODE_PRIVATE)
         return preference.getBoolean(PreferenceUtil.KEY_PREFERENCE_CELEB_MODE, false)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun shouldUpdate(): Boolean {
+        // 画像解析ワードがPreferenceに保存されているかで判断
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
+
+        val keyword: String? = preference.getString(PreferenceUtil.KEY_KEYWORD, "")
+
+        return !TextUtils.isEmpty(keyword)
     }
 }
