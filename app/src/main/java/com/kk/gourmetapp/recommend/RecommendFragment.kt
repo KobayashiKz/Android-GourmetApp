@@ -18,6 +18,7 @@ import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.select.SelectActivity
+import com.kk.gourmetapp.util.ActivityUtil
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
@@ -35,8 +36,8 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         val fab: FloatingActionButton? = root?.findViewById(R.id.fab_add_image)
         fab?.setOnClickListener {
             // タップされたら画像選択画面を起動する
-            val intent: Intent = Intent(context, SelectActivity::class.java)
-            startActivity(intent)
+            val intent = Intent(context, SelectActivity::class.java)
+            activity?.startActivityForResult(intent, ActivityUtil.REQUEST_CODE_RECOGNIZE)
         }
 
         // ぐるなびのお店情報を表示するRecyclerViewの設定
@@ -70,14 +71,11 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             showHotpepperCreditInfo()
         }
 
-        return root
-    }
-
-    override fun onResume() {
-        super.onResume()
         // ぐるなびとホットペッパーのお店情報を取得開始
         mRecommendPresenter?.createGurunaviInfo()
         mRecommendPresenter?.createHotpepperInfo()
+
+        return root
     }
 
     /**

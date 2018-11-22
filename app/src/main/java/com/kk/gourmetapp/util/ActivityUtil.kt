@@ -7,6 +7,10 @@ import android.support.v4.app.FragmentTransaction
 class ActivityUtil {
 
     companion object {
+        // Activity起動のリクエストコード
+        const val REQUEST_CODE_SPLASH: Int = 0
+        const val REQUEST_CODE_RECOGNIZE: Int = 1
+        const val REQUEST_CODE_SETTING: Int = 2
 
         /**
          * ActivityにFragmentを追加する際に必要なTransaction処理

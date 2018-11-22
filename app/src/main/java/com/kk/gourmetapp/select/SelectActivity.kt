@@ -38,7 +38,8 @@ class SelectActivity : AppCompatActivity() {
 
         // Fragmentの生成
         val selectFragment: SelectFragment = SelectFragment.newInstance()
-        ActivityUtil.addFragmentToActivity(supportFragmentManager, selectFragment, R.id.select_content_frame)
+        ActivityUtil.addFragmentToActivity(supportFragmentManager,selectFragment,
+            R.id.select_content_frame)
 
         // Presenterの生成
         mSelectPresenter = SelectPresenter(selectFragment, applicationContext)

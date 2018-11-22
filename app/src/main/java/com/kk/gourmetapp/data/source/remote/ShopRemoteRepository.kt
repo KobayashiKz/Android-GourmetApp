@@ -289,7 +289,18 @@ class ShopRemoteRepository(context: Context): DataSource {
         return Uri.parse(URL_HOTPEPPER_CREDIT_TRANSITION)
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun isCelebMode(): Boolean {
+        // do nothing.
+        return false
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun shouldUpdate(): Boolean {
         // do nothing.
         return false
     }

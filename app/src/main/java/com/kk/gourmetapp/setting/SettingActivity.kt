@@ -1,5 +1,6 @@
 package com.kk.gourmetapp.setting
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,6 +10,8 @@ import com.kk.gourmetapp.R
 import com.kk.gourmetapp.util.PreferenceUtil
 
 class SettingActivity : AppCompatActivity() {
+
+    var mIsChage: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +28,22 @@ class SettingActivity : AppCompatActivity() {
             if (b) {
                 // セレブモードonで保存
                 preference.edit().putBoolean(PreferenceUtil.KEY_PREFERENCE_CELEB_MODE, true).apply()
+                mIsChage = true
             } else {
                 // セレブモードoffで保存
                 preference.edit().putBoolean(
                     PreferenceUtil.KEY_PREFERENCE_CELEB_MODE, false).apply()
+                mIsChage = true
             }
         }
+    }
+
+    override fun finish() {
+        if (mIsChage) {
+            setResult(Activity.RESULT_OK)
+        } else {
+            setResult(Activity.RESULT_CANCELED)
+        }
+        super.finish()
     }
 }

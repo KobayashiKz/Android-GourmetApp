@@ -88,4 +88,11 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     override fun loadHotpepperCreditUri(): Uri? {
         return mDataRepository?.loadHotpepperCreditUri()
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun shouldUpdate(): Boolean  {
+        return mDataRepository?.shouldUpdate() as Boolean
+    }
 }
