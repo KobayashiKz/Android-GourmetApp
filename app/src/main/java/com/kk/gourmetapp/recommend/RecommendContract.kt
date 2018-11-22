@@ -75,6 +75,13 @@ interface RecommendContract {
         fun loadHotpepperCreditUri(): Uri?
 
         /**
+         * セレブモード状態の取得
+         * @return true  : ON
+         *         false : OFF
+         */
+        fun isCelebMode(): Boolean
+
+        /**
          * おすすめショップの更新可否
          * @return true  : 更新必要
          *         false : 更新不必要

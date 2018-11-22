@@ -21,6 +21,7 @@ class RecommendActivity : AppCompatActivity() {
 
     private var mDrawerLayout: DrawerLayout? = null
 
+    private var mRecommendFragment: RecommendFragment = RecommendFragment.newInstance()
     private var mRecommendPresenter: RecommendPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,12 +47,11 @@ class RecommendActivity : AppCompatActivity() {
         setupDrawerContent(navigationView)
 
         // Fragmentの生成
-        val recommendFragment: RecommendFragment = RecommendFragment.newInstance()
-        ActivityUtil.addFragmentToActivity(supportFragmentManager, recommendFragment,
+        ActivityUtil.addFragmentToActivity(supportFragmentManager, mRecommendFragment,
             R.id.content_frame)
 
         // Presenterの生成
-        mRecommendPresenter = RecommendPresenter(recommendFragment, applicationContext)
+        mRecommendPresenter = RecommendPresenter(mRecommendFragment, applicationContext)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -71,9 +71,11 @@ class RecommendActivity : AppCompatActivity() {
             // セレブモード変更した際には再検索をかける
             mRecommendPresenter?.createGurunaviInfo()
             mRecommendPresenter?.createHotpepperInfo()
+
+            // セレブモード背景の設定
+            mRecommendFragment.setCelebBackground()
         }
     }
-
 
     /**
      * ドロワーナビゲーションのアイテムがタップされたときの処理

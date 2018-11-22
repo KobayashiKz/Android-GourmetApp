@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.airbnb.lottie.LottieAnimationView
 import com.android.volley.toolbox.ImageLoader
 import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
@@ -27,6 +28,8 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     private var mGurunaviRecyclerView: RecyclerView? = null
     private var mHotpepperRecyclerView: RecyclerView? = null
 
+    private var mCelebBackground: LottieAnimationView? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
@@ -39,6 +42,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             val intent = Intent(context, SelectActivity::class.java)
             activity?.startActivityForResult(intent, ActivityUtil.REQUEST_CODE_RECOGNIZE)
         }
+
+        // セレブモードの背景設定
+        mCelebBackground = root?.findViewById(R.id.celeb_background)
+        setCelebBackground()
 
         // ぐるなびのお店情報を表示するRecyclerViewの設定
         mGurunaviRecyclerView = root?.findViewById(R.id.gurunavi_shop_recycler_view)
@@ -101,6 +108,17 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         // 表示するお店情報をもとにアダプターを生成してRecyclerViewにセット
         val hotpepperShopAdapter: HotpepperShopAdapter? = HotpepperShopAdapter(shops, imageLoader)
         mHotpepperRecyclerView?.adapter = hotpepperShopAdapter
+    }
+
+    /**
+     * セレブモード背景の設定
+     */
+    fun setCelebBackground() {
+        if (mRecommendPresenter!!.isCelebMode()) {
+            mCelebBackground?.visibility = View.VISIBLE
+        } else {
+            mCelebBackground?.visibility = View.GONE
+        }
     }
 
     /**
