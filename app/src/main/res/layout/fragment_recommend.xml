@@ -15,6 +15,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/celeb_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:scaleType="centerCrop"
+                    app:lottie_rawRes="@raw/gradient_animated_background"
+                    app:lottie_loop="true"
+                    app:lottie_autoPlay="true"/>
+
             <ScrollView
                     android:id="@+id/content_scroll_view"
                     android:layout_width="wrap_content"

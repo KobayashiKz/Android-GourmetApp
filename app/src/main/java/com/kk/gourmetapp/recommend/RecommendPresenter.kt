@@ -92,6 +92,13 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     /**
      * {@inheritDoc}
      */
+    override fun isCelebMode(): Boolean {
+        return mDataRepository?.isCelebMode() as Boolean
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     override fun shouldUpdate(): Boolean  {
         return mDataRepository?.shouldUpdate() as Boolean
     }
