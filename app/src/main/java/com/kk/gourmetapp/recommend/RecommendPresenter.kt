@@ -63,11 +63,6 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                 mRecommendView.showHotpepperShops(shops, imageLoader)
                 // 画像解析で取得保存しておいたキーワードを空文字にしておく
                 mDataRepository?.removeRecognizeKeyword()
-
-                // 結果が取得できなかったら通信状況確認ダイアログ表示
-                if (shops.size == 0 && !isConnectNetwork()) {
-                    mRecommendView.showNetworkErrorDialog()
-                }
             }
 
             override fun onError() {
