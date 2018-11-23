@@ -2,6 +2,7 @@ package com.kk.gourmetapp.data.source.remote
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
 import android.net.Uri
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -121,7 +122,7 @@ class ShopRemoteRepository(context: Context): DataSource {
                 callback.createGurunaviShop(shopList, RequestSingleQueue.getImageLoader())
             },
             Response.ErrorListener { _ ->
-                // TODO: エラー時の処理
+                callback.onError()
             })
         // リクエストキューを追加
         RequestSingleQueue.addToRequestQueue(request, mContext!!)
@@ -174,7 +175,7 @@ class ShopRemoteRepository(context: Context): DataSource {
                 callback.createHotpepperShop(shopList, RequestSingleQueue.getImageLoader())
             },
             Response.ErrorListener { _ ->
-                // TODO: エラー時の処理
+                callback.onError()
             })
         // リクエストキューを追加
         RequestSingleQueue.addToRequestQueue(request, mContext!!)
@@ -303,5 +304,15 @@ class ShopRemoteRepository(context: Context): DataSource {
     override fun shouldUpdate(): Boolean {
         // do nothing.
         return false
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun isConnectNetwork(): Boolean {
+        val connMgr = mContext?.getSystemService(
+            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connMgr.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 }

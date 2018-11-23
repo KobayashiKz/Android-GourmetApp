@@ -243,4 +243,11 @@ class DataRepository(context: Context): DataSource {
 
         return !TextUtils.isEmpty(keyword)
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun isConnectNetwork(): Boolean {
+        return mShopRemoteRepository?.isConnectNetwork() as Boolean
+    }
 }

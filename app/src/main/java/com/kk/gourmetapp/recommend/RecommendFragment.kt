@@ -1,10 +1,14 @@
 package com.kk.gourmetapp.recommend
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -111,6 +115,14 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    override fun showNetworkErrorDialog() {
+        val errorDialog = NetworkErrorDialog()
+        errorDialog.show(fragmentManager, "tag")
+    }
+
+    /**
      * セレブモード背景の設定
      */
     fun setCelebBackground() {
@@ -142,6 +154,35 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     companion object {
         fun newInstance(): RecommendFragment {
             return RecommendFragment()
+        }
+    }
+
+    /**
+     * 読み込み中ダイアログ
+     */
+    class NetworkErrorDialog: DialogFragment() {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+            val builder = AlertDialog.Builder(activity)
+            builder.setMessage(getString(R.string.network_dialog_message))
+                .setPositiveButton(R.string.network_dialog_positive_button) { _, _ ->
+                    showWifiSetting()
+                }
+
+            val dialog = builder.create()
+            // キャンセルさせないダイアログ
+            dialog.setCancelable(false)
+            dialog.setCanceledOnTouchOutside(false)
+            return dialog
+        }
+
+        /**
+         * Wifi設定画面表示
+         */
+        private fun showWifiSetting() {
+            val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+            startActivity(intent)
         }
     }
 }

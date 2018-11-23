@@ -18,6 +18,11 @@ interface DataSource {
          * @param imageLoader お店の画像用イメージローダー
          */
         fun createGurunaviShop(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
+
+        /**
+         * ぐるなびAPIからエラーが返ってきた場合のコールバック
+         */
+        fun onError()
     }
 
     // ホットペッパーAPIからデータ取得完了コールバック
@@ -28,6 +33,11 @@ interface DataSource {
          * @param imageLoader お店の画像用イメージローダー
          */
         fun createHotpepperShop(shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
+
+        /**
+         * ホットペッパーAPIからエラーが返ってきた場合のコールバック
+         */
+        fun onError()
     }
 
     /**
@@ -138,4 +148,11 @@ interface DataSource {
      *         false : 更新不必要
      */
     fun shouldUpdate(): Boolean
+
+    /**
+     * 通信状態チェック
+     * @return true  : ネットワーク接続あり
+     *         false : ネットワーク接続なし
+     */
+    fun isConnectNetwork(): Boolean
 }
