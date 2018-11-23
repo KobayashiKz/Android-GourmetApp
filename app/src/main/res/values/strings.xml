@@ -14,4 +14,8 @@
 
     <!-- 設定画面 -->
     <string name="mode_celeb_text">セレブモード</string>
+
+    <!-- 通信状況確認ダイアログ -->
+    <string name="network_dialog_message">ネットワーク接続ができません。接続状況を確認してください。</string>
+    <string name="network_dialog_positive_button">設定画面へ</string>
 </resources>

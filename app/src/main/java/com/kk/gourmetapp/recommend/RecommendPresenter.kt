@@ -35,10 +35,16 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
             // Repository側でモデルクラス作成する
             mDataRepository?.createGurunaviInfo(object : DataSource.CreateGurunaviShopCallback {
                 override fun createGurunaviShop(
-                    shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?
-                ) {
+                    shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
                     // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
                     mRecommendView.showGurunaviShops(shops, imageLoader)
+                }
+
+                override fun onError() {
+                    // 結果が取得できなかったら通信状況確認ダイアログ表示
+                    if (!isConnectNetwork()) {
+                        mRecommendView.showNetworkErrorDialog()
+                    }
                 }
             }, isCelebMode as Boolean)
     }
@@ -57,6 +63,18 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                 mRecommendView.showHotpepperShops(shops, imageLoader)
                 // 画像解析で取得保存しておいたキーワードを空文字にしておく
                 mDataRepository?.removeRecognizeKeyword()
+
+                // 結果が取得できなかったら通信状況確認ダイアログ表示
+                if (shops.size == 0 && !isConnectNetwork()) {
+                    mRecommendView.showNetworkErrorDialog()
+                }
+            }
+
+            override fun onError() {
+                // 結果が取得できなかったら通信状況確認ダイアログ表示
+                if (!isConnectNetwork()) {
+                    mRecommendView.showNetworkErrorDialog()
+                }
             }
         }, isCelebMode as Boolean)
     }
@@ -101,5 +119,12 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
      */
     override fun shouldUpdate(): Boolean  {
         return mDataRepository?.shouldUpdate() as Boolean
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun isConnectNetwork(): Boolean {
+        return mDataRepository?.isConnectNetwork() as Boolean
     }
 }

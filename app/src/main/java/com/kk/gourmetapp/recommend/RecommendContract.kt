@@ -33,6 +33,11 @@ interface RecommendContract {
          * @param imageLoader レストラン画像
          */
         fun showHotpepperShops(shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
+
+        /**
+         * 通信エラーダイアログ表示
+         */
+        fun showNetworkErrorDialog()
     }
 
     /**
@@ -87,5 +92,12 @@ interface RecommendContract {
          *         false : 更新不必要
          */
         fun shouldUpdate(): Boolean
+
+        /**
+         * 通信状態チェック
+         * @return true  : ネットワーク接続あり
+         *         false : ネットワーク接続なし
+         */
+        fun isConnectNetwork(): Boolean
     }
 }
