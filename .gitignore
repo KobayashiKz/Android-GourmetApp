@@ -12,6 +12,7 @@
 /app/src/main/assets/gurunavi-auth-info.txt
 /app/src/main/assets/hotpepper-auth-info.txt
 /app/src/main/assets/watson-recognize-info.txt
+/app/src/main/res/values/google_maps_api.xml
 .idea/vcs.xml
 /app/google-services.json
 .idea/
