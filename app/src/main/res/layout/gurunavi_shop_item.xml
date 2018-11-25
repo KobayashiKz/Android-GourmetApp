@@ -124,6 +124,13 @@
                             android:layout_marginStart="@dimen/text_margin_start"
                             android:layout_marginBottom="10dp"/>
                 </LinearLayout>
+
+                <!-- TODO ボタン変更 -->
+                <Button
+                        android:id="@+id/map_button"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:text="map"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

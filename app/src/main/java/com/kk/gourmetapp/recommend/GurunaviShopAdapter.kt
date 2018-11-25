@@ -9,12 +9,14 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
+import com.kk.gourmetapp.map.MapActivity
 
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<GurunaviShopAdapter.ShopViewHolder>() {
@@ -64,6 +66,11 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
 
         holder.openTime.text = mShopList[position].mOpenTime
         holder.budget.text = mShopList[position].mBudget
+
+        holder.button.setOnClickListener {
+            val intent = Intent(mContext, MapActivity::class.java)
+            mContext?.startActivity(intent)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
@@ -83,6 +90,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         val tel: TextView = itemView.findViewById(R.id.gurunavi_shop_tel)
         val openTime: TextView = itemView.findViewById(R.id.gurunavi_shop_open_time)
         val budget: TextView = itemView.findViewById(R.id.gurunavi_shop_budget)
+        val button: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.gurunavi_shop_text_scroll_view)
     }
