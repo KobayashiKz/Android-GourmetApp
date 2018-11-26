@@ -4,7 +4,7 @@ package com.kk.gourmetapp.data
  * ぐるなびのレストランのEntityクラス
  */
 class GurunaviShop(name: String, category: String, imageUrl: String, pageUrl: String,
-                   tel: String, openTime: String, budget: String) {
+                   tel: String, openTime: String, budget: String, address: String) {
 
     // レストラン名
     val mName: String = name
@@ -20,4 +20,6 @@ class GurunaviShop(name: String, category: String, imageUrl: String, pageUrl: St
     val mOpenTime: String = openTime
     // 平均予算
     val mBudget: String = budget
+    // 住所
+    val mAddress: String = address
 }

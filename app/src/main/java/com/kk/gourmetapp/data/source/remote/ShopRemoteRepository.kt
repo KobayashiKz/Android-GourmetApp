@@ -46,6 +46,7 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_REST_TEL: String = "tel"
         const val KEY_REST_OPEN_TIME: String = "opentime"
         const val KEY_REST_BUDGET: String = "budget"
+        const val KEY_REST_ADDRESS: String = "address"
 
         // ホットペッパーAPI URL
         const val NAME_HOTPEPPER_AUTH_INFO_FILE: String = "hotpepper-auth-info.txt"
@@ -72,6 +73,7 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_HOTPEPPER_SHOP_OPEN: String = "open"
         const val KEY_HOTPEPPER_SHOP_BUDGET: String = "budget"
         const val KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE: String = "average"
+        const val KEY_HOTPEPPER_SHOP_ADDRESS: String = "address"
 
         // セレブモード検索ワード
         const val TEXT_CELEB_SEATCH_WORD: String = "フレンチ"
@@ -111,8 +113,9 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
                     val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
                             mContext?.getString(R.string.text_budget_unit)
+                    val address: String = restJsonObject.getString(KEY_REST_ADDRESS)
                     val shop = GurunaviShop(
-                        name, category, imageUrl, pageUrl, tel, openTime, budget)
+                        name, category, imageUrl, pageUrl, tel, openTime, budget, address)
 
                     // ぐるなびのショップリストに追加
                     shopList.add(shop)
@@ -166,8 +169,10 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val openTime: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_OPEN)
                     val budget: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_BUDGET)
                         .getString(KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE)
+                    val address: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_ADDRESS)
 
-                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget)
+                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget
+                        , address)
 
                     shopList.add(shop)
                 }

@@ -1,7 +1,7 @@
 package com.kk.gourmetapp.data
 
 class HotpepperShop(name: String, category: String, imageUrl: String, pageUrl: String,
-                    openTime: String, budget: String) {
+                    openTime: String, budget: String, address: String) {
 
     // レストラン名
     val mName: String = name
@@ -15,5 +15,6 @@ class HotpepperShop(name: String, category: String, imageUrl: String, pageUrl: S
     val mOpenTime: String = openTime
     // 平均予算
     val mBudget: String = budget
-
+    // 住所
+    val mAddress: String = address
 }

@@ -17,6 +17,7 @@ import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.map.MapActivity
+import com.kk.gourmetapp.util.ActivityUtil
 
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<GurunaviShopAdapter.ShopViewHolder>() {
@@ -67,8 +68,12 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         holder.openTime.text = mShopList[position].mOpenTime
         holder.budget.text = mShopList[position].mBudget
 
-        holder.button.setOnClickListener {
+        // Mapボタンタップ時にはMapActivityを起動する
+        holder.mapButton.setOnClickListener {
+            val address: String = mShopList[position].mAddress
+            // TODO 住所をPreferenceに保存してMapFragmentで受け取るように修正する
             val intent = Intent(mContext, MapActivity::class.java)
+            intent.putExtra(ActivityUtil.KEY_GURUNAVI_ADDRESS, address)
             mContext?.startActivity(intent)
         }
     }
@@ -90,7 +95,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         val tel: TextView = itemView.findViewById(R.id.gurunavi_shop_tel)
         val openTime: TextView = itemView.findViewById(R.id.gurunavi_shop_open_time)
         val budget: TextView = itemView.findViewById(R.id.gurunavi_shop_budget)
-        val button: Button = itemView.findViewById(R.id.map_button)
+        val mapButton: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.gurunavi_shop_text_scroll_view)
     }

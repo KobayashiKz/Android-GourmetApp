@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.HotpepperShop
+import com.kk.gourmetapp.map.MapActivity
+import com.kk.gourmetapp.util.ActivityUtil
 
 class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<HotpepperShopAdapter.ShopViewHolder>() {
@@ -50,6 +53,15 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
         holder.category.text = mShopList[position].mCategory
         holder.openTime.text = mShopList[position].mOpenTime
         holder.budget.text = mShopList[position].mBudget
+
+        // Mapボタンタップ時にはMapActivityを起動する
+        holder.mapButton.setOnClickListener {
+            val address: String = mShopList[position].mAddress
+            // TODO 住所をPreferenceに保存してMapFragmentで受け取るように修正する
+            val intent = Intent(mContext, MapActivity::class.java)
+            intent.putExtra(ActivityUtil.KEY_HOTPEPPER_ADDRESS, address)
+            mContext?.startActivity(intent)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
@@ -69,6 +81,7 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
         val category: TextView = itemView.findViewById(R.id.hotpepper_shop_category)
         val openTime: TextView = itemView.findViewById(R.id.hotpepper_shop_open_time)
         val budget: TextView = itemView.findViewById(R.id.hotpepper_shop_budget)
+        val mapButton: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.hotpepper_shop_text_scroll_view)
     }
