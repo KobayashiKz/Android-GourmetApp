@@ -2,6 +2,7 @@ package com.kk.gourmetapp.recommend
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Paint
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
@@ -17,7 +18,7 @@ import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.map.MapActivity
-import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.PreferenceUtil
 
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<GurunaviShopAdapter.ShopViewHolder>() {
@@ -71,9 +72,17 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         // Mapボタンタップ時にはMapActivityを起動する
         holder.mapButton.setOnClickListener {
             val address: String = mShopList[position].mAddress
-            // TODO 住所をPreferenceに保存してMapFragmentで受け取るように修正する
+
+            val latitude: Long = mShopList[position].mLatitude
+            val longitude: Long = mShopList[position].mLongitude
+
+            // 緯度経度をPreferenceに保存しておく
+            val preference: SharedPreferences = mContext!!.getSharedPreferences(
+                PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
+            preference.edit().putLong(PreferenceUtil.KEY_GURUNAVI_LATITUDE, latitude).apply()
+            preference.edit().putLong(PreferenceUtil.KEY_GURUNAVI_LATITUDE, longitude).apply()
+
             val intent = Intent(mContext, MapActivity::class.java)
-            intent.putExtra(ActivityUtil.KEY_GURUNAVI_ADDRESS, address)
             mContext?.startActivity(intent)
         }
     }

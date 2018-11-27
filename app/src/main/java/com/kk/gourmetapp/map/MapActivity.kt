@@ -17,6 +17,8 @@ class MapActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
 
+    private lateinit var mPresenter: MapPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -38,6 +40,9 @@ class MapActivity : AppCompatActivity() {
         val mapFragment: MapFragment = MapFragment.newInstance()
         ActivityUtil.addFragmentToActivity(supportFragmentManager, mapFragment,
             R.id.map_content_frame)
+
+        // Presenterの生成
+        mPresenter = MapPresenter(mapFragment, applicationContext)
     }
 
     /**

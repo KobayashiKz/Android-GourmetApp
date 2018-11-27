@@ -1,5 +1,26 @@
 package com.kk.gourmetapp.map
 
-class MapPresenter: MapContract.Presenter {
-    // do nothing.
+import android.content.Context
+
+class MapPresenter(mapView: MapContract.View, context: Context): MapContract.Presenter {
+
+    private var mView: MapContract.View = mapView
+    private var mContext: Context = context
+    private var mModel: MapContract.Model = MapModel(context)
+
+    init {
+        mView.setPresenter(this)
+    }
+
+    override fun getGurunaviLatitude(): Long {
+        return mModel.loadGurunaviLatitude()
+    }
+
+    override fun getGurunaviLongitude(): Long {
+        return mModel.loadGurunaviLongitude()
+    }
+
+    override fun clearGurunaviAddressInfo() {
+        mModel.clearGurunaviAddress()
+    }
 }

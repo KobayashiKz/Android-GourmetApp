@@ -16,6 +16,8 @@ class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
+    private lateinit var mPresenter: MapPresenter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root: View? = inflater.inflate(R.layout.fragment_map, container, false)
@@ -33,9 +35,15 @@ class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
 
-        // TODO ひとまずシドニーを中心としたマップを表示. 目的の住所を表示させる.
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val latitude: Long = mPresenter.getGurunaviLatitude()
+        val longitude: Long = mPresenter.getGurunaviLongitude()
+
+        val location = LatLng(latitude.toDouble(), longitude.toDouble())
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+    }
+
+    override fun setPresenter(presenter: MapPresenter) {
+        mPresenter = presenter
     }
 
     companion object {

@@ -47,6 +47,8 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_REST_OPEN_TIME: String = "opentime"
         const val KEY_REST_BUDGET: String = "budget"
         const val KEY_REST_ADDRESS: String = "address"
+        const val KEY_REST_LATITUDE: String = "latitude"
+        const val KEY_REST_LONGITUDE: String = "longitude"
 
         // ホットペッパーAPI URL
         const val NAME_HOTPEPPER_AUTH_INFO_FILE: String = "hotpepper-auth-info.txt"
@@ -114,8 +116,10 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
                             mContext?.getString(R.string.text_budget_unit)
                     val address: String = restJsonObject.getString(KEY_REST_ADDRESS)
+                    val latitude: Long = restJsonObject.getLong(KEY_REST_LATITUDE)
+                    val longitude: Long = restJsonObject.getLong(KEY_REST_LONGITUDE)
                     val shop = GurunaviShop(
-                        name, category, imageUrl, pageUrl, tel, openTime, budget, address)
+                        name, category, imageUrl, pageUrl, tel, openTime, budget, address, latitude, longitude)
 
                     // ぐるなびのショップリストに追加
                     shopList.add(shop)
