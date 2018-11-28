@@ -12,11 +12,11 @@ class MapPresenter(mapView: MapContract.View, context: Context): MapContract.Pre
         mView.setPresenter(this)
     }
 
-    override fun getGurunaviLatitude(): Long {
+    override fun getGurunaviLatitude(): Double {
         return mModel.loadGurunaviLatitude()
     }
 
-    override fun getGurunaviLongitude(): Long {
+    override fun getGurunaviLongitude(): Double {
         return mModel.loadGurunaviLongitude()
     }
 

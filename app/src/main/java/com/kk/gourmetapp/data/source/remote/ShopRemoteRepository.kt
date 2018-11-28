@@ -116,8 +116,8 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
                             mContext?.getString(R.string.text_budget_unit)
                     val address: String = restJsonObject.getString(KEY_REST_ADDRESS)
-                    val latitude: Long = restJsonObject.getLong(KEY_REST_LATITUDE)
-                    val longitude: Long = restJsonObject.getLong(KEY_REST_LONGITUDE)
+                    val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
+                    val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
                     val shop = GurunaviShop(
                         name, category, imageUrl, pageUrl, tel, openTime, budget, address, latitude, longitude)
 
