@@ -9,26 +9,34 @@ class MapModel(context: Context): MapContract.Model {
     private var mContext: Context = context
 
     /**
-     * Preferenceから住所を取得する
+     * ぐるなびショップの緯度取得
+     * @return 緯度
      */
-    override fun loadGurunaviLatitude(): Double {
+    override fun loadShopLatitude(): Double {
         val preference: SharedPreferences = mContext.getSharedPreferences(
             PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
         return java.lang.Double.longBitsToDouble(preference.getLong(
-            PreferenceUtil.KEY_GURUNAVI_LATITUDE, 0L))
+            PreferenceUtil.KEY_SHOP_LATITUDE, 0L))
     }
 
-    override fun loadGurunaviLongitude(): Double {
+    /**
+     * ぐるなびショップの経度取得
+     * @return 経度
+     */
+    override fun loadShopLongitude(): Double {
         val preference: SharedPreferences = mContext.getSharedPreferences(
             PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
         return java.lang.Double.longBitsToDouble(preference.getLong(
-            PreferenceUtil.KEY_GURUNAVI_LONGITUDE, 0L))
+            PreferenceUtil.KEY_SHOP_LONGITUDE, 0L))
     }
 
-    override fun clearGurunaviAddress() {
+    /**
+     * ぐるなびショップの位置情報を削除
+     */
+    override fun clearShopAddress() {
         val preference: SharedPreferences = mContext.getSharedPreferences(
             PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
-        preference.edit().putFloat(PreferenceUtil.KEY_GURUNAVI_LATITUDE, 0f).apply()
-        preference.edit().putFloat(PreferenceUtil.KEY_GURUNAVI_LONGITUDE, 0f).apply()
+        preference.edit().putFloat(PreferenceUtil.KEY_SHOP_LATITUDE, 0f).apply()
+        preference.edit().putFloat(PreferenceUtil.KEY_SHOP_LONGITUDE, 0f).apply()
     }
 }

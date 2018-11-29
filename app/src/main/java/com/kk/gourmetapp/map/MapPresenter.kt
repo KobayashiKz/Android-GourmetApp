@@ -5,22 +5,33 @@ import android.content.Context
 class MapPresenter(mapView: MapContract.View, context: Context): MapContract.Presenter {
 
     private var mView: MapContract.View = mapView
-    private var mContext: Context = context
     private var mModel: MapContract.Model = MapModel(context)
 
     init {
         mView.setPresenter(this)
     }
 
-    override fun getGurunaviLatitude(): Double {
-        return mModel.loadGurunaviLatitude()
+    /**
+     * ぐるなびショップの緯度取得
+     * @return 緯度
+     */
+    override fun getShopLatitude(): Double {
+        return mModel.loadShopLatitude()
     }
 
-    override fun getGurunaviLongitude(): Double {
-        return mModel.loadGurunaviLongitude()
+    /**
+     * ぐるなびショップの経度取得
+     * @return 経度
+     */
+    override fun getShopLongitude(): Double {
+        return mModel.loadShopLongitude()
     }
 
-    override fun clearGurunaviAddressInfo() {
-        mModel.clearGurunaviAddress()
+    /**
+     * ぐるなびショップの位置情報の削除.
+     * 位置情報取得用に一時保存しているため.
+     */
+    override fun clearShopAddressInfo() {
+        mModel.clearShopAddress()
     }
 }

@@ -7,18 +7,18 @@ interface MapContract {
     }
 
     interface Presenter {
-        fun getGurunaviLatitude(): Double
+        fun getShopLatitude(): Double
 
-        fun getGurunaviLongitude(): Double
+        fun getShopLongitude(): Double
 
-        fun clearGurunaviAddressInfo()
+        fun clearShopAddressInfo()
     }
 
     interface Model {
-        fun loadGurunaviLatitude(): Double
+        fun loadShopLatitude(): Double
 
-        fun loadGurunaviLongitude(): Double
+        fun loadShopLongitude(): Double
 
-        fun clearGurunaviAddress()
+        fun clearShopAddress()
     }
 }

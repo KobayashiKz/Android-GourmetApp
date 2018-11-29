@@ -75,7 +75,9 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_HOTPEPPER_SHOP_OPEN: String = "open"
         const val KEY_HOTPEPPER_SHOP_BUDGET: String = "budget"
         const val KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE: String = "average"
-        const val KEY_HOTPEPPER_SHOP_ADDRESS: String = "address"
+        const val KEY_HOTPEPPER_SHOP_LATITUDE: String = "lat"
+        const val KEY_HOTPEPPER_SHOP_LONGITUDE: String = "lng"
+
 
         // セレブモード検索ワード
         const val TEXT_CELEB_SEATCH_WORD: String = "フレンチ"
@@ -115,11 +117,10 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
                     val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
                             mContext?.getString(R.string.text_budget_unit)
-                    val address: String = restJsonObject.getString(KEY_REST_ADDRESS)
                     val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
                     val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
                     val shop = GurunaviShop(
-                        name, category, imageUrl, pageUrl, tel, openTime, budget, address, latitude, longitude)
+                        name, category, imageUrl, pageUrl, tel, openTime, budget, latitude, longitude)
 
                     // ぐるなびのショップリストに追加
                     shopList.add(shop)
@@ -173,10 +174,11 @@ class ShopRemoteRepository(context: Context): DataSource {
                     val openTime: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_OPEN)
                     val budget: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_BUDGET)
                         .getString(KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE)
-                    val address: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_ADDRESS)
+                    val latitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LATITUDE)
+                    val longitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LONGITUDE)
 
-                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget
-                        , address)
+                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget,
+                        latitude, longitude)
 
                     shopList.add(shop)
                 }

@@ -14,9 +14,7 @@ class PreferenceUtil {
 
         // マップ住所保存用
         const val KEY_PREFERENCE_MAP: String = "key_preference_map"
-        const val KEY_GURUNAVI_ADDRESS = "key_gurunavi_address"
-        const val KEY_GURUNAVI_LATITUDE = "key_gurunavi_latitude"
-        const val KEY_GURUNAVI_LONGITUDE = "key_gurunavi_longitude"
-        const val KEY_HOTPEPPER_ADDRESS = "key_hotpepper_address"
+        const val KEY_SHOP_LATITUDE = "key_shop_latitude"
+        const val KEY_SHOP_LONGITUDE = "key_shop_longitude"
     }
 }

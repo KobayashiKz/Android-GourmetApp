@@ -71,7 +71,6 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
 
         // Mapボタンタップ時にはMapActivityを起動する
         holder.mapButton.setOnClickListener {
-            val address: String = mShopList[position].mAddress
 
             val latitude: Double = mShopList[position].mLatitude
             val longitude: Double = mShopList[position].mLongitude
@@ -79,9 +78,9 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             // 緯度経度をPreferenceに保存しておく. Double型はそのまま保存できないのでLong型のビット表現で保存.
             val preference: SharedPreferences = mContext!!.getSharedPreferences(
                 PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
-            preference.edit().putLong(PreferenceUtil.KEY_GURUNAVI_LATITUDE,
+            preference.edit().putLong(PreferenceUtil.KEY_SHOP_LATITUDE,
                 java.lang.Double.doubleToRawLongBits(latitude)).apply()
-            preference.edit().putLong(PreferenceUtil.KEY_GURUNAVI_LONGITUDE,
+            preference.edit().putLong(PreferenceUtil.KEY_SHOP_LONGITUDE,
                 java.lang.Double.doubleToRawLongBits(longitude)).apply()
 
             val intent = Intent(mContext, MapActivity::class.java)

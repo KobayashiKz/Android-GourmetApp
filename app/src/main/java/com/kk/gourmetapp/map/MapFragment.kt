@@ -19,9 +19,9 @@ import pub.devrel.easypermissions.EasyPermissions
 
 class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-
     private lateinit var mPresenter: MapPresenter
+
+    private lateinit var mMap: GoogleMap
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -41,32 +41,27 @@ class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
 
-        val latitude: Double = mPresenter.getGurunaviLatitude()
-        val longitude: Double = mPresenter.getGurunaviLongitude()
+        // 緯度経度を取得
+        val latitude: Double = mPresenter.getShopLatitude()
+        val longitude: Double = mPresenter.getShopLongitude()
 
-        mPresenter.clearGurunaviAddressInfo()
+        mPresenter.clearShopAddressInfo()
 
         if (latitude == 0.0 && longitude == 0.0) {
             // TODO: 住所取得できなかった際の処理
             return
         }
-
         val location = LatLng(latitude, longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
 
-        mMap.addMarker(
-            MarkerOptions()
-                .position(location)
-        )
-
+        // 対象のショップが表示されるようにMapに各種設定
+        mMap.addMarker(MarkerOptions().position(location))
         val shopLocation: CameraPosition = CameraPosition.Builder().
             target(location)
-            .zoom(15.5f)
-            .bearing(0f)
-            .tilt(25f)
+            .zoom(15.5f)     // 拡大度
+            .bearing(0f)     // 北方向向き
+            .tilt(25f)       // 角度
             .build()
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(shopLocation))
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(shopLocation))
 
         if (hasLocationPermission()) {
             mMap.isMyLocationEnabled = true
@@ -75,20 +70,29 @@ class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
         }
     }
 
-    // パーミッションダイアログ表示
+    /**
+     * Presenterの登録
+     */
+    override fun setPresenter(presenter: MapPresenter) {
+        mPresenter = presenter
+    }
+
+    /**
+     * 現在地パーミッションの表示
+     */
     private fun showRequestPermission() {
         EasyPermissions.requestPermissions(this, getString(R.string.location_request_permission_message),
             REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 
-    // パーミッションチェック
+    /**
+     * 現在地パーミッションのチェック
+     * @return true:  取得済み
+     *         false: 未取得
+     */
     private fun hasLocationPermission(): Boolean {
         return EasyPermissions.hasPermissions(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
-    }
-
-    override fun setPresenter(presenter: MapPresenter) {
-        mPresenter = presenter
     }
 
     companion object {

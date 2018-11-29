@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#FC913A</color>
     <color name="colorAccent">#F68655</color>
 
+    <color name="rippleEffectColor">#CCCCCC</color>
+
     <color name="dialogBackground">#a0909090</color>
 </resources>

@@ -2,6 +2,7 @@ package com.kk.gourmetapp.recommend
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.map.MapActivity
-import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.PreferenceUtil
 
 class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<HotpepperShopAdapter.ShopViewHolder>() {
@@ -56,10 +57,20 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
 
         // Mapボタンタップ時にはMapActivityを起動する
         holder.mapButton.setOnClickListener {
-            val address: String = mShopList[position].mAddress
-            // TODO 住所をPreferenceに保存してMapFragmentで受け取るように修正する
+            val latitude: Double = mShopList[position].mLatitude
+            val longitude: Double = mShopList[position].mLongitude
+
+            // 緯度経度をPreferenceに保存しておく. Double型はそのまま保存できないのでLong型のビット表現で保存.
+            val preference: SharedPreferences = mContext!!.getSharedPreferences(
+                PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
+            preference.edit().putLong(
+                PreferenceUtil.KEY_SHOP_LATITUDE,
+                java.lang.Double.doubleToRawLongBits(latitude)).apply()
+            preference.edit().putLong(
+                PreferenceUtil.KEY_SHOP_LONGITUDE,
+                java.lang.Double.doubleToRawLongBits(longitude)).apply()
+
             val intent = Intent(mContext, MapActivity::class.java)
-            intent.putExtra(ActivityUtil.KEY_HOTPEPPER_ADDRESS, address)
             mContext?.startActivity(intent)
         }
     }
