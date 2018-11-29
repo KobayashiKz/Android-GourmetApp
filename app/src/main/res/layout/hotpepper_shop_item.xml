@@ -104,6 +104,16 @@
                             android:layout_marginStart="@dimen/text_margin_start"
                             android:layout_marginBottom="10dp"/>
                 </LinearLayout>
+
+                <Button
+                        android:id="@+id/map_button"
+                        android:layout_width="@dimen/map_button_width"
+                        android:layout_height="@dimen/map_button_height"
+                        android:layout_margin="@dimen/map_button_margin"
+                        android:textColor="@android:color/white"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/button_ripple_effect"
+                        android:text="@string/text_map_button"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

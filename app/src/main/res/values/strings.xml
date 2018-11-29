@@ -6,6 +6,7 @@
     <!-- おすすめ画面 -->
     <string name="text_gurunavi">ぐるなび</string>
     <string name="text_hotpepper">ホットペッパー</string>
+    <string name="text_map_button">Mapをみる</string>
     <string name="text_budget_unit">円</string>
 
     <!-- 画像選択画面 -->
@@ -18,4 +19,7 @@
     <!-- 通信状況確認ダイアログ -->
     <string name="network_dialog_message">ネットワーク接続ができません。接続状況を確認してください。</string>
     <string name="network_dialog_positive_button">設定画面へ</string>
+
+    <!-- パーミッションダイアログ -->
+    <string name="location_request_permission_message">パーミッションを許可してください。</string>
 </resources>

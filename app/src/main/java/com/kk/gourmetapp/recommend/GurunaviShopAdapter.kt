@@ -2,6 +2,7 @@ package com.kk.gourmetapp.recommend
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Paint
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.map.MapActivity
+import com.kk.gourmetapp.util.PreferenceUtil
 
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<GurunaviShopAdapter.ShopViewHolder>() {
@@ -67,7 +69,20 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         holder.openTime.text = mShopList[position].mOpenTime
         holder.budget.text = mShopList[position].mBudget
 
-        holder.button.setOnClickListener {
+        // Mapボタンタップ時にはMapActivityを起動する
+        holder.mapButton.setOnClickListener {
+
+            val latitude: Double = mShopList[position].mLatitude
+            val longitude: Double = mShopList[position].mLongitude
+
+            // 緯度経度をPreferenceに保存しておく. Double型はそのまま保存できないのでLong型のビット表現で保存.
+            val preference: SharedPreferences = mContext!!.getSharedPreferences(
+                PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
+            preference.edit().putLong(PreferenceUtil.KEY_SHOP_LATITUDE,
+                java.lang.Double.doubleToRawLongBits(latitude)).apply()
+            preference.edit().putLong(PreferenceUtil.KEY_SHOP_LONGITUDE,
+                java.lang.Double.doubleToRawLongBits(longitude)).apply()
+
             val intent = Intent(mContext, MapActivity::class.java)
             mContext?.startActivity(intent)
         }
@@ -90,7 +105,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         val tel: TextView = itemView.findViewById(R.id.gurunavi_shop_tel)
         val openTime: TextView = itemView.findViewById(R.id.gurunavi_shop_open_time)
         val budget: TextView = itemView.findViewById(R.id.gurunavi_shop_budget)
-        val button: Button = itemView.findViewById(R.id.map_button)
+        val mapButton: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.gurunavi_shop_text_scroll_view)
     }
