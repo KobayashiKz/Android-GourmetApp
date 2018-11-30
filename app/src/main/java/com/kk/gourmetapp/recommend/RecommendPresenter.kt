@@ -3,6 +3,7 @@ package com.kk.gourmetapp.recommend
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import com.android.volley.toolbox.ImageLoader
 import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.data.GurunaviShop
@@ -28,7 +29,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     /**
      * {@inheritDoc}
      */
-    override fun createGurunaviInfo() {
+    override fun createGurunaviInfo(bundle: Bundle) {
 
         val isCelebMode: Boolean? = mDataRepository?.isCelebMode()
 
@@ -46,13 +47,13 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                         mRecommendView.showNetworkErrorDialog()
                     }
                 }
-            }, isCelebMode as Boolean)
+            }, isCelebMode as Boolean , bundle)
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun createHotpepperInfo() {
+    override fun createHotpepperInfo(bundle: Bundle) {
 
         val isCelebMode: Boolean? = mDataRepository?.isCelebMode()
 
@@ -71,7 +72,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                     mRecommendView.showNetworkErrorDialog()
                 }
             }
-        }, isCelebMode as Boolean)
+        }, isCelebMode as Boolean, bundle)
     }
 
     /**
@@ -122,4 +123,22 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     override fun isConnectNetwork(): Boolean {
         return mDataRepository?.isConnectNetwork() as Boolean
     }
+
+    override fun loadShopInfo() {
+        if (mDataRepository!!.hasLocationPermission()) {
+            // パーミッションが許可されている場合には現在地を取得する
+            mDataRepository?.getCurrentLocation(object : DataSource.LocationCallback {
+                override fun onComplete(bundle: Bundle) {
+                    // 現在地取得後にショップ情報を作成
+                    createGurunaviInfo(bundle)
+                    createHotpepperInfo(bundle)
+                }
+            })
+        } else {
+            // パーミッションが許可されていない場合にはダイアログ表示させる
+            mRecommendView.showRequestLocationPermission()
+        }
+    }
+
+    // 現在地取得できたらコールバックを取得する. その中でショップインフォを作成する
 }

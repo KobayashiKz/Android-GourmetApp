@@ -1,5 +1,6 @@
 package com.kk.gourmetapp.recommend
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -22,8 +23,10 @@ import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
+import com.kk.gourmetapp.map.MapFragment
 import com.kk.gourmetapp.select.SelectActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import pub.devrel.easypermissions.EasyPermissions
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
@@ -82,9 +85,11 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             showHotpepperCreditInfo()
         }
 
+        // TODO presenterで現在地取得できたら呼ぶようにする
         // ぐるなびとホットペッパーのお店情報を取得開始
-        mRecommendPresenter?.createGurunaviInfo()
-        mRecommendPresenter?.createHotpepperInfo()
+//        mRecommendPresenter?.createGurunaviInfo()
+//        mRecommendPresenter?.createHotpepperInfo()
+        mRecommendPresenter?.loadShopInfo()
 
         return root
     }
@@ -120,6 +125,12 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     override fun showNetworkErrorDialog() {
         val errorDialog = NetworkErrorDialog()
         errorDialog.show(fragmentManager, "tag")
+    }
+
+    override fun showRequestLocationPermission() {
+        EasyPermissions.requestPermissions(this,
+            getString(R.string.location_request_permission_message),
+            MapFragment.REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     /**

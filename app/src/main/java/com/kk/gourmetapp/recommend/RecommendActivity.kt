@@ -63,14 +63,15 @@ class RecommendActivity : AppCompatActivity() {
 
             // 画像解析が完了している場合には再検索をかける
             if (mRecommendPresenter?.shouldUpdate()!!) {
-                mRecommendPresenter?.createGurunaviInfo()
-                mRecommendPresenter?.createHotpepperInfo()
+                mRecommendPresenter?.loadShopInfo()
+//                mRecommendPresenter?.createHotpepperInfo()
             }
         } else if (requestCode == ActivityUtil.REQUEST_CODE_SETTING &&
             resultCode == Activity.RESULT_OK) {
             // セレブモード変更した際には再検索をかける
-            mRecommendPresenter?.createGurunaviInfo()
-            mRecommendPresenter?.createHotpepperInfo()
+            mRecommendPresenter?.loadShopInfo()
+//            mRecommendPresenter?.createGurunaviInfo()
+//            mRecommendPresenter?.createHotpepperInfo()
 
             // セレブモード背景の設定
             mRecommendFragment.setCelebBackground()
