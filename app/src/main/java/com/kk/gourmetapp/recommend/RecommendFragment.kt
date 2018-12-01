@@ -124,6 +124,9 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         errorDialog.show(fragmentManager, "tag")
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun showRequestLocationPermission() {
         EasyPermissions.requestPermissions(this,
             getString(R.string.location_request_permission_message),

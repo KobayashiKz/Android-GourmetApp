@@ -17,7 +17,6 @@ class PreferenceUtil {
         const val KEY_CURRENT_LATITUDE = "key_current_latitude"
         const val KEY_CURRENT_LONGITUDE = "key_current_longitude"
 
-
         // マップ住所保存用
         const val KEY_PREFERENCE_MAP: String = "key_preference_map"
         const val KEY_SHOP_LATITUDE = "key_shop_latitude"
