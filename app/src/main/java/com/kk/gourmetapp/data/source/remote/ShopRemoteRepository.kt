@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Bundle
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
+import com.kk.gourmetapp.data.source.DataRepository
 import com.kk.gourmetapp.data.source.DataSource
 import java.io.BufferedReader
 import java.io.InputStream
@@ -23,7 +25,7 @@ class ShopRemoteRepository(context: Context): DataSource {
 
     companion object {
         // レストランの取得数
-        const val REST_GET_COUNT: Int = 5
+        const val REST_GET_COUNT: Int = 20
 
         // ぐるなびAPI URL
         const val NAME_GURUNAVI_AUTH_INFO_FILE: String = "gurunavi-auth-info.txt"
@@ -46,7 +48,6 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_REST_TEL: String = "tel"
         const val KEY_REST_OPEN_TIME: String = "opentime"
         const val KEY_REST_BUDGET: String = "budget"
-        const val KEY_REST_ADDRESS: String = "address"
         const val KEY_REST_LATITUDE: String = "latitude"
         const val KEY_REST_LONGITUDE: String = "longitude"
 
@@ -87,7 +88,7 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback,
-                                    isCeleb: Boolean) {
+                                    isCeleb: Boolean, bundle: Bundle) {
         // do nothing.
     }
 
@@ -96,38 +97,40 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     override fun createGurunaviInfo(keyword: String?,
                                     callback: DataSource.CreateGurunaviShopCallback,
-                                    isCeleb: Boolean) {
+                                    isCeleb: Boolean, bundle: Bundle) {
         val apikey: String = getApiKey(NAME_GURUNAVI_AUTH_INFO_FILE)
 
-        val request = JsonObjectRequest(createGurunaviURL(apikey, keyword, isCeleb), null,
+        val request = JsonObjectRequest(createGurunaviURL(apikey, keyword, isCeleb, bundle), null,
             Response.Listener { response ->
 
                 val shopList: MutableList<GurunaviShop> = ArrayList()
 
                 for (i in 0..(REST_GET_COUNT - 1)) {
-                    val restJsonObject = response.getJSONArray(KEY_REST).getJSONObject(i)
+                    if (response.getJSONArray(KEY_REST).length()  > i) {
+                        val restJsonObject = response.getJSONArray(KEY_REST).getJSONObject(i)
 
-                    // 各レストラン情報をパースする
-                    val name: String = restJsonObject.getString(KEY_REST_NAME)
-                    val category: String = restJsonObject.getString(KEY_REST_CATEGORY)
-                    val imageUrl: String = restJsonObject.getJSONObject(KEY_REST_IMAGE_URL)
-                        .getString(KEY_REST_URL_MOBILE_SHOP)
-                    val pageUrl: String = restJsonObject.getString(KEY_REST_URL_MOBILE)
-                    val tel: String = restJsonObject.getString(KEY_REST_TEL)
-                    val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
-                    val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
-                            mContext?.getString(R.string.text_budget_unit)
-                    val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
-                    val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
-                    val shop = GurunaviShop(
-                        name, category, imageUrl, pageUrl, tel, openTime, budget, latitude, longitude)
+                        // 各レストラン情報をパースする
+                        val name: String = restJsonObject.getString(KEY_REST_NAME)
+                        val category: String = restJsonObject.getString(KEY_REST_CATEGORY)
+                        val imageUrl: String = restJsonObject.getJSONObject(KEY_REST_IMAGE_URL)
+                            .getString(KEY_REST_URL_MOBILE_SHOP)
+                        val pageUrl: String = restJsonObject.getString(KEY_REST_URL_MOBILE)
+                        val tel: String = restJsonObject.getString(KEY_REST_TEL)
+                        val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
+                        val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
+                                mContext?.getString(R.string.text_budget_unit)
+                        val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
+                        val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
+                        val shop = GurunaviShop(name, category, imageUrl, pageUrl, tel,
+                            openTime, budget, latitude, longitude)
 
-                    // ぐるなびのショップリストに追加
-                    shopList.add(shop)
+                        // ぐるなびのショップリストに追加
+                        shopList.add(shop)
+                    }
+
+                    // 取得完了コールバックを返す
+                    callback.createGurunaviShop(shopList, RequestSingleQueue.getImageLoader())
                 }
-
-                // 取得完了コールバックを返す
-                callback.createGurunaviShop(shopList, RequestSingleQueue.getImageLoader())
             },
             Response.ErrorListener { _ ->
                 callback.onError()
@@ -140,7 +143,7 @@ class ShopRemoteRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback
-                                     ,isCeleb: Boolean) {
+                                     ,isCeleb: Boolean, bundle: Bundle) {
         // do nothing.
     }
 
@@ -149,41 +152,42 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     override fun createHotpepperInfo(keyword: String?,
                                      callback: DataSource.CreateHotpepperShopCallback,
-                                     isCeleb: Boolean) {
+                                     isCeleb: Boolean, bundle: Bundle) {
         val apikey: String = getApiKey(NAME_HOTPEPPER_AUTH_INFO_FILE)
 
-        val request = JsonObjectRequest(createHotpepperURL(apikey, keyword, isCeleb), null,
+        val request = JsonObjectRequest(createHotpepperURL(apikey, keyword, isCeleb, bundle), null,
             Response.Listener { response ->
                 val shopList: MutableList<HotpepperShop> = ArrayList()
 
                 val resultJsonObject = response.getJSONObject(KEY_HOTPEPPER_RESULTS)
 
                 for (i in 0..(REST_GET_COUNT - 1)) {
-                    val restJsonObject =
-                        resultJsonObject.getJSONArray(KEY_HOTPEPPER_SHOP).getJSONObject(i)
+                    if (resultJsonObject.getJSONArray(KEY_HOTPEPPER_SHOP).length() > i) {
+                        val restJsonObject =
+                            resultJsonObject.getJSONArray(KEY_HOTPEPPER_SHOP).getJSONObject(i)
 
-                    // 各レストラン情報をパースする
-                    val name: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_NAME)
-                    val category: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_GENRE)
-                        .getString(KEY_HOTPEPPER_SHOP_GENRE_NAME)
-                    val imageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO)
-                        .getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE)
-                        .getString(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE)
-                    val pageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_URL)
-                        .getString(KEY_HOTPEPPER_SHOP_URL_PC)
-                    val openTime: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_OPEN)
-                    val budget: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_BUDGET)
-                        .getString(KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE)
-                    val latitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LATITUDE)
-                    val longitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LONGITUDE)
+                        // 各レストラン情報をパースする
+                        val name: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_NAME)
+                        val category: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_GENRE)
+                            .getString(KEY_HOTPEPPER_SHOP_GENRE_NAME)
+                        val imageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO)
+                            .getJSONObject(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE)
+                            .getString(KEY_HOTPEPPER_SHOP_PHOTO_MOBILE_LARGE)
+                        val pageUrl: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_URL)
+                            .getString(KEY_HOTPEPPER_SHOP_URL_PC)
+                        val openTime: String = restJsonObject.getString(KEY_HOTPEPPER_SHOP_OPEN)
+                        val budget: String = restJsonObject.getJSONObject(KEY_HOTPEPPER_SHOP_BUDGET)
+                            .getString(KEY_HOTPEPPER_SHOP_BUDGET_AVERAGE)
+                        val latitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LATITUDE)
+                        val longitude: Double = restJsonObject.getDouble(KEY_HOTPEPPER_SHOP_LONGITUDE)
 
-                    val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget,
-                        latitude, longitude)
+                        val shop = HotpepperShop(name, category, imageUrl, pageUrl, openTime, budget,
+                            latitude, longitude)
 
-                    shopList.add(shop)
+                        shopList.add(shop)
+                    }
+                    callback.createHotpepperShop(shopList, RequestSingleQueue.getImageLoader())
                 }
-
-                callback.createHotpepperShop(shopList, RequestSingleQueue.getImageLoader())
             },
             Response.ErrorListener { _ ->
                 callback.onError()
@@ -210,14 +214,18 @@ class ShopRemoteRepository(context: Context): DataSource {
      * ぐるなびURLの生成処理
      * @param key     APIキー
      * @param keyword 検索キーワード
+     * @param bundle  現在地
      * @return 検索URL
      */
-    private fun createGurunaviURL(key: String, keyword: String?, isCeleb: Boolean): String {
-        // TODO: 現在地取得処理.ひとまず東京駅の座標で固定検索かける
-        val latitude: String = "35.681167"
-        val longitude: String = "139.767052"
-        val url: String = URL_GURUNAVI_API + "?keyid=" + key + URL_SEPARATOR + "latitude=" + latitude +
-                URL_SEPARATOR + "longitude=" + longitude
+    private fun createGurunaviURL(key: String, keyword: String?, isCeleb: Boolean, bundle: Bundle): String {
+        // 現在地の緯度経度を取得
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
+        val url: String = URL_GURUNAVI_API + "?keyid=" + key + URL_SEPARATOR + "latitude=" +
+                latitude.toString() + URL_SEPARATOR + "longitude=" + longitude.toString()
         return when {
             isCeleb -> url + URL_SEPARATOR + "freeword=" + TEXT_CELEB_SEATCH_WORD
             keyword != null -> url + URL_SEPARATOR + "freeword=" + keyword
@@ -229,14 +237,20 @@ class ShopRemoteRepository(context: Context): DataSource {
      * ホットペッパーURLの生成処理
      * @param key     APIキー
      * @param keyword 検索キーワード
+     * @param bundle  現在地
      * @return 検索URL
      */
-    private fun createHotpepperURL(key: String, keyword: String?, isCeleb: Boolean): String {
-        // TODO: 現在地取得処理.ひとまず東京駅の座標で固定検索かける
-        val latitude: String = "35.681167"
-        val longitude: String = "139.767052"
-        val url: String = URL_HOTPEPPER_API + "?key=" + key + URL_SEPARATOR + "lat=" + latitude +
-                URL_SEPARATOR + "lng=" + longitude + URL_SEPARATOR + "format=json"
+    private fun createHotpepperURL(key: String, keyword: String?, isCeleb: Boolean,
+                                   bundle: Bundle): String {
+        // 現在地の緯度経度を取得
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
+        val url: String = URL_HOTPEPPER_API + "?key=" + key + URL_SEPARATOR + "lat=" +
+                latitude.toString() + URL_SEPARATOR + "lng=" + longitude.toString() +
+                URL_SEPARATOR + "format=json"
         return when {
             isCeleb -> url + URL_SEPARATOR + "keyword=" + TEXT_CELEB_SEATCH_WORD
             keyword != null -> url + URL_SEPARATOR + "keyword=" + keyword
@@ -325,5 +339,28 @@ class ShopRemoteRepository(context: Context): DataSource {
             Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun getCurrentLocation(callback: DataSource.LocationCallback) {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun hasLocationPermission(): Boolean {
+        // do nothing.
+        return false
+    }
+
+    override fun getSavedCurrentLocation(): Bundle {
+        return Bundle()
+    }
+
+    override fun saveCurrentLocation(bundle: Bundle) {
+        // do nothing.
     }
 }

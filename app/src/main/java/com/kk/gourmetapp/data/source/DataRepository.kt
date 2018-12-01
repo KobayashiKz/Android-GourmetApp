@@ -1,13 +1,21 @@
 package com.kk.gourmetapp.data.source
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.drawable.Drawable
+import android.location.Criteria
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
+import android.os.Bundle
 import android.text.TextUtils
+import android.widget.Toast
 import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
@@ -15,28 +23,33 @@ import com.kk.gourmetapp.data.ImageRecognizer
 import com.kk.gourmetapp.data.source.remote.ShopRemoteRepository
 import com.kk.gourmetapp.util.DatabaseHelper
 import com.kk.gourmetapp.util.PreferenceUtil
+import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
 class DataRepository(context: Context): DataSource {
 
     private val mContext: Context = context
 
-    private var mShopRemoteRepository: ShopRemoteRepository? = null
+    private var mShopRemoteRepository: ShopRemoteRepository = ShopRemoteRepository(context)
 
     private var mDbHelper: DatabaseHelper? = DatabaseHelper(mContext)
 
-    init {
-        mShopRemoteRepository = ShopRemoteRepository(mContext)
+    // 現在地取得済みかどうかを判定するフラグ
+    private var mLocationKnownFlg: Boolean = false
+
+    companion object {
+        const val KEY_BUNDLE_LATITUDE: String = "key_bundle_latitude"
+        const val KEY_BUNDLE_LONGITUDE: String = "key_bundle_longitude"
     }
 
     /**
      * {@inheritDoc}
      */
     override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback,
-                                    isCeleb: Boolean) {
+                                    isCeleb: Boolean, bundle: Bundle) {
         val keyword: String? = pickKeyword()
         //リモート側でAPIをたたいて情報生成する
-        mShopRemoteRepository?.createGurunaviInfo(keyword, callback, isCeleb)
+        mShopRemoteRepository.createGurunaviInfo(keyword, callback, isCeleb, bundle)
     }
 
     /**
@@ -44,7 +57,7 @@ class DataRepository(context: Context): DataSource {
      */
     override fun createGurunaviInfo(keyword: String?,
                                     callback: DataSource.CreateGurunaviShopCallback,
-                                    isCeleb: Boolean) {
+                                    isCeleb: Boolean, bundle: Bundle) {
         // do nothing.
     }
 
@@ -52,9 +65,9 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback,
-                                     isCeleb: Boolean) {
+                                     isCeleb: Boolean, bundle: Bundle) {
         val keyword: String? = pickKeyword()
-        mShopRemoteRepository?.createHotpepperInfo(keyword, callback, isCeleb)
+        mShopRemoteRepository.createHotpepperInfo(keyword, callback, isCeleb, bundle)
     }
 
     /**
@@ -62,7 +75,7 @@ class DataRepository(context: Context): DataSource {
      */
     override fun createHotpepperInfo(keyword: String?,
                                      callback: DataSource.CreateHotpepperShopCallback,
-                                     isCeleb: Boolean) {
+                                     isCeleb: Boolean, bundle: Bundle) {
         // do nothing.
     }
 
@@ -198,28 +211,28 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun loadGurunaviCredit(): RequestBuilder<Drawable>? {
-        return mShopRemoteRepository?.loadGurunaviCredit()
+        return mShopRemoteRepository.loadGurunaviCredit()
     }
 
     /**
      * {@inheritDoc}
      */
     override fun loadHotpepperCredit(): RequestBuilder<Drawable>? {
-        return mShopRemoteRepository?.loadHotpepperCredit()
+        return mShopRemoteRepository.loadHotpepperCredit()
     }
 
     /**
      * {@inheritDoc}
      */
     override fun loadGurunaviCreditUri(): Uri? {
-        return mShopRemoteRepository?.loadGurunaviCreditUri()
+        return mShopRemoteRepository.loadGurunaviCreditUri()
     }
 
     /**
      * {@inheritDoc}
      */
     override fun loadHotpepperCreditUri(): Uri? {
-        return mShopRemoteRepository?.loadHotpepperCreditUri()
+        return mShopRemoteRepository.loadHotpepperCreditUri()
     }
 
     /**
@@ -248,6 +261,105 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun isConnectNetwork(): Boolean {
-        return mShopRemoteRepository?.isConnectNetwork() as Boolean
+        return mShopRemoteRepository.isConnectNetwork() as Boolean
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressLint("MissingPermission")
+    override fun getCurrentLocation(callback: DataSource.LocationCallback) {
+        // インスタンス生成
+        val locationManager: LocationManager
+                = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        // 詳細設定
+        val criteria = Criteria()
+        criteria.accuracy = Criteria.ACCURACY_LOW
+        criteria.powerRequirement = Criteria.POWER_HIGH
+        criteria.isSpeedRequired = false
+        criteria.isAltitudeRequired = false
+        criteria.isBearingRequired = false
+        criteria.isCostAllowed = true
+        criteria.horizontalAccuracy = Criteria.ACCURACY_LOW
+        criteria.verticalAccuracy = Criteria.ACCURACY_LOW
+        val bundle = Bundle()
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+            0, 0f, object: LocationListener {
+            override fun onLocationChanged(location: Location?) {
+                if (location != null && !mLocationKnownFlg) {
+                    Toast.makeText(mContext, location.latitude.toString() , Toast.LENGTH_SHORT).show()
+                    bundle.putDouble(KEY_BUNDLE_LATITUDE, location.latitude)
+                    bundle.putDouble(KEY_BUNDLE_LONGITUDE, location.longitude)
+
+                    // 現在地を保存
+                    saveCurrentLocation(bundle)
+
+                    callback.onComplete(bundle)
+
+                    // 現在地取得終了
+                    locationManager.removeUpdates(this)
+                    mLocationKnownFlg = true
+                }
+            }
+
+            override fun onProviderDisabled(provider: String?) {
+                // do nothing.
+            }
+
+            override fun onProviderEnabled(provider: String?) {
+                // do nothing.
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                // do nothing.
+            }
+        })
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun hasLocationPermission(): Boolean {
+        return EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun getSavedCurrentLocation(): Bundle {
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_CURRENT_LOCATION, Context.MODE_PRIVATE)
+        val latitude: Double = java.lang.Double.longBitsToDouble(preference.getLong(
+            PreferenceUtil.KEY_CURRENT_LATITUDE, 0L))
+        val longitude: Double = java.lang.Double.longBitsToDouble(preference.getLong(
+            PreferenceUtil.KEY_CURRENT_LONGITUDE, 0L))
+
+        val bundle = Bundle()
+        bundle.putDouble(KEY_BUNDLE_LATITUDE, latitude)
+        bundle.putDouble(KEY_BUNDLE_LONGITUDE, longitude)
+        return bundle
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveCurrentLocation(bundle: Bundle) {
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
+
+        // Preferenceに保存
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_CURRENT_LOCATION, Context.MODE_PRIVATE)
+        preference.edit().putLong(
+            PreferenceUtil.KEY_CURRENT_LATITUDE,
+            java.lang.Double.doubleToRawLongBits(latitude)).apply()
+        preference.edit().putLong(
+            PreferenceUtil.KEY_CURRENT_LONGITUDE,
+            java.lang.Double.doubleToRawLongBits(longitude)).apply()
     }
 }

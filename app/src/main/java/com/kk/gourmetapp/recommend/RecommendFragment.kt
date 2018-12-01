@@ -1,5 +1,6 @@
 package com.kk.gourmetapp.recommend
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -22,8 +23,10 @@ import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
+import com.kk.gourmetapp.map.MapFragment
 import com.kk.gourmetapp.select.SelectActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import pub.devrel.easypermissions.EasyPermissions
 
 class RecommendFragment : Fragment(), RecommendContract.View {
 
@@ -82,9 +85,8 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             showHotpepperCreditInfo()
         }
 
-        // ぐるなびとホットペッパーのお店情報を取得開始
-        mRecommendPresenter?.createGurunaviInfo()
-        mRecommendPresenter?.createHotpepperInfo()
+        // ショップ情報の読み込み
+        mRecommendPresenter?.loadShopInfo()
 
         return root
     }
@@ -123,13 +125,22 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    override fun showRequestLocationPermission() {
+        EasyPermissions.requestPermissions(this,
+            getString(R.string.location_request_permission_message),
+            MapFragment.REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    /**
      * セレブモード背景の設定
      */
     fun setCelebBackground() {
-        if (mRecommendPresenter!!.isCelebMode()) {
-            mCelebBackground?.visibility = View.VISIBLE
-        } else {
+        if (mRecommendPresenter == null ||  !mRecommendPresenter!!.isCelebMode()) {
             mCelebBackground?.visibility = View.GONE
+        } else {
+            mCelebBackground?.visibility = View.VISIBLE
         }
     }
 

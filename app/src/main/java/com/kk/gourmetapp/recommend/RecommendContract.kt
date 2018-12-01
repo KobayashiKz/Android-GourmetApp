@@ -2,6 +2,7 @@ package com.kk.gourmetapp.recommend
 
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import com.android.volley.toolbox.ImageLoader
 import com.bumptech.glide.RequestBuilder
 import com.kk.gourmetapp.data.GurunaviShop
@@ -38,6 +39,8 @@ interface RecommendContract {
          * 通信エラーダイアログ表示
          */
         fun showNetworkErrorDialog()
+
+        fun showRequestLocationPermission()
     }
 
     /**
@@ -47,13 +50,15 @@ interface RecommendContract {
 
         /**
          * ぐるなびのお店情報生成
+         * @param bundle 現在地
          */
-        fun createGurunaviInfo()
+        fun createGurunaviInfo(bundle: Bundle)
 
         /**
          * ホットペッパーのお店情報生成
+         * @param bundle 現在地
          */
-        fun createHotpepperInfo()
+        fun createHotpepperInfo(bundle: Bundle)
 
         /**
          * ぐるなびのクレジット画像の読み込み
@@ -99,5 +104,16 @@ interface RecommendContract {
          *         false : ネットワーク接続なし
          */
         fun isConnectNetwork(): Boolean
+
+        /**
+         * ショップ情報の読み込み処理
+         */
+        fun loadShopInfo()
+
+        /**
+         * すでに取得済みの現在地取得
+         * @return 現在地
+         */
+        fun getSavedCurrentLocation(): Bundle
     }
 }

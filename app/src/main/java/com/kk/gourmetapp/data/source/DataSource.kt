@@ -2,6 +2,7 @@ package com.kk.gourmetapp.data.source
 
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import com.android.volley.toolbox.ImageLoader
 import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
@@ -9,6 +10,11 @@ import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 
 interface DataSource {
+
+    // 現在地取得完了コールバック
+    interface LocationCallback {
+        fun onComplete(bundle: Bundle)
+    }
 
     // ぐるなびAPIからデータ取得完了コールバック
     interface CreateGurunaviShopCallback {
@@ -44,33 +50,37 @@ interface DataSource {
      * ぐるなびからお店情報を生成する処理
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
+     * @param bundle   現在地
      */
-    fun createGurunaviInfo(callback: CreateGurunaviShopCallback, isCeleb: Boolean)
+    fun createGurunaviInfo(callback: CreateGurunaviShopCallback, isCeleb: Boolean, bundle: Bundle)
 
     /**
      * ぐるなびからお店情報を生成する処理
      * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
-     *
+     * @param bundle   現在地
      */
-    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback, isCeleb: Boolean)
+    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback,
+                           isCeleb: Boolean, bundle: Bundle)
 
     /**
      * ホットペッパーからお店情報を生成する処理
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
+     * @param bundle   現在地
      */
-    fun createHotpepperInfo(callback: CreateHotpepperShopCallback, isCeleb: Boolean)
+    fun createHotpepperInfo(callback: CreateHotpepperShopCallback, isCeleb: Boolean, bundle: Bundle)
 
     /**
      * ホットペッパーからお店情報を生成する処理
      * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
+     * @param bundle   現在地
      */
     fun createHotpepperInfo(keyword: String?, callback: CreateHotpepperShopCallback
-                            , isCeleb: Boolean)
+                            , isCeleb: Boolean, bundle: Bundle)
 
     // 画像認証後のコールバック
     interface RecognizeCallback {
@@ -155,4 +165,29 @@ interface DataSource {
      *         false : ネットワーク接続なし
      */
     fun isConnectNetwork(): Boolean
+
+    /**
+     * 現在地取得
+     * @param callback 現在地取得コールバック
+     */
+    fun getCurrentLocation(callback: DataSource.LocationCallback)
+
+    /**
+     * すでに取得済みの現在地取得
+     * @return 現在地
+     */
+    fun getSavedCurrentLocation(): Bundle
+
+    /**
+     * 現在地の保存
+     * @param bundle 現在地
+     */
+    fun saveCurrentLocation(bundle: Bundle)
+
+    /**
+     * 現在地パーミッションのチェック
+     * @return true:  取得済み
+     *         false: 未取得
+     */
+    fun hasLocationPermission() : Boolean
 }

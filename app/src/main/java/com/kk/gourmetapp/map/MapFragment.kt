@@ -82,8 +82,7 @@ class MapFragment : Fragment(), MapContract.View, OnMapReadyCallback {
      */
     private fun showRequestPermission() {
         EasyPermissions.requestPermissions(this, getString(R.string.location_request_permission_message),
-            REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
-        )
+            REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     /**
