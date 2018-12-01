@@ -19,8 +19,6 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
     // レポジトリはコンストラクタで受け取る
     private var mDataRepository: DataRepository? = DataRepository(context)
 
-    private var mContext: Context = context
-
     init {
         // FragmentにPresenterの登録要求
         mRecommendView.setUserActionListener(this)
@@ -124,6 +122,9 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
         return mDataRepository?.isConnectNetwork() as Boolean
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun loadShopInfo() {
         if (mDataRepository!!.hasLocationPermission()) {
             // パーミッションが許可されている場合には現在地を取得する
@@ -140,5 +141,12 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
         }
     }
 
-    // 現在地取得できたらコールバックを取得する. その中でショップインフォを作成する
+    /**
+     * {@inheritDoc}
+     */
+    override fun getSavedCurrentLocation(): Bundle {
+        return mDataRepository!!.getSavedCurrentLocation()
+    }
+
+
 }

@@ -61,17 +61,22 @@ class RecommendActivity : AppCompatActivity() {
         } else if (requestCode == ActivityUtil.REQUEST_CODE_RECOGNIZE &&
             resultCode == Activity.RESULT_OK) {
 
-            // 画像解析が完了している場合には再検索をかける
+            // 画像解析が完了している場合には取得済みの現在地で再検索をかける
             if (mRecommendPresenter?.shouldUpdate()!!) {
-                mRecommendPresenter?.loadShopInfo()
-//                mRecommendPresenter?.createHotpepperInfo()
+                val bundle: Bundle? = mRecommendPresenter?.getSavedCurrentLocation()
+                if (bundle != null) {
+                    mRecommendPresenter?.createGurunaviInfo(bundle)
+                    mRecommendPresenter?.createHotpepperInfo(bundle)
+                }
             }
         } else if (requestCode == ActivityUtil.REQUEST_CODE_SETTING &&
             resultCode == Activity.RESULT_OK) {
-            // セレブモード変更した際には再検索をかける
-            mRecommendPresenter?.loadShopInfo()
-//            mRecommendPresenter?.createGurunaviInfo()
-//            mRecommendPresenter?.createHotpepperInfo()
+            // セレブモード変更した際には取得済みの現在地で再検索をかける
+            val bundle: Bundle? = mRecommendPresenter?.getSavedCurrentLocation()
+            if (bundle != null) {
+                mRecommendPresenter?.createGurunaviInfo(bundle)
+                mRecommendPresenter?.createHotpepperInfo(bundle)
+            }
 
             // セレブモード背景の設定
             mRecommendFragment.setCelebBackground()

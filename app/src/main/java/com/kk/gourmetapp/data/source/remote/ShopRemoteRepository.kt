@@ -25,7 +25,7 @@ class ShopRemoteRepository(context: Context): DataSource {
 
     companion object {
         // レストランの取得数
-        const val REST_GET_COUNT: Int = 5
+        const val REST_GET_COUNT: Int = 20
 
         // ぐるなびAPI URL
         const val NAME_GURUNAVI_AUTH_INFO_FILE: String = "gurunavi-auth-info.txt"
@@ -48,7 +48,6 @@ class ShopRemoteRepository(context: Context): DataSource {
         const val KEY_REST_TEL: String = "tel"
         const val KEY_REST_OPEN_TIME: String = "opentime"
         const val KEY_REST_BUDGET: String = "budget"
-        const val KEY_REST_ADDRESS: String = "address"
         const val KEY_REST_LATITUDE: String = "latitude"
         const val KEY_REST_LONGITUDE: String = "longitude"
 
@@ -107,8 +106,8 @@ class ShopRemoteRepository(context: Context): DataSource {
                 val shopList: MutableList<GurunaviShop> = ArrayList()
 
                 for (i in 0..(REST_GET_COUNT - 1)) {
-                    val restJsonObject = response.getJSONArray(KEY_REST).getJSONObject(i)
-                    if (restJsonObject.length() > i) {
+                    if (response.getJSONArray(KEY_REST).length()  > i) {
+                        val restJsonObject = response.getJSONArray(KEY_REST).getJSONObject(i)
 
                         // 各レストラン情報をパースする
                         val name: String = restJsonObject.getString(KEY_REST_NAME)
@@ -122,17 +121,8 @@ class ShopRemoteRepository(context: Context): DataSource {
                                 mContext?.getString(R.string.text_budget_unit)
                         val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
                         val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
-                        val shop = GurunaviShop(
-                            name,
-                            category,
-                            imageUrl,
-                            pageUrl,
-                            tel,
-                            openTime,
-                            budget,
-                            latitude,
-                            longitude
-                        )
+                        val shop = GurunaviShop(name, category, imageUrl, pageUrl, tel,
+                            openTime, budget, latitude, longitude)
 
                         // ぐるなびのショップリストに追加
                         shopList.add(shop)
@@ -229,8 +219,11 @@ class ShopRemoteRepository(context: Context): DataSource {
      */
     private fun createGurunaviURL(key: String, keyword: String?, isCeleb: Boolean, bundle: Bundle): String {
         // 現在地の緯度経度を取得
-        val latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
-        val longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
         val url: String = URL_GURUNAVI_API + "?keyid=" + key + URL_SEPARATOR + "latitude=" +
                 latitude.toString() + URL_SEPARATOR + "longitude=" + longitude.toString()
         return when {
@@ -250,8 +243,11 @@ class ShopRemoteRepository(context: Context): DataSource {
     private fun createHotpepperURL(key: String, keyword: String?, isCeleb: Boolean,
                                    bundle: Bundle): String {
         // 現在地の緯度経度を取得
-        val latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
-        val longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
         val url: String = URL_HOTPEPPER_API + "?key=" + key + URL_SEPARATOR + "lat=" +
                 latitude.toString() + URL_SEPARATOR + "lng=" + longitude.toString() +
                 URL_SEPARATOR + "format=json"
@@ -358,5 +354,13 @@ class ShopRemoteRepository(context: Context): DataSource {
     override fun hasLocationPermission(): Boolean {
         // do nothing.
         return false
+    }
+
+    override fun getSavedCurrentLocation(): Bundle {
+        return Bundle()
+    }
+
+    override fun saveCurrentLocation(bundle: Bundle) {
+        // do nothing.
     }
 }

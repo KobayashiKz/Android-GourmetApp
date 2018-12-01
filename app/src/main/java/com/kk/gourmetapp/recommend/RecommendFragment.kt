@@ -85,10 +85,7 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             showHotpepperCreditInfo()
         }
 
-        // TODO presenterで現在地取得できたら呼ぶようにする
-        // ぐるなびとホットペッパーのお店情報を取得開始
-//        mRecommendPresenter?.createGurunaviInfo()
-//        mRecommendPresenter?.createHotpepperInfo()
+        // ショップ情報の読み込み
         mRecommendPresenter?.loadShopInfo()
 
         return root
@@ -137,10 +134,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
      * セレブモード背景の設定
      */
     fun setCelebBackground() {
-        if (mRecommendPresenter!!.isCelebMode()) {
-            mCelebBackground?.visibility = View.VISIBLE
-        } else {
+        if (mRecommendPresenter == null ||  !mRecommendPresenter!!.isCelebMode()) {
             mCelebBackground?.visibility = View.GONE
+        } else {
+            mCelebBackground?.visibility = View.VISIBLE
         }
     }
 

@@ -166,7 +166,28 @@ interface DataSource {
      */
     fun isConnectNetwork(): Boolean
 
+    /**
+     * 現在地取得
+     * @param callback 現在地取得コールバック
+     */
     fun getCurrentLocation(callback: DataSource.LocationCallback)
 
+    /**
+     * すでに取得済みの現在地取得
+     * @return 現在地
+     */
+    fun getSavedCurrentLocation(): Bundle
+
+    /**
+     * 現在地の保存
+     * @param bundle 現在地
+     */
+    fun saveCurrentLocation(bundle: Bundle)
+
+    /**
+     * 現在地パーミッションのチェック
+     * @return true:  取得済み
+     *         false: 未取得
+     */
     fun hasLocationPermission() : Boolean
 }

@@ -105,6 +105,15 @@ interface RecommendContract {
          */
         fun isConnectNetwork(): Boolean
 
+        /**
+         * ショップ情報の読み込み処理
+         */
         fun loadShopInfo()
+
+        /**
+         * すでに取得済みの現在地取得
+         * @return 現在地
+         */
+        fun getSavedCurrentLocation(): Bundle
     }
 }

@@ -15,6 +15,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.Toast
 import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
@@ -25,8 +26,6 @@ import com.kk.gourmetapp.util.PreferenceUtil
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
-
-
 class DataRepository(context: Context): DataSource {
 
     private val mContext: Context = context
@@ -34,6 +33,9 @@ class DataRepository(context: Context): DataSource {
     private var mShopRemoteRepository: ShopRemoteRepository = ShopRemoteRepository(context)
 
     private var mDbHelper: DatabaseHelper? = DatabaseHelper(mContext)
+
+    // 現在地取得済みかどうかを判定するフラグ
+    private var mLocationKnownFlg: Boolean = false
 
     companion object {
         const val KEY_BUNDLE_LATITUDE: String = "key_bundle_latitude"
@@ -273,24 +275,32 @@ class DataRepository(context: Context): DataSource {
 
         // 詳細設定
         val criteria = Criteria()
-        criteria.accuracy = Criteria.ACCURACY_FINE
+        criteria.accuracy = Criteria.ACCURACY_LOW
         criteria.powerRequirement = Criteria.POWER_HIGH
         criteria.isSpeedRequired = false
         criteria.isAltitudeRequired = false
         criteria.isBearingRequired = false
         criteria.isCostAllowed = true
-        criteria.horizontalAccuracy = Criteria.ACCURACY_HIGH
-        criteria.verticalAccuracy = Criteria.ACCURACY_HIGH
-        val bestProvider: String = locationManager.getBestProvider(criteria, true)
-        val bundle: Bundle = Bundle()
+        criteria.horizontalAccuracy = Criteria.ACCURACY_LOW
+        criteria.verticalAccuracy = Criteria.ACCURACY_LOW
+        val bundle = Bundle()
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-            300, 3f, object: LocationListener {
+            0, 0f, object: LocationListener {
             override fun onLocationChanged(location: Location?) {
-                if (location != null) {
-//                    bundle.putDouble(KEY_BUNDLE_LATITUDE, location.latitude)
-//                    bundle.putDouble(KEY_BUNDLE_LONGITUDE, location.longitude)
-//                    callback.onComplete(bundle)
+                if (location != null && !mLocationKnownFlg) {
+                    Toast.makeText(mContext, location.latitude.toString() , Toast.LENGTH_SHORT).show()
+                    bundle.putDouble(KEY_BUNDLE_LATITUDE, location.latitude)
+                    bundle.putDouble(KEY_BUNDLE_LONGITUDE, location.longitude)
+
+                    // 現在地を保存
+                    saveCurrentLocation(bundle)
+
+                    callback.onComplete(bundle)
+
+                    // 現在地取得終了
+                    locationManager.removeUpdates(this)
+                    mLocationKnownFlg = true
                 }
             }
 
@@ -306,20 +316,50 @@ class DataRepository(context: Context): DataSource {
                 // do nothing.
             }
         })
-
-        val location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        bundle.putDouble(KEY_BUNDLE_LATITUDE, location.latitude)
-        bundle.putDouble(KEY_BUNDLE_LONGITUDE, location.longitude)
-        callback.onComplete(bundle)
-
     }
 
     /**
-     * 現在地パーミッションのチェック
-     * @return true:  取得済み
-     *         false: 未取得
+     * {@inheritDoc}
      */
     override fun hasLocationPermission(): Boolean {
         return EasyPermissions.hasPermissions(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun getSavedCurrentLocation(): Bundle {
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_CURRENT_LOCATION, Context.MODE_PRIVATE)
+        val latitude: Double = java.lang.Double.longBitsToDouble(preference.getLong(
+            PreferenceUtil.KEY_CURRENT_LATITUDE, 0L))
+        val longitude: Double = java.lang.Double.longBitsToDouble(preference.getLong(
+            PreferenceUtil.KEY_CURRENT_LONGITUDE, 0L))
+
+        val bundle = Bundle()
+        bundle.putDouble(KEY_BUNDLE_LATITUDE, latitude)
+        bundle.putDouble(KEY_BUNDLE_LONGITUDE, longitude)
+        return bundle
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveCurrentLocation(bundle: Bundle) {
+        var latitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LATITUDE)
+        var longitude: Double = bundle.getDouble(DataRepository.KEY_BUNDLE_LONGITUDE)
+        // TODO: 東京駅の座標で検索.
+        latitude = 35.681167
+        longitude = 139.767052
+
+        // Preferenceに保存
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_CURRENT_LOCATION, Context.MODE_PRIVATE)
+        preference.edit().putLong(
+            PreferenceUtil.KEY_CURRENT_LATITUDE,
+            java.lang.Double.doubleToRawLongBits(latitude)).apply()
+        preference.edit().putLong(
+            PreferenceUtil.KEY_CURRENT_LONGITUDE,
+            java.lang.Double.doubleToRawLongBits(longitude)).apply()
     }
 }
