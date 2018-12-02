@@ -75,6 +75,7 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
             mContext?.startActivity(intent)
         }
 
+        // フェードイン
         setFadeAnimation(holder.itemView)
     }
 

@@ -21,8 +21,6 @@ import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.map.MapActivity
 import com.kk.gourmetapp.util.PreferenceUtil
 
-
-
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
     : RecyclerView.Adapter<GurunaviShopAdapter.ShopViewHolder>() {
 
