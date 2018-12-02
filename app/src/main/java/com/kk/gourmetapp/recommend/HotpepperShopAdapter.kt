@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
@@ -73,6 +74,9 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
             val intent = Intent(mContext, MapActivity::class.java)
             mContext?.startActivity(intent)
         }
+
+        // フェードイン
+        setFadeAnimation(holder.itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
@@ -81,6 +85,16 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
             R.layout.hotpepper_shop_item, parent, false
         )
         return ShopViewHolder(item)
+    }
+
+    /**
+     * フェードインアニメーションの付加
+     * @param view フェードインさせるビュー
+     */
+    private fun setFadeAnimation(view: View) {
+        val anim = AlphaAnimation(0.0f, 1.0f)
+        anim.duration = ITEM_ANIMATION_DURATION
+        view.startAnimation(anim)
     }
 
     /**
@@ -95,5 +109,9 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
         val mapButton: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.hotpepper_shop_text_scroll_view)
+    }
+
+    companion object {
+        const val ITEM_ANIMATION_DURATION: Long = 800
     }
 }

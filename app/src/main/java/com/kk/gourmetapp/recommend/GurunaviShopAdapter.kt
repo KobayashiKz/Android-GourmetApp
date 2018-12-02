@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.Button
 import android.widget.ScrollView
 import android.widget.TextView
@@ -86,6 +87,9 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             val intent = Intent(mContext, MapActivity::class.java)
             mContext?.startActivity(intent)
         }
+
+        // フェードイン
+        setFadeAnimation(holder.itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
@@ -93,6 +97,16 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         val item: View = LayoutInflater.from(parent.context).inflate(
             R.layout.gurunavi_shop_item, parent, false)
         return ShopViewHolder(item)
+    }
+
+    /**
+     * フェードインアニメーションの付加
+     * @param view フェードインさせるビュー
+     */
+    private fun setFadeAnimation(view: View) {
+        val anim = AlphaAnimation(0.0f, 1.0f)
+        anim.duration = ITEM_ANIMATION_DURATION
+        view.startAnimation(anim)
     }
 
     /**
@@ -108,5 +122,9 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         val mapButton: Button = itemView.findViewById(R.id.map_button)
 
         val scrollView: ScrollView = itemView.findViewById(R.id.gurunavi_shop_text_scroll_view)
+    }
+
+    companion object {
+        const val ITEM_ANIMATION_DURATION: Long = 800
     }
 }
