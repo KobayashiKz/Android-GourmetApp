@@ -40,7 +40,15 @@ interface RecommendContract {
          */
         fun showNetworkErrorDialog()
 
+        /**
+         * ロケーションパーミッションダイアログ表示
+         */
         fun showRequestLocationPermission()
+
+        /**
+         * 現在地取得中画面を閉じる
+         */
+        fun removeLoadingFragment()
     }
 
     /**
