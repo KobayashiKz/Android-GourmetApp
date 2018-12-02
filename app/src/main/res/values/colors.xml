@@ -7,4 +7,6 @@
     <color name="rippleEffectColor">#CCCCCC</color>
 
     <color name="dialogBackground">#a0909090</color>
+
+    <color name="locationLoadingBackground">#a0909090</color>
 </resources>

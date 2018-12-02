@@ -133,6 +133,9 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                     // 現在地取得後にショップ情報を作成
                     createGurunaviInfo(bundle)
                     createHotpepperInfo(bundle)
+
+                    // 現在地取得中画面を閉じる
+                    mRecommendView.removeLoadingFragment()
                 }
             })
         } else {

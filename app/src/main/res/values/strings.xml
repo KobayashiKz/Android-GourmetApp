@@ -22,4 +22,6 @@
 
     <!-- パーミッションダイアログ -->
     <string name="location_request_permission_message">パーミッションを許可してください。</string>
+
+    <string name="location_loading_text">現在地取得中..</string>
 </resources>

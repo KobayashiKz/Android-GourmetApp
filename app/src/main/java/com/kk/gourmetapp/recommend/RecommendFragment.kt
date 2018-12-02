@@ -37,6 +37,8 @@ class RecommendFragment : Fragment(), RecommendContract.View {
 
     private var mCelebBackground: LottieAnimationView? = null
 
+    private var mLoadingFragment: LocationLoadingFragment = LocationLoadingFragment.newInstance()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
 
@@ -85,6 +87,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
             showHotpepperCreditInfo()
         }
 
+        // 現在地取得中Fragmentの生成
+        ActivityUtil.addFragmentToActivity(activity!!.supportFragmentManager, mLoadingFragment,
+            R.id.content_frame)
+
         // ショップ情報の読み込み
         mRecommendPresenter?.loadShopInfo()
 
@@ -131,6 +137,13 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         EasyPermissions.requestPermissions(this,
             getString(R.string.location_request_permission_message),
             MapFragment.REQUEST_CODE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun removeLoadingFragment() {
+        mLoadingFragment.removeLocationLoadingFragment()
     }
 
     /**
