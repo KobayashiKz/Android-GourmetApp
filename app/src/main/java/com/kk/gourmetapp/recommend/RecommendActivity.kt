@@ -1,6 +1,7 @@
 package com.kk.gourmetapp.recommend
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -9,13 +10,16 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.ImageButton
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.splash.SplashActivity
 import com.kk.gourmetapp.util.ActivityUtil
-
-
 
 class RecommendActivity : AppCompatActivity() {
 
@@ -23,6 +27,8 @@ class RecommendActivity : AppCompatActivity() {
 
     private var mRecommendFragment: RecommendFragment = RecommendFragment.newInstance()
     private var mRecommendPresenter: RecommendPresenter? = null
+
+    private lateinit var mKeywordEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +94,8 @@ class RecommendActivity : AppCompatActivity() {
      * @param navigationView
      */
     private fun setupDrawerContent(navigationView: NavigationView) {
+        setupDrawerHeader(navigationView)
+
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_setting -> {
@@ -107,6 +115,47 @@ class RecommendActivity : AppCompatActivity() {
     }
 
     /**
+     * ナビゲーションドロワーヘッダーの初期セットアップ
+     * @param navigationView ナビゲーションビュー
+     */
+    private fun setupDrawerHeader(navigationView: NavigationView) {
+        val headerView: View = navigationView.getHeaderView(0)
+        mKeywordEditText = headerView.findViewById(R.id.drawer_search_edit_text)
+
+        val searchButton: ImageButton = headerView.findViewById(R.id.drawer_search_button)
+        searchButton.setOnClickListener {
+            // 入力したキーワードをもとに再検索
+            val keyword: String = mKeywordEditText.text.toString()
+            mKeywordEditText.editableText.clear()
+
+            mRecommendPresenter?.researchShopManualKeyword(keyword)
+
+            // ドロワーナビゲーションを閉じる
+            mDrawerLayout?.closeDrawers()
+        }
+
+        mKeywordEditText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            // エンターキーを押された場合
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                // キーボードを閉じる
+                closeKeyboard(mKeywordEditText)
+
+                // 入力したキーワードをもとに再検索
+                val keyword: String = mKeywordEditText.text.toString()
+                mKeywordEditText.editableText.clear()
+
+                mRecommendPresenter?.researchShopManualKeyword(keyword)
+
+                // ドロワーナビゲーションを閉じる
+                mDrawerLayout?.closeDrawers()
+
+                return@OnKeyListener true
+            }
+            false
+        })
+    }
+
+    /**
      * {@inheritDoc}
      */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -118,6 +167,18 @@ class RecommendActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * ソフトキーボードを閉じる
+     * @param editText エディットテキスト
+     */
+    private fun closeKeyboard(editText: EditText) {
+        val inputMethodManager: InputMethodManager
+                =  getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(editText.windowToken,
+            InputMethodManager.RESULT_UNCHANGED_SHOWN)
+
     }
 
     companion object {

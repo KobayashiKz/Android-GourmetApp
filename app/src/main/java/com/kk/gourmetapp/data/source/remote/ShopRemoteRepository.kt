@@ -356,11 +356,31 @@ class ShopRemoteRepository(context: Context): DataSource {
         return false
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun getSavedCurrentLocation(): Bundle {
         return Bundle()
     }
 
+    /**
+     * {@inheritDoc}
+     */
     override fun saveCurrentLocation(bundle: Bundle) {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveManualKeyword(keyword: String) {
+        // do nothing.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun clearManualKeyword() {
         // do nothing.
     }
 }

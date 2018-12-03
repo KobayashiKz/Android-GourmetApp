@@ -23,5 +23,9 @@
     <!-- パーミッションダイアログ -->
     <string name="location_request_permission_message">パーミッションを許可してください。</string>
 
+    <!-- 現在地取得中画面 -->
     <string name="location_loading_text">現在地取得中..</string>
+
+    <!-- ナビゲーションドロワー -->
+    <string name="drawer_search_hint">検索キーワード</string>
 </resources>
