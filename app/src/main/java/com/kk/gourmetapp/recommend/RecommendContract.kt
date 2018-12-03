@@ -123,5 +123,17 @@ interface RecommendContract {
          * @return 現在地
          */
         fun getSavedCurrentLocation(): Bundle
+
+        /**
+         * 手動入力キーワードの保存
+         * @param keyword 手動入力キーワード
+         */
+        fun saveManualKeyword(keyword: String)
+
+        /**
+         * 手動入力キーワードによる再検索処理
+         * @param keyword 手動入力キーワード
+         */
+        fun researchShopManualKeyword(keyword: String)
     }
 }

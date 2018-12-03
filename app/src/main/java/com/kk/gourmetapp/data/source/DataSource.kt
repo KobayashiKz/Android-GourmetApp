@@ -189,5 +189,16 @@ interface DataSource {
      * @return true:  取得済み
      *         false: 未取得
      */
-    fun hasLocationPermission() : Boolean
+    fun hasLocationPermission(): Boolean
+
+    /**
+     * 手動入力キーワードの保存
+     * @param keyword 手動入力キーワード
+     */
+    fun saveManualKeyword(keyword: String)
+
+    /**
+     * 手動入力キーワードの削除
+     */
+    fun clearManualKeyword()
 }

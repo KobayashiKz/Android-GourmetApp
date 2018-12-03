@@ -151,5 +151,28 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
         return mDataRepository!!.getSavedCurrentLocation()
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveManualKeyword(keyword: String) {
+        mDataRepository?.saveManualKeyword(keyword)
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    override fun researchShopManualKeyword(keyword: String) {
+        // キーワードをPreferenceに一時保存
+        mDataRepository?.saveManualKeyword(keyword)
+
+        // 画像解析が完了している場合には取得済みの現在地で再検索をかける
+        val bundle: Bundle? = mDataRepository!!.getSavedCurrentLocation()
+        if (bundle != null) {
+            createGurunaviInfo(bundle)
+            createHotpepperInfo(bundle)
+        }
+
+        // Preferenceに一時保存していたキーワードを削除する
+        mDataRepository?.clearManualKeyword()
+    }
 }

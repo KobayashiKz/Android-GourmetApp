@@ -261,7 +261,7 @@ class DataRepository(context: Context): DataSource {
      * {@inheritDoc}
      */
     override fun isConnectNetwork(): Boolean {
-        return mShopRemoteRepository.isConnectNetwork() as Boolean
+        return mShopRemoteRepository.isConnectNetwork()
     }
 
     /**
@@ -361,5 +361,23 @@ class DataRepository(context: Context): DataSource {
         preference.edit().putLong(
             PreferenceUtil.KEY_CURRENT_LONGITUDE,
             java.lang.Double.doubleToRawLongBits(longitude)).apply()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun saveManualKeyword(keyword: String) {
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(PreferenceUtil.KEY_KEYWORD, keyword).apply()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun clearManualKeyword() {
+        val preference: SharedPreferences = mContext.getSharedPreferences(
+            PreferenceUtil.KEY_PREFERENCE_KEYWORD, Context.MODE_PRIVATE)
+        preference.edit().putString(PreferenceUtil.KEY_KEYWORD, "").apply()
     }
 }

@@ -1,24 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="192dp"
-    android:background="@color/colorPrimary"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:padding="16dp">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
-    <!-- TODO ロゴが出来次第差し替える -->
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_launcher_foreground"/>
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:background="@color/colorPrimary"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:text="@string/app_name"/>
+        <!-- TODO ロゴが出来次第差し替える -->
+        <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher_foreground"/>
 
-</FrameLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:text="@string/app_name"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+        <EditText
+                android:id="@+id/drawer_search_edit_text"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:hint="@string/drawer_search_hint"
+                android:inputType="text"/>
+
+        <ImageButton
+                android:id="@+id/drawer_search_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_baseline_search_24px"/>
+
+    </LinearLayout>
+</LinearLayout>
