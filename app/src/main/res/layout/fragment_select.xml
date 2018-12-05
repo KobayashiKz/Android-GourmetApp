@@ -28,7 +28,7 @@
                     android:layout_gravity="start"
                     android:text="@string/button_cancel_recognize"
                     android:layout_margin="@dimen/button_recognize_margin"
-                    android:background="@android:color/darker_gray"/>
+                    android:background="@drawable/button_cancel_ripple_effect"/>
 
             <View
                     android:layout_width="0dp"
@@ -42,7 +42,7 @@
                     android:layout_gravity="end"
                     android:text="@string/button_start_recognize"
                     android:textColor="@android:color/white"
-                    android:background="@color/colorAccent"
+                    android:background="@drawable/button_ripple_effect"
                     android:layout_margin="@dimen/button_recognize_margin"/>
         </LinearLayout>
     </LinearLayout>
