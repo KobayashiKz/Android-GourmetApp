@@ -110,6 +110,9 @@ class SelectFragment : Fragment(), SelectContract.View {
         activity?.finish()
     }
 
+    /**
+     * 選択画面を閉じる
+     */
     private fun closeCanceled() {
         activity?.setResult(Activity.RESULT_CANCELED)
         activity?.finish()
