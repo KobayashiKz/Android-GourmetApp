@@ -84,7 +84,7 @@ class SelectFragment : Fragment(), SelectContract.View {
             val image: Bitmap = BitmapFactory.decodeStream(inputStream)
             mSelectImageView?.setImageBitmap(image)
         } else {
-            // do nothing.
+            closeCanceled()
         }
     }
 
@@ -107,6 +107,14 @@ class SelectFragment : Fragment(), SelectContract.View {
      */
     override fun close() {
         activity?.setResult(Activity.RESULT_OK)
+        activity?.finish()
+    }
+
+    /**
+     * 選択画面を閉じる
+     */
+    private fun closeCanceled() {
+        activity?.setResult(Activity.RESULT_CANCELED)
         activity?.finish()
     }
 
