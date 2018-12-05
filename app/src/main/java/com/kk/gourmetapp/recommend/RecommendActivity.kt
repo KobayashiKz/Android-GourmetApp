@@ -85,7 +85,7 @@ class RecommendActivity : AppCompatActivity() {
             }
 
             // セレブモード背景の設定
-            mRecommendFragment.setCelebBackground()
+            mRecommendPresenter?.updateCelebMode()
         }
     }
 

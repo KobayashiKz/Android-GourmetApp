@@ -20,7 +20,7 @@ import kotlin.concurrent.thread
 
 class ImageRecognizer(context: Context) {
 
-    private val mContext = context
+    private val mContext: Context = context
 
     /**
      * Watson Visual Recognizerによる画像認証処理
