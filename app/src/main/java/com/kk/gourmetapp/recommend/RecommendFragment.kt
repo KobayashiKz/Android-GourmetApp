@@ -48,48 +48,25 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         val fab: FloatingActionButton? = root?.findViewById(R.id.fab_add_image)
         fab?.setOnClickListener {
             // タップされたら画像選択画面を起動する
-            val intent = Intent(context, SelectActivity::class.java)
-            activity?.startActivityForResult(intent, ActivityUtil.REQUEST_CODE_RECOGNIZE)
+            showRecognizeScreen()
         }
 
         // セレブモードの背景設定
         mCelebBackground = root?.findViewById(R.id.celeb_background)
-        setCelebBackground()
+        mRecommendPresenter?.updateCelebMode()
 
         // ぐるなびのお店情報を表示するRecyclerViewの設定
-        mGurunaviRecyclerView = root?.findViewById(R.id.gurunavi_shop_recycler_view)
-        mGurunaviRecyclerView?.setHasFixedSize(true)
-        val gurunaviLinearLayoutManager = LinearLayoutManager(context)
-        gurunaviLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        mGurunaviRecyclerView?.layoutManager = gurunaviLinearLayoutManager
-
+        setupGurunaviRecyclerView(root)
         // ホットペッパーのお店情報を表示するRecyclerViewの設定
-        mHotpepperRecyclerView = root?.findViewById(R.id.hotpepper_shop_recycler_view)
-        mHotpepperRecyclerView?.setHasFixedSize(true)
-        val hotpepperLinearLayoutManager = LinearLayoutManager(context)
-        hotpepperLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        mHotpepperRecyclerView?.layoutManager = hotpepperLinearLayoutManager
+        setupHotpepperRecyclerView(root)
 
         // ぐるなびクレジット画像
-        val gurunaviCredit: ImageView? = root?.findViewById(R.id.gurunavi_credit)
-        val gurunaviCreditBuilder: RequestBuilder<Drawable>?
-                = mRecommendPresenter?.loadGurunaviCredit()
-        gurunaviCreditBuilder?.into(gurunaviCredit)
-        gurunaviCredit?.setOnClickListener {
-            showGurunaviCreditInfo()
-        }
+        setupGurunaviCredit(root)
         // ホットペッパークレジット画像
-        val hotpepperCredit: ImageView? = root?.findViewById(R.id.hotpepper_credit)
-        val hotpepperCreditBuilder: RequestBuilder<Drawable>?
-                = mRecommendPresenter?.loadHotpepperCredit()
-        hotpepperCreditBuilder?.into(hotpepperCredit)
-        hotpepperCredit?.setOnClickListener {
-            showHotpepperCreditInfo()
-        }
+        setupHotpepperCredit(root)
 
         // 現在地取得中Fragmentの生成
-        ActivityUtil.addFragmentToActivity(activity!!.supportFragmentManager, mLoadingFragment,
-            R.id.content_frame)
+        showLocationLoadingFragment()
 
         // ショップ情報の読み込み
         mRecommendPresenter?.loadShopInfo()
@@ -98,14 +75,77 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * {@inheritDoc}
+     * ぐるなびお店情報表示RecyclerViewの設定
+     * @param root ルートビュー
      */
-    override fun setUserActionListener(recommendPresenter: RecommendPresenter) {
+    private fun setupGurunaviRecyclerView(root: View?) {
+        mGurunaviRecyclerView = root?.findViewById(R.id.gurunavi_shop_recycler_view)
+        mGurunaviRecyclerView?.setHasFixedSize(true)
+        val gurunaviLinearLayoutManager = LinearLayoutManager(context)
+        gurunaviLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        mGurunaviRecyclerView?.layoutManager = gurunaviLinearLayoutManager
+    }
+
+    /**
+     * ホットペッパーお店情報表示RecyclerViewの設定
+     * @param root ルートビュー
+     */
+    private fun setupHotpepperRecyclerView(root: View?) {
+        mHotpepperRecyclerView = root?.findViewById(R.id.hotpepper_shop_recycler_view)
+        mHotpepperRecyclerView?.setHasFixedSize(true)
+        val hotpepperLinearLayoutManager = LinearLayoutManager(context)
+        hotpepperLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        mHotpepperRecyclerView?.layoutManager = hotpepperLinearLayoutManager
+    }
+
+    /**
+     * ぐるなびクレジット画像の設定
+     * @param root ルートビュー
+     */
+    private fun setupGurunaviCredit(root: View?) {
+        val gurunaviCredit: ImageView? = root?.findViewById(R.id.gurunavi_credit)
+        val gurunaviCreditBuilder: RequestBuilder<Drawable>?
+                = mRecommendPresenter?.loadGurunaviCredit()
+        gurunaviCreditBuilder?.into(gurunaviCredit)
+        gurunaviCredit?.setOnClickListener {
+            mRecommendPresenter?.updateGurunaviCreditTransition()
+        }
+    }
+
+    /**
+     * ホットペッパークレジット画像の設定
+     * @param root ルートビュー
+     */
+    private fun setupHotpepperCredit(root: View?) {
+        val hotpepperCredit: ImageView? = root?.findViewById(R.id.hotpepper_credit)
+        val hotpepperCreditBuilder: RequestBuilder<Drawable>?
+                = mRecommendPresenter?.loadHotpepperCredit()
+        hotpepperCreditBuilder?.into(hotpepperCredit)
+        hotpepperCredit?.setOnClickListener {
+            mRecommendPresenter?.updateHotpepperCreditTransition()
+        }
+    }
+
+    /**
+     * 画像認証画面の表示
+     */
+    override fun showRecognizeScreen() {
+        val intent = Intent(context, SelectActivity::class.java)
+        activity?.startActivityForResult(intent, ActivityUtil.REQUEST_CODE_RECOGNIZE)
+    }
+
+    /**
+     * Presenterの登録
+     * @param recommendPresenter 登録するPresenter
+     */
+    override fun setPresenter(recommendPresenter: RecommendPresenter) {
         mRecommendPresenter = recommendPresenter
     }
 
     /**
-     * {@inheritDoc}
+     * ぐるなびのレストラン情報を表示
+     * @param shops       レストランリスト
+     * @param imageLoader レストラン画像
      */
     override fun showGurunaviShops(shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
         // 表示するお店情報をもとにアダプターを生成してRecyclerViewにセット
@@ -114,7 +154,9 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * {@inheritDoc}
+     * ホットペッパーのレストラン情報を表示
+     * @param shops       レストランリスト
+     * @param imageLoader レストラン画像
      */
     override fun showHotpepperShops(shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?) {
         // 表示するお店情報をもとにアダプターを生成してRecyclerViewにセット
@@ -123,7 +165,7 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * {@inheritDoc}
+     * ネットワーク未接続確認ダイアログの表示
      */
     override fun showNetworkErrorDialog() {
         val errorDialog = NetworkErrorDialog()
@@ -131,7 +173,7 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * {@inheritDoc}
+     * ロケーションパーミッションダイアログの表示
      */
     override fun showRequestLocationPermission() {
         EasyPermissions.requestPermissions(this,
@@ -140,39 +182,40 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * {@inheritDoc}
+     * 現在地読み込み中Fragmentの表示
      */
-    override fun removeLoadingFragment() {
+    private fun showLocationLoadingFragment() {
+        ActivityUtil.addFragmentToActivity(activity!!.supportFragmentManager, mLoadingFragment,
+            R.id.content_frame)
+    }
+
+    /**
+     * 現在地読み込み中Fragmentの削除
+     */
+    override fun closeLocationLoadingFragment() {
         mLoadingFragment.removeLocationLoadingFragment()
     }
 
     /**
-     * セレブモード背景の設定
+     * APIのクレジット画像遷移先の表示
      */
-    fun setCelebBackground() {
-        if (mRecommendPresenter == null ||  !mRecommendPresenter!!.isCelebMode()) {
-            mCelebBackground?.visibility = View.GONE
-        } else {
-            mCelebBackground?.visibility = View.VISIBLE
-        }
-    }
-
-    /**
-     * ぐるなびのクレジット画像遷移先の表示
-     */
-    private fun showGurunaviCreditInfo() {
-        val uri: Uri? = mRecommendPresenter?.loadGurunaviCreditUri()
+    override fun showApiCreditTransition(uri: Uri) {
         val intent = Intent(Intent.ACTION_VIEW, uri)
         startActivity(intent)
     }
 
     /**
-     * ホットペッパーのクレジット画像遷移先の表示
+     * セレブモード背景の表示
      */
-    private fun showHotpepperCreditInfo() {
-        val uri: Uri? = mRecommendPresenter?.loadHotpepperCreditUri()
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        startActivity(intent)
+    override fun showCelebBackground() {
+        mCelebBackground?.visibility = View.VISIBLE
+    }
+
+    /**
+     * セレブモード背景の非表示
+     */
+    override fun removeCelebBackground() {
+        mCelebBackground?.visibility = View.GONE
     }
 
     companion object {
@@ -182,7 +225,7 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
-     * 読み込み中ダイアログ
+     * ネットワーク未接続確認ダイアログの表示
      */
     class NetworkErrorDialog: DialogFragment() {
 

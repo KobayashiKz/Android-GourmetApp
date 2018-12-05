@@ -1,4 +1,4 @@
-package com.kk.gourmetapp.data.source.remote
+package com.kk.gourmetapp.data
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -36,7 +36,8 @@ object RequestSingleQueue {
      * キャッシュの処理を書かずにXMLに追加しておけばいいので負担がほぼない
      */
     fun getImageLoader(): ImageLoader? {
-        mImageLoader = ImageLoader(mRequestQueue,
+        mImageLoader = ImageLoader(
+            mRequestQueue,
             object : ImageLoader.ImageCache {
                 // キャッシュは最大20件
                 private val cache: LruCache<String, Bitmap>? = LruCache<String, Bitmap>(20)
