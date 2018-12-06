@@ -28,6 +28,16 @@
         </activity>
         <activity android:name=".map.MapActivity">
         </activity>
+        <receiver
+                android:name=".widget.WidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="com.kk.gourmetapp.widget.IMAGE_CLICKED"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_provider"/>
+        </receiver>
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
