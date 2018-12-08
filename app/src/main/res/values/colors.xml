@@ -9,4 +9,6 @@
     <color name="dialogBackground">#a0909090</color>
 
     <color name="locationLoadingBackground">#a0909090</color>
+
+    <color name="widgetColorBackground">#DDF6B352</color>
 </resources>

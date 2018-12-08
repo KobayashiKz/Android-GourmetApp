@@ -29,10 +29,10 @@
         <activity android:name=".map.MapActivity">
         </activity>
         <receiver
-                android:name=".widget.WidgetProvider">
+                android:name=".widget.WidgetProvider"
+                android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.kk.gourmetapp.widget.IMAGE_CLICKED"/>
             </intent-filter>
             <meta-data
                     android:name="android.appwidget.provider"
