@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,9 +37,46 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
     override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
         holder.scrollView.isVerticalScrollBarEnabled = false
 
-        holder.name.text = mShopList[position].mName
+        // お店情報の設定
+        setShopName(holder, position)
+        setShopImage(holder, position)
+        setShopCategory(holder, position)
+        setShopOpenTime(holder, position)
+        setShopBudget(holder, position)
+        setShopMapButton(holder, position)
 
-        // 画像URLが存在する場合は取得し存在しない場合はデフォルド画像を表示する
+        // フェードイン
+        setFadeAnimation(holder.itemView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
+        mContext = parent.context
+        val item: View = LayoutInflater.from(parent.context).inflate(
+            R.layout.hotpepper_shop_item, parent, false
+        )
+        return ShopViewHolder(item)
+    }
+
+    /**
+     * ショップ名の設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopName(holder: ShopViewHolder, position: Int) {
+        if (!TextUtils.isEmpty(mShopList[position].mName)) {
+            holder.name.text = mShopList[position].mName
+        } else {
+            holder.name.text = mContext?.getString(R.string.text_empty_info)
+        }
+    }
+
+    /**
+     * お店画像の設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopImage(holder: ShopViewHolder, position: Int) {
+        // 画像URLが存在する場合は取得し存在しない場合はデフォルト画像を表示する
         if (!mShopList[position].mImageUrl.isEmpty()) {
             holder.image.setImageUrl(mShopList[position].mImageUrl, mImageLoader)
         } else {
@@ -52,11 +90,54 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
             val intent = Intent(Intent.ACTION_VIEW, uri)
             mContext?.startActivity(intent)
         }
-        holder.category.text = mShopList[position].mCategory
-        holder.openTime.text = mShopList[position].mOpenTime
-        holder.budget.text = mShopList[position].mBudget
 
-        // Mapボタンタップ時にはMapActivityを起動する
+    }
+
+    /**
+     * カテゴリー情報の設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopCategory(holder: ShopViewHolder, position: Int) {
+        if (!TextUtils.isEmpty(mShopList[position].mCategory)) {
+            holder.category.text = mShopList[position].mCategory
+        } else {
+            holder.category.text = mContext?.getString(R.string.text_empty_info)
+        }
+    }
+
+    /**
+     * 営業時間の設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopOpenTime(holder: ShopViewHolder, position: Int) {
+        if (!TextUtils.isEmpty(mShopList[position].mOpenTime)) {
+            holder.openTime.text = mShopList[position].mOpenTime
+        } else {
+            holder.openTime.text = mContext?.getString(R.string.text_empty_info)
+        }
+    }
+
+    /**
+     * 平均予算の設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopBudget(holder: ShopViewHolder, position: Int) {
+        if (!TextUtils.isEmpty(mShopList[position].mBudget)) {
+            holder.budget.text = mShopList[position].mBudget
+        } else {
+            holder.budget.text = mContext?.getString(R.string.text_empty_info)
+        }
+    }
+
+    /**
+     * マップボタンの設定
+     * @param holder   アダプターにセットするView
+     * @param position RecyclerViewのポジション
+     */
+    private fun setShopMapButton(holder: ShopViewHolder, position: Int) {
         holder.mapButton.setOnClickListener {
             val latitude: Double = mShopList[position].mLatitude
             val longitude: Double = mShopList[position].mLongitude
@@ -71,20 +152,10 @@ class HotpepperShopAdapter(shopList: MutableList<HotpepperShop>, imageLoader: Im
                 PreferenceUtil.KEY_SHOP_LONGITUDE,
                 java.lang.Double.doubleToRawLongBits(longitude)).apply()
 
+            // Mapボタンタップ時にはMapActivityを起動する
             val intent = Intent(mContext, MapActivity::class.java)
             mContext?.startActivity(intent)
         }
-
-        // フェードイン
-        setFadeAnimation(holder.itemView)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {
-        mContext = parent.context
-        val item: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.hotpepper_shop_item, parent, false
-        )
-        return ShopViewHolder(item)
     }
 
     /**
