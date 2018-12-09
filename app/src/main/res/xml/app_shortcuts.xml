@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+            android:shortcutId="recognize_image_id"
+            android:enabled="true"
+            android:icon="@drawable/ic_add_shortcut"
+            android:shortcutShortLabel="@string/app_shortcut_recognize_image"
+            android:shortcutLongLabel="@string/app_shortcut_recognize_image">
+
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.kk.gourmetapp"
+                android:targetClass="com.kk.gourmetapp.select.SelectActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+</shortcuts>

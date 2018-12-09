@@ -134,7 +134,7 @@ class RecommendActivity : AppCompatActivity() {
             mDrawerLayout?.closeDrawers()
         }
 
-        mKeywordEditText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        mKeywordEditText.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             // エンターキーを押された場合
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 // キーボードを閉じる

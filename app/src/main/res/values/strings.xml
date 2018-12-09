@@ -28,4 +28,7 @@
 
     <!-- ナビゲーションドロワー -->
     <string name="drawer_search_hint">検索キーワード</string>
+
+    <!-- アプリショートカット -->
+    <string name="app_shortcut_recognize_image">画像登録</string>
 </resources>
