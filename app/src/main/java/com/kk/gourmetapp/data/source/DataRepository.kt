@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassResult
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
-import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.data.ImageRecognizer
@@ -138,8 +137,7 @@ class DataRepository(context: Context): DataSource {
                         val pageUrl: String = restJsonObject.getString(KEY_REST_URL_MOBILE)
                         val tel: String = restJsonObject.getString(KEY_REST_TEL)
                         val openTime: String = restJsonObject.getString(KEY_REST_OPEN_TIME)
-                        val budget: String = restJsonObject.getString(KEY_REST_BUDGET) +
-                                mContext.getString(R.string.text_budget_unit)
+                        val budget: String = restJsonObject.getString(KEY_REST_BUDGET)
                         val latitude: Double = restJsonObject.getDouble(KEY_REST_LATITUDE)
                         val longitude: Double = restJsonObject.getDouble(KEY_REST_LONGITUDE)
                         val shop = GurunaviShop(name, category, imageUrl, pageUrl, tel,

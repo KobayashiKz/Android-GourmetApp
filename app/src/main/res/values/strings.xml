@@ -8,6 +8,7 @@
     <string name="text_hotpepper">ホットペッパー</string>
     <string name="text_map_button">Mapをみる</string>
     <string name="text_budget_unit">円</string>
+    <string name="text_empty_info">情報なし</string>
 
     <!-- 画像選択画面 -->
     <string name="button_start_recognize">Recognize</string>
