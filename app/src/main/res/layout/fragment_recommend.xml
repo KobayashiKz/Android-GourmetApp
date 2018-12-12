@@ -43,11 +43,21 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"/>
 
+                    <TextView
+                            android:id="@+id/gurunavi_shop_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:visibility="invisible"/>
+
                     <android.support.v7.widget.RecyclerView
                             android:id="@+id/gurunavi_shop_recycler_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp">
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="5dp">
                     </android.support.v7.widget.RecyclerView>
 
                     <ImageView
@@ -57,11 +67,21 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"/>
 
+                    <TextView
+                            android:id="@+id/hotpepper_shop_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:visibility="invisible"/>
+
                     <android.support.v7.widget.RecyclerView
                             android:id="@+id/hotpepper_shop_recycler_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp">
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="5dp">
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
             </ScrollView>

@@ -5,6 +5,9 @@
 
     <!-- おすすめ画面 -->
     <string name="text_gurunavi">ぐるなび</string>
+    <string name="text_shop_title">あなたにおすすめのお店を紹介しています</string>
+    <string name="text_shop_title_keyword">「%s」のお店を紹介しています</string>
+    <string name="text_shop_title_celeb">セレブなあなたにおすすめのお店を紹介しています</string>
     <string name="text_hotpepper">ホットペッパー</string>
     <string name="text_map_button">Mapをみる</string>
     <string name="text_budget_unit">円</string>
