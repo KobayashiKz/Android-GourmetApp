@@ -197,6 +197,7 @@ class DataRepository(context: Context): DataSource {
 
     /**
      * ホットペッパーからお店情報を生成する処理
+     * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
      * @param bundle   現在地
