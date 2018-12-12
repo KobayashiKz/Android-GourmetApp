@@ -11,9 +11,11 @@ import com.kk.gourmetapp.data.HotpepperShop
 
 interface DataSource {
 
-    fun createGurunaviInfo(callback: CreateGurunaviShopCallback, isCeleb: Boolean, bundle: Bundle)
+    fun createGurunaviInfo(keyword: String?, callback: CreateGurunaviShopCallback,
+                           isCeleb: Boolean, bundle: Bundle)
 
-    fun createHotpepperInfo(callback: CreateHotpepperShopCallback, isCeleb: Boolean, bundle: Bundle)
+    fun createHotpepperInfo(keyword: String?, callback: CreateHotpepperShopCallback,
+                            isCeleb: Boolean, bundle: Bundle)
 
     fun startRecognizeImage(uri: Uri?, callback: RecognizeCallback)
 

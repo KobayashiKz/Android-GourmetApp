@@ -110,13 +110,13 @@ class DataRepository(context: Context): DataSource {
 
     /**
      * ぐるなびからお店情報を生成する処理
+     * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
      * @param bundle   現在地
      */
-    override fun createGurunaviInfo(callback: DataSource.CreateGurunaviShopCallback,
+    override fun createGurunaviInfo(keyword: String?, callback: DataSource.CreateGurunaviShopCallback,
                                     isCeleb: Boolean, bundle: Bundle) {
-        val keyword: String? = pickKeyword()
 
         val apikey: String = getApiKey(NAME_GURUNAVI_AUTH_INFO_FILE)
 
@@ -197,14 +197,13 @@ class DataRepository(context: Context): DataSource {
 
     /**
      * ホットペッパーからお店情報を生成する処理
+     * @param keyword  検索キーワード
      * @param callback 情報取得後のコールバック
      * @param isCeleb  セレブモード状態
      * @param bundle   現在地
      */
-    override fun createHotpepperInfo(callback: DataSource.CreateHotpepperShopCallback,
+    override fun createHotpepperInfo(keyword: String?, callback: DataSource.CreateHotpepperShopCallback,
                                      isCeleb: Boolean, bundle: Bundle) {
-        val keyword: String? = pickKeyword()
-
         val apikey: String = getApiKey(NAME_HOTPEPPER_AUTH_INFO_FILE)
 
         val request = JsonObjectRequest(createHotpepperURL(apikey, keyword, isCeleb, bundle), null,

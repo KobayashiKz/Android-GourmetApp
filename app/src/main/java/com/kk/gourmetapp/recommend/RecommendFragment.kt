@@ -13,10 +13,12 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.airbnb.lottie.LottieAnimationView
 import com.android.volley.toolbox.ImageLoader
 import com.bumptech.glide.RequestBuilder
@@ -34,6 +36,9 @@ class RecommendFragment : Fragment(), RecommendContract.View {
 
     private var mGurunaviRecyclerView: RecyclerView? = null
     private var mHotpepperRecyclerView: RecyclerView? = null
+
+    private var mGurunaviTitle: TextView? = null
+    private var mHotpepperTitle: TextView? = null
 
     private var mCelebBackground: LottieAnimationView? = null
 
@@ -54,6 +59,10 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         // セレブモードの背景設定
         mCelebBackground = root?.findViewById(R.id.celeb_background)
         mRecommendPresenter?.updateCelebMode()
+
+        // タイトルテキストの設定
+        mGurunaviTitle = root?.findViewById(R.id.gurunavi_shop_title)
+        mHotpepperTitle = root?.findViewById(R.id.hotpepper_shop_title)
 
         // ぐるなびのお店情報を表示するRecyclerViewの設定
         setupGurunaviRecyclerView(root)
@@ -154,6 +163,29 @@ class RecommendFragment : Fragment(), RecommendContract.View {
     }
 
     /**
+     * ぐるなびタイトルテキストの表示
+     * @param keyword     検索キーワード
+     * @param isCelebMode セレブモードのON/OFF
+     */
+    override fun showGurunaviTitle(keyword: String?, isCelebMode: Boolean) {
+        mGurunaviTitle?.visibility = View.VISIBLE
+        if (isCelebMode) {
+            mGurunaviTitle?.text = getString(R.string.text_shop_title_celeb)
+        } else if (!TextUtils.isEmpty(keyword)) {
+            mGurunaviTitle?.text = getString(R.string.text_shop_title_keyword, keyword)
+        } else {
+            mGurunaviTitle?.text = getString(R.string.text_shop_title)
+        }
+    }
+
+    /**
+     * ぐるなびタイトルテキストの非表示
+     */
+    override fun hideGurunaviTitle() {
+        mGurunaviTitle?.visibility = View.INVISIBLE
+    }
+
+    /**
      * ホットペッパーのレストラン情報を表示
      * @param shops       レストランリスト
      * @param imageLoader レストラン画像
@@ -162,6 +194,29 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         // 表示するお店情報をもとにアダプターを生成してRecyclerViewにセット
         val hotpepperShopAdapter: HotpepperShopAdapter? = HotpepperShopAdapter(shops, imageLoader)
         mHotpepperRecyclerView?.adapter = hotpepperShopAdapter
+    }
+
+    /**
+     * ホットペッパータイトルテキストの表示
+     * @param keyword     検索キーワード
+     * @param isCelebMode セレブモードのON/OFF
+     */
+    override fun showHotpepperTitle(keyword: String?, isCelebMode: Boolean) {
+        mHotpepperTitle?.visibility = View.VISIBLE
+        if (isCelebMode) {
+            mHotpepperTitle?.text = getString(R.string.text_shop_title_celeb)
+        } else if (!TextUtils.isEmpty(keyword)) {
+            mHotpepperTitle?.text = getString(R.string.text_shop_title_keyword, keyword)
+        } else {
+            mHotpepperTitle?.text = getString(R.string.text_shop_title)
+        }
+    }
+
+    /**
+     * ホットペッパータイトルテキストの非表示
+     */
+    override fun hideHotpepperTitle() {
+        mHotpepperTitle?.visibility = View.INVISIBLE
     }
 
     /**

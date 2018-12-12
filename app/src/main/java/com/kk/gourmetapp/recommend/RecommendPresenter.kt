@@ -29,15 +29,22 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
      * @param bundle 現在地
      */
     override fun createGurunaviInfo(bundle: Bundle) {
+        // 検索キーワードは検索完了するまで非表示にしておく
+        mRecommendView.hideGurunaviTitle()
 
-        val isCelebMode: Boolean? = mDataRepository.isCelebMode()
+        val isCelebMode: Boolean = mDataRepository.isCelebMode()
 
+        val keyword: String? = mDataRepository.pickKeyword()
+
+        // キーワード引数にいれて、showGurunaviTitleを呼んであげる
             // Repository側でモデルクラス作成する
-            mDataRepository.createGurunaviInfo(object : DataSource.CreateGurunaviShopCallback {
+            mDataRepository.createGurunaviInfo(keyword, object : DataSource.CreateGurunaviShopCallback {
                 override fun createGurunaviShop(
                     shops: MutableList<GurunaviShop>, imageLoader: ImageLoader?) {
                     // ぐるなびのレストラン情報が取得できた場合にはUI更新をかける
                     mRecommendView.showGurunaviShops(shops, imageLoader)
+                    mRecommendView.showGurunaviTitle(keyword, isCelebMode)
+
                 }
 
                 override fun onError() {
@@ -46,7 +53,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                         mRecommendView.showNetworkErrorDialog()
                     }
                 }
-            }, isCelebMode as Boolean , bundle)
+            }, isCelebMode , bundle)
     }
 
     /**
@@ -54,14 +61,19 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
      * @param bundle 現在地
      */
     override fun createHotpepperInfo(bundle: Bundle) {
+        // 検索キーワードは検索完了するまで非表示にしておく
+        mRecommendView.hideHotpepperTitle()
 
-        val isCelebMode: Boolean? = mDataRepository.isCelebMode()
+        val keyword: String? = mDataRepository.pickKeyword()
 
-        mDataRepository.createHotpepperInfo(object :DataSource.CreateHotpepperShopCallback {
+        val isCelebMode: Boolean = mDataRepository.isCelebMode()
+
+        mDataRepository.createHotpepperInfo(keyword, object :DataSource.CreateHotpepperShopCallback {
             override fun createHotpepperShop(
                 shops: MutableList<HotpepperShop>, imageLoader: ImageLoader?) {
                 // ホットペッパーのレストラン情報が取得できた場合にはUI更新をかける
                 mRecommendView.showHotpepperShops(shops, imageLoader)
+                mRecommendView.showHotpepperTitle(keyword, isCelebMode)
                 // 画像解析で取得保存しておいたキーワードを空文字にしておく
                 mDataRepository.removeRecognizeKeyword()
             }
@@ -72,7 +84,7 @@ class RecommendPresenter(recommendView: RecommendContract.View, context: Context
                     mRecommendView.showNetworkErrorDialog()
                 }
             }
-        }, isCelebMode as Boolean, bundle)
+        }, isCelebMode, bundle)
     }
 
     /**
