@@ -16,10 +16,12 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import com.crashlytics.android.Crashlytics
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.splash.SplashActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import io.fabric.sdk.android.Fabric
 
 class RecommendActivity : AppCompatActivity() {
 
@@ -32,6 +34,8 @@ class RecommendActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Fabric.with(this, Crashlytics())
 
         // スプラッシュ画面の起動
         val splashIntent = Intent(this, SplashActivity::class.java)
