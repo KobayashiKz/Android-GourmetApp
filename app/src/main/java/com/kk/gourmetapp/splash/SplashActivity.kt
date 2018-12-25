@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.kk.gourmetapp.R
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 
 class SplashActivity : AppCompatActivity() {
 
@@ -23,6 +24,13 @@ class SplashActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(0, R.anim.alpha_fadeout)
         }, SPLASH_DURATION)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        GoogleAnalyticsUtil.sendScreenEvent(applicationContext,
+            GoogleAnalyticsUtil.ScreenEvent.SHOW_SPLASH_SCREEN.key)
     }
 
     override fun onBackPressed() {

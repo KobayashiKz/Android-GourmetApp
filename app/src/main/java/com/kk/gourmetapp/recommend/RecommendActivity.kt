@@ -21,6 +21,7 @@ import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.splash.SplashActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import io.fabric.sdk.android.Fabric
 
 class RecommendActivity : AppCompatActivity() {
@@ -91,6 +92,13 @@ class RecommendActivity : AppCompatActivity() {
             // セレブモード背景の設定
             mRecommendPresenter?.updateCelebMode()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        GoogleAnalyticsUtil.sendScreenEvent(applicationContext,
+            GoogleAnalyticsUtil.ScreenEvent.SHOW_RECOMMEND_SCREEN.key)
     }
 
     /**

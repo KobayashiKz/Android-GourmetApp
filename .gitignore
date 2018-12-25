@@ -17,3 +17,4 @@
 /app/google-services.json
 .idea/
 /app/fabric.properties
+/app/src/main/res/xml/global_tracker.xml
