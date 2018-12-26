@@ -12,6 +12,7 @@ import android.view.MenuItem
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 
 class MapActivity : AppCompatActivity() {
 
@@ -43,6 +44,13 @@ class MapActivity : AppCompatActivity() {
 
         // Presenterの生成
         mPresenter = MapPresenter(mapFragment, applicationContext)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        GoogleAnalyticsUtil.sendScreenEvent(applicationContext,
+            GoogleAnalyticsUtil.ScreenEvent.SHOW_MAP_SCREEN.key)
     }
 
     /**

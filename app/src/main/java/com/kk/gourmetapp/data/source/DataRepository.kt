@@ -28,6 +28,7 @@ import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.data.ImageRecognizer
 import com.kk.gourmetapp.data.RequestSingleQueue
 import com.kk.gourmetapp.util.DatabaseHelper
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import com.kk.gourmetapp.util.PreferenceUtil
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.BufferedReader
@@ -156,6 +157,10 @@ class DataRepository(context: Context): DataSource {
             })
         // リクエストキューを追加
         RequestSingleQueue.addToRequestQueue(request, mContext)
+
+        GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+            GoogleAnalyticsUtil.ActionEventAction.OTHER_SEARCH.key,
+            GoogleAnalyticsUtil.ActionEventCategory.OTHER_GURUNAVI.key, keyword)
     }
 
     /**
@@ -244,7 +249,11 @@ class DataRepository(context: Context): DataSource {
                 callback.onError()
             })
         // リクエストキューを追加
-        RequestSingleQueue.addToRequestQueue(request, mContext!!)
+        RequestSingleQueue.addToRequestQueue(request, mContext)
+
+        GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+            GoogleAnalyticsUtil.ActionEventAction.OTHER_SEARCH.key,
+            GoogleAnalyticsUtil.ActionEventCategory.OTHER_HOTPEPPER.key, keyword)
     }
 
     /**
@@ -296,6 +305,9 @@ class DataRepository(context: Context): DataSource {
                 // キーワードが抽出できた場合だけコールバックを返す
                 if (keyword != null) {
                     callback.onParsed(keyword)
+
+                    GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+                        GoogleAnalyticsUtil.ActionEventAction.OTHER_END_IMAGE_RECOGNIZE.key, null, keyword)
                 }
             }
 

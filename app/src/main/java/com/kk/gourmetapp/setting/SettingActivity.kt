@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Switch
 import com.airbnb.lottie.LottieAnimationView
 import com.kk.gourmetapp.R
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import com.kk.gourmetapp.util.PreferenceUtil
 
 class SettingActivity : AppCompatActivity() {
@@ -46,6 +47,13 @@ class SettingActivity : AppCompatActivity() {
                 mIsChage = true
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        GoogleAnalyticsUtil.sendScreenEvent(applicationContext,
+            GoogleAnalyticsUtil.ScreenEvent.SHOW_SETTING_SCREEN.key)
     }
 
     override fun finish() {

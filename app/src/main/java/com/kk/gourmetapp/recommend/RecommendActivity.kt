@@ -21,6 +21,7 @@ import com.kk.gourmetapp.R
 import com.kk.gourmetapp.setting.SettingActivity
 import com.kk.gourmetapp.splash.SplashActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import io.fabric.sdk.android.Fabric
 
 class RecommendActivity : AppCompatActivity() {
@@ -93,6 +94,13 @@ class RecommendActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        GoogleAnalyticsUtil.sendScreenEvent(applicationContext,
+            GoogleAnalyticsUtil.ScreenEvent.SHOW_RECOMMEND_SCREEN.key)
+    }
+
     /**
      * ドロワーナビゲーションのアイテムがタップされたときの処理
      * @param navigationView
@@ -106,6 +114,9 @@ class RecommendActivity : AppCompatActivity() {
                     // 設定画面を起動する
                     val intent = Intent(applicationContext, SettingActivity::class.java)
                     startActivityForResult(intent, ActivityUtil.REQUEST_CODE_SETTING)
+
+                    GoogleAnalyticsUtil.sendActionEvent(applicationContext,
+                        GoogleAnalyticsUtil.ActionEventAction.CLICK_SETTINGS.key)
                 }
                 else -> {
                     // do nothing.
@@ -136,6 +147,9 @@ class RecommendActivity : AppCompatActivity() {
 
             // ドロワーナビゲーションを閉じる
             mDrawerLayout?.closeDrawers()
+
+            GoogleAnalyticsUtil.sendActionEvent(applicationContext,
+                GoogleAnalyticsUtil.ActionEventAction.CLICK_SEARCH_BUTTON.key)
         }
 
         mKeywordEditText.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->

@@ -28,6 +28,7 @@ import com.kk.gourmetapp.data.HotpepperShop
 import com.kk.gourmetapp.map.MapFragment
 import com.kk.gourmetapp.select.SelectActivity
 import com.kk.gourmetapp.util.ActivityUtil
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import pub.devrel.easypermissions.EasyPermissions
 
 class RecommendFragment : Fragment(), RecommendContract.View {
@@ -118,6 +119,12 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         gurunaviCreditBuilder?.into(gurunaviCredit)
         gurunaviCredit?.setOnClickListener {
             mRecommendPresenter?.updateGurunaviCreditTransition()
+
+            if (context != null) {
+                GoogleAnalyticsUtil.sendActionEvent(context!!.applicationContext,
+                    GoogleAnalyticsUtil.ActionEventAction.CLICK_SHOP_CREDIT.key,
+                    GoogleAnalyticsUtil.ActionEventCategory.CLICK_GURUNAVI.key)
+            }
         }
     }
 
@@ -132,6 +139,12 @@ class RecommendFragment : Fragment(), RecommendContract.View {
         hotpepperCreditBuilder?.into(hotpepperCredit)
         hotpepperCredit?.setOnClickListener {
             mRecommendPresenter?.updateHotpepperCreditTransition()
+
+            if (context != null) {
+                GoogleAnalyticsUtil.sendActionEvent(context!!.applicationContext,
+                    GoogleAnalyticsUtil.ActionEventAction.CLICK_SHOP_CREDIT.key,
+                    GoogleAnalyticsUtil.ActionEventCategory.CLICK_HOTPEPPER.key)
+            }
         }
     }
 
