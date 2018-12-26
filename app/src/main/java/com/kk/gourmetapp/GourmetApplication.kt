@@ -3,6 +3,7 @@ package com.kk.gourmetapp
 import android.app.Application
 import com.google.android.gms.analytics.GoogleAnalytics
 import com.google.android.gms.analytics.Tracker
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 
 class GourmetApplication: Application() {
 
@@ -13,6 +14,8 @@ class GourmetApplication: Application() {
         super.onCreate()
 
         sAnalytics = GoogleAnalytics.getInstance(this)
+        val util = GoogleAnalyticsUtil()
+        util.setApplicationContext(applicationContext)
     }
 
     /**

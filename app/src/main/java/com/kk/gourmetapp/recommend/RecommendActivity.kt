@@ -114,6 +114,9 @@ class RecommendActivity : AppCompatActivity() {
                     // 設定画面を起動する
                     val intent = Intent(applicationContext, SettingActivity::class.java)
                     startActivityForResult(intent, ActivityUtil.REQUEST_CODE_SETTING)
+
+                    GoogleAnalyticsUtil.sendActionEvent(applicationContext,
+                        GoogleAnalyticsUtil.ActionEventAction.CLICK_SETTINGS.key)
                 }
                 else -> {
                     // do nothing.
@@ -144,6 +147,9 @@ class RecommendActivity : AppCompatActivity() {
 
             // ドロワーナビゲーションを閉じる
             mDrawerLayout?.closeDrawers()
+
+            GoogleAnalyticsUtil.sendActionEvent(applicationContext,
+                GoogleAnalyticsUtil.ActionEventAction.CLICK_SEARCH_BUTTON.key)
         }
 
         mKeywordEditText.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.NetworkImageView
 import com.kk.gourmetapp.R
 import com.kk.gourmetapp.data.GurunaviShop
 import com.kk.gourmetapp.map.MapActivity
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import com.kk.gourmetapp.util.PreferenceUtil
 
 class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: ImageLoader?)
@@ -29,7 +30,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
     // 画像のイメージローダー
     private var mImageLoader: ImageLoader? = imageLoader
 
-    private var mContext: Context? = null
+    private lateinit var mContext: Context
 
     override fun getItemCount(): Int {
         return mShopList.size
@@ -67,7 +68,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         if (!TextUtils.isEmpty(mShopList[position].mName)) {
             holder.name.text = mShopList[position].mName
         } else {
-            holder.name.text = mContext?.getString(R.string.text_empty_info)
+            holder.name.text = mContext.getString(R.string.text_empty_info)
         }
     }
 
@@ -89,7 +90,11 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             // 遷移処理はFragmentにかいたほうがよさそう
             val uri: Uri = Uri.parse(mShopList[position].mPageUrl)
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            mContext?.startActivity(intent)
+            mContext.startActivity(intent)
+
+            GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+                GoogleAnalyticsUtil.ActionEventAction.CLICK_SHOP_DETAIL.key,
+                GoogleAnalyticsUtil.ActionEventCategory.CLICK_GURUNAVI.key)
         }
     }
 
@@ -102,7 +107,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
          if (!TextUtils.isEmpty(mShopList[position].mCategory)) {
              holder.category.text = mShopList[position].mCategory
          } else {
-             holder.category.text = mContext?.getString(R.string.text_empty_info)
+             holder.category.text = mContext.getString(R.string.text_empty_info)
          }
      }
 
@@ -120,10 +125,13 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             holder.tel.setOnClickListener {
                 val uri: Uri = Uri.parse("tel:" + mShopList[position].mTelNumber)
                 val intent = Intent(Intent.ACTION_DIAL, uri)
-                mContext?.startActivity(intent)
+                mContext.startActivity(intent)
+
+                GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+                    GoogleAnalyticsUtil.ActionEventAction.CLICK_SHOP_TEL_NUMBER.key)
             }
         } else {
-            holder.tel.text = mContext?.getString(R.string.text_empty_info)
+            holder.tel.text = mContext.getString(R.string.text_empty_info)
         }
     }
 
@@ -136,7 +144,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
         if (!TextUtils.isEmpty(mShopList[position].mOpenTime)) {
             holder.openTime.text = mShopList[position].mOpenTime
         } else {
-            holder.openTime.text = mContext?.getString(R.string.text_empty_info)
+            holder.openTime.text = mContext.getString(R.string.text_empty_info)
         }
     }
 
@@ -148,10 +156,10 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
     private fun setShopBudget(holder: ShopViewHolder, position: Int) {
         if (!TextUtils.isEmpty(mShopList[position].mBudget)) {
             val budget: String = mShopList[position].mBudget +
-                    mContext?.getString(R.string.text_budget_unit)
+                    mContext.getString(R.string.text_budget_unit)
             holder.budget.text = budget
         } else {
-            holder.budget.text = mContext?.getString(R.string.text_empty_info)
+            holder.budget.text = mContext.getString(R.string.text_empty_info)
         }
     }
 
@@ -166,7 +174,7 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
             val longitude: Double = mShopList[position].mLongitude
 
             // 緯度経度をPreferenceに保存しておく. Double型はそのまま保存できないのでLong型のビット表現で保存.
-            val preference: SharedPreferences = mContext!!.getSharedPreferences(
+            val preference: SharedPreferences = mContext.getSharedPreferences(
                 PreferenceUtil.KEY_PREFERENCE_MAP, Context.MODE_PRIVATE)
             preference.edit().putLong(PreferenceUtil.KEY_SHOP_LATITUDE,
                 java.lang.Double.doubleToRawLongBits(latitude)).apply()
@@ -175,7 +183,11 @@ class GurunaviShopAdapter(shopList: MutableList<GurunaviShop>, imageLoader: Imag
 
             // Mapボタンタップ時にはMapActivityを起動する
             val intent = Intent(mContext, MapActivity::class.java)
-            mContext?.startActivity(intent)
+            mContext.startActivity(intent)
+
+            GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+                GoogleAnalyticsUtil.ActionEventAction.CLICK_SHOP_MAP.key,
+                GoogleAnalyticsUtil.ActionEventCategory.CLICK_GURUNAVI.key)
         }
     }
 

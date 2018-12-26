@@ -11,6 +11,7 @@ import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyOptions
 import com.kk.gourmetapp.data.source.DataSource
+import com.kk.gourmetapp.util.GoogleAnalyticsUtil
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -28,6 +29,9 @@ class ImageRecognizer(context: Context) {
      * @param callback 画像解析後に発火するコールバック
      */
     fun recognizeImage(uri: Uri?, callback: DataSource.RecognizeCallback) {
+        GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
+            GoogleAnalyticsUtil.ActionEventAction.OTHER_START_IMAGE_RECOGNIZE.key)
+
         thread {
             val apiInfoList: MutableList<String> = getRecoginzeApiKey()
             analize(
