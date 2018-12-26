@@ -160,7 +160,7 @@ class DataRepository(context: Context): DataSource {
 
         GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
             GoogleAnalyticsUtil.ActionEventAction.OTHER_SEARCH.key,
-            GoogleAnalyticsUtil.ActionEventCategory.OTHER_GURUNAVI.key)
+            GoogleAnalyticsUtil.ActionEventCategory.OTHER_GURUNAVI.key, keyword)
     }
 
     /**
@@ -252,7 +252,7 @@ class DataRepository(context: Context): DataSource {
 
         GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
             GoogleAnalyticsUtil.ActionEventAction.OTHER_SEARCH.key,
-            GoogleAnalyticsUtil.ActionEventCategory.OTHER_HOTPEPPER.key)
+            GoogleAnalyticsUtil.ActionEventCategory.OTHER_HOTPEPPER.key, keyword)
     }
 
     /**
@@ -306,7 +306,7 @@ class DataRepository(context: Context): DataSource {
                     callback.onParsed(keyword)
 
                     GoogleAnalyticsUtil.sendActionEvent(mContext.applicationContext,
-                        GoogleAnalyticsUtil.ActionEventAction.OTHER_END_IMAGE_RECOGNIZE.key)
+                        GoogleAnalyticsUtil.ActionEventAction.OTHER_END_IMAGE_RECOGNIZE.key, null, keyword)
                 }
             }
 

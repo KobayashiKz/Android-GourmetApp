@@ -81,11 +81,16 @@ class GoogleAnalyticsUtil {
          * @param context    アプリケーションコンテキスト
          * @param actionName アクション名
          */
-        fun sendActionEvent(context: Context, actionName: String, categoryName: String? = null) {
-            // TODO カスタムディメンション付与
+        fun sendActionEvent(context: Context, actionName: String, categoryName: String? = null,
+                            dimension: String? = null) {
+            val application: GourmetApplication = context as GourmetApplication
+            val tracker: Tracker? = application.getDefaultTracker()
+
+            val builder: HitBuilders.EventBuilder = HitBuilders.EventBuilder()
 
             var labelName = ""
             var category: String? = categoryName
+            var customDimension: String? = ""
 
             when (actionName) {
                 ActionEventAction.CLICK_SHOP_DETAIL.key -> {
@@ -111,6 +116,9 @@ class GoogleAnalyticsUtil {
                 }
                 ActionEventAction.OTHER_SEARCH.key -> {
                     labelName = ActionEventLabel.OTHER_SEARCH.key
+                    if (!TextUtils.isEmpty(dimension)) {
+                        builder.setCustomDimension(1, dimension)
+                    }
                 }
                 ActionEventAction.OTHER_START_IMAGE_RECOGNIZE.key -> {
                     category = ActionEventCategory.OTHER_IMAGE_RECOGNIZE.key
@@ -119,20 +127,17 @@ class GoogleAnalyticsUtil {
                 ActionEventAction.OTHER_END_IMAGE_RECOGNIZE.key -> {
                     category = ActionEventCategory.OTHER_IMAGE_RECOGNIZE.key
                     labelName = ActionEventLabel.OTHER_END_IMAGE_RECOGNIZE.key
+                    if (!TextUtils.isEmpty(dimension)) {
+                        builder.setCustomDimension(2, dimension)
+                    }
                 }
             }
 
-            val application: GourmetApplication = context as GourmetApplication
-            val tracker: Tracker? = application.getDefaultTracker()
-
             if (category != null && !TextUtils.isEmpty(labelName)) {
-                tracker?.send(
-                    HitBuilders.EventBuilder()
-                        .setCategory(category)
+                tracker?.send(builder.setCategory(category)
                         .setAction(actionName)
                         .setLabel(labelName)
-                        .build()
-                )
+                        .build())
             }
         }
     }
